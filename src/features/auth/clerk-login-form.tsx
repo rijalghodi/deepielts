@@ -1,14 +1,16 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { IconGoogle } from "@/components/ui/icon-google";
-import { IconLogo } from "@/components/ui/icon-logo";
-import { Input } from "@/components/ui/input";
-import { APP_NAME } from "@/lib/constants/brand";
 import * as Clerk from "@clerk/elements/common";
 import * as SignIn from "@clerk/elements/sign-in";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+
+import { APP_NAME } from "@/lib/constants/brand";
+
+import { Button } from "@/components/ui/button";
+import { IconGoogle } from "@/components/ui/icon-google";
+import { IconLogo } from "@/components/ui/icon-logo";
+import { Input } from "@/components/ui/input";
 
 export function ClerkLoginForm() {
   return (

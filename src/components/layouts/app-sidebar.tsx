@@ -1,3 +1,7 @@
+import { SignOutButton } from "@clerk/nextjs";
+import { Calendar, CalendarDays, ChevronDown, Inbox, LogOut, Settings, Sun } from "lucide-react";
+import Link from "next/link";
+
 import {
    Sidebar,
    SidebarContent,
@@ -11,9 +15,7 @@ import {
    SidebarMenuItem,
    SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { SignOutButton } from "@clerk/nextjs";
-import { Calendar, CalendarDays, ChevronDown, Inbox, LogOut, Settings, Sun } from "lucide-react";
-import Link from "next/link";
+
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";

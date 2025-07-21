@@ -1,15 +1,17 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
 
 import "./globals.css";
-import { APP_NAME, APP_TAGLINE, APP_DESCRIPTION, APP_KEYWORS } from "@/lib/constants/brand";
-import { ClerkProvider } from "@clerk/nextjs";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "sonner";
-import { cn } from "@/lib/utils";
-import { ReactQueryProvider } from "@/lib/providers/react-query";
-import { ThemeProvider } from "next-themes";
+
+import { APP_DESCRIPTION, APP_KEYWORS,APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
 import { DialogSystemProvider } from "@/lib/providers/dialog-system";
-import { Geist } from "next/font/google";
+import { ReactQueryProvider } from "@/lib/providers/react-query";
+import { cn } from "@/lib/utils";
+
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: {
@@ -26,9 +28,9 @@ export const metadata: Metadata = {
   ],
 };
 
-const fontSans = Geist({
+const fontSans = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-inter",
 });
 
 export default function RootLayout({

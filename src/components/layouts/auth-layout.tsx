@@ -1,6 +1,8 @@
-import { APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
 import Link from "next/link";
 import type React from "react";
+
+import { APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
+
 import { IconLogo } from "../ui/icon-logo";
 
 type Props = {

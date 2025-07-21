@@ -1,8 +1,9 @@
 "use client";
 
+import React, { createContext, ReactNode,useContext, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type DialogSystemProps = {
    message: string | React.ReactNode;

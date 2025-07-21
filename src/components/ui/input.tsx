@@ -1,21 +1,62 @@
+import { cva } from "class-variance-authority";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, ...props }, ref) => {
+export const inputVariants = cva(
+  "flex justify-between gap-1 items-stretch h-9 w-full bg-inherit rounded-sm border-input border transition-colors disabled:opacity-50 [&_svg]:size-4 overflow-clip focus-within:border-primary",
+  {
+    variants: {
+      error: {
+        true: "border-destructive focus-within:border-destructive",
+        false: "border-input",
+      },
+    },
+    defaultVariants: {
+      error: false,
+    },
+  }
+);
+
+export type InputProps = React.ComponentProps<"input"> & {
+  error?: boolean;
+  leftSection?: React.ReactNode;
+  rightSection?: React.ReactNode;
+  allowedRegex?: RegExp;
+};
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, error, name, leftSection, rightSection, disabled, allowedRegex, onChange, ...props }, ref) => {
     return (
-      <input
-        type={type}
-        aria-invalid={props["aria-invalid"] ?? false}
-        className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50",
-          "aria-invalid:border-destructive aria-invalid:ring-destructive/30 dark:aria-invalid:ring-destructive/50",
-          className
+      <div className={cn(inputVariants({ error: !!error }), className)}>
+        <div className="flex flex-1 gap-1 items-stretch">
+          {leftSection && <div className="flex justify-center items-center pl-2">{leftSection}</div>}
+          <input
+            name={name}
+            className={cn(
+              "flex-1 px-3 focus-visible:outline-none border-none bg-background",
+              "placeholder:text-muted-foreground/50 text-base",
+              "disabled:cursor-default",
+              "peer w-full",
+              error && "text-destructive",
+              leftSection && "pl-1",
+              rightSection && "pr-1"
+            )}
+            ref={ref}
+            {...props}
+            disabled={disabled}
+            onChange={(e) => {
+              if (allowedRegex && e.target.value) {
+                if (!allowedRegex.test(e.target.value)) return;
+              }
+              onChange?.(e);
+            }}
+          />
+        </div>
+        {rightSection && (
+          <div className="flex justify-center items-center min-w-10 px-2 bg-inherit">{rightSection}</div>
         )}
-        ref={ref}
-        {...props}
-      />
+      </div>
     );
   }
 );

@@ -1,6 +1,3 @@
-import { IconLogo } from "@/components/ui/icon-logo";
-import { APP_NAME } from "@/lib/constants/brand";
-import Link from "next/link";
 
 interface AuthHeaderProps {
   title: string;

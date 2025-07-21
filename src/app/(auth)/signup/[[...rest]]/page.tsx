@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { ClerkSignUpForm } from "@/features/auth/clerk-signup-form";
 import type { Metadata } from "next";
-import Link from "next/link";
+
+import { ClerkSignUpForm } from "@/features/auth/clerk-signup-form";
 
 export const metadata: Metadata = {
   title: "Signup",

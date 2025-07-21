@@ -1,17 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { IconGoogle } from "@/components/ui/icon-google";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { AuthHeader } from "@/components/auth/auth-header";
+import { useSignIn } from "@clerk/nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useSignIn } from "@clerk/nextjs";
+
+import { AuthHeader } from "@/components/auth/auth-header";
+import { Button } from "@/components/ui/button";
+import { IconGoogle } from "@/components/ui/icon-google";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -66,14 +67,7 @@ export default function LoginPage() {
         <AuthHeader title="Welcome back!" description="Please sign in to continue" />
 
         <div className="flex flex-col gap-6">
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-full"
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={isLoaded}
-          >
+          <Button variant="outline" size="lg" className="w-full" type="button" onClick={handleGoogleLogin}>
             <IconGoogle />
             Continue with Google
           </Button>

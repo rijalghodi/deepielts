@@ -1,9 +1,11 @@
 "use client";
 
-import { AppSidebar } from "@/components/layouts/app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useUser } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
+
+import { AppSidebar } from "@/components/layouts/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
 import { IconLogo } from "../ui/icon-logo";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {

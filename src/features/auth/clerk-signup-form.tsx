@@ -1,11 +1,13 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { IconGoogle } from "@/components/ui/icon-google";
-import { Input } from "@/components/ui/input";
 import * as Clerk from "@clerk/elements/common";
 import * as SignUp from "@clerk/elements/sign-up";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import { IconGoogle } from "@/components/ui/icon-google";
+import { Input } from "@/components/ui/input";
+
 import { AuthHeader } from "./clerk-login-form";
 
 export function ClerkSignUpForm() {

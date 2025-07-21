@@ -1,18 +1,19 @@
 "use client";
 
+import { useSignUp } from "@clerk/nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { AuthHeader } from "@/components/auth/auth-header";
 import { Button } from "@/components/ui/button";
 import { IconGoogle } from "@/components/ui/icon-google";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthHeader } from "@/components/auth/auth-header";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useSignUp } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 // import { useAuth } from "@/lib/contexts/auth-context";
 
 const signupSchema = z
@@ -20,7 +21,6 @@ const signupSchema = z
     email: z.string().email("Please enter a valid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
-    username: z.string().min(3, "Username must be at least 3 characters"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -51,7 +51,6 @@ export default function SignupPage() {
       const signUpAttempt = await signUp?.create({
         emailAddress: data.email,
         password: data.password,
-        // firstName: data.username,
       });
 
       if (signUpAttempt?.status === "complete") {
@@ -183,7 +182,7 @@ export default function SignupPage() {
         <AuthHeader title="Create an account" />
 
         <div className="flex flex-col gap-6">
-          <Button variant="outline" size="lg" className="w-full" onClick={handleGoogleSignup} disabled={isLoaded}>
+          <Button variant="outline" size="lg" className="w-full" onClick={handleGoogleSignup}>
             <IconGoogle />
             Continue with Google
           </Button>
@@ -231,31 +230,10 @@ export default function SignupPage() {
               {errors.confirmPassword && <p className="text-destructive text-sm">{errors.confirmPassword.message}</p>}
             </div>
 
-            <div className="flex flex-col gap-1">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                placeholder="Your username"
-                {...register("username")}
-                className={errors.username ? "border-destructive" : ""}
-              />
-              {errors.username && <p className="text-destructive text-sm">{errors.username.message}</p>}
-            </div>
-
             {error && <p className="text-destructive text-sm">{error}</p>}
 
-            <Button variant="default" size="lg" className="w-full" disabled={isLoaded} type="submit">
-              {isLoaded ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  Creating account...
-                </div>
-              ) : (
-                <>
-                  Continue <ArrowRight />
-                </>
-              )}
+            <Button variant="default" size="lg" className="w-full" type="submit">
+              Continue <ArrowRight />
             </Button>
 
             <p className="text-sm text-muted-foreground text-center">
