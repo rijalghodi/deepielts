@@ -13,6 +13,8 @@ import { useAuth } from "@/lib/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useResendCooldown } from "@/hooks";
+import { writeCooldown } from "@/hooks/use-resend-cooldown";
 
 const schema = z.object({
   email: z.string().email(),
@@ -23,8 +25,7 @@ type Props = {
 };
 
 export function LoginForm({ onSuccess }: Props) {
-  const [_error, _setError] = useState<string | null>(null);
-  const { loadUser } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -44,11 +45,13 @@ export function LoginForm({ onSuccess }: Props) {
       });
     },
     onSuccess: async (_data, variables) => {
+      writeCooldown(variables.email);
       onSuccess?.(variables.email);
     },
   });
 
   const handleSubmit = async (values: z.infer<typeof schema>) => {
+    setError(null);
     await requuestCode(values);
   };
 
@@ -69,7 +72,7 @@ export function LoginForm({ onSuccess }: Props) {
           )}
         />
 
-        {_error && <p className="text-destructive text-sm text-center">{_error}</p>}
+        {error && <p className="text-destructive text-sm text-center">{error}</p>}
 
         <Button
           variant="default"

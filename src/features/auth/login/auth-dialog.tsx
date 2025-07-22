@@ -31,14 +31,15 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
   const [email, setEmail] = useState<string>("");
 
   const open = openProp ?? !!searchParams.get("authOpen");
-  const step = searchParams.get("authStep") ?? "login";
+  const [step, setStep] = useState<"login" | "code">("code");
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      removeSearchParams(["authOpen", "authStep"]);
+      removeSearchParams(["authOpen"]);
       onOpenChange?.(false);
     } else {
-      addSearchParams({ authOpen: "true", authStep: "login" });
+      addSearchParams({ authOpen: "true" });
+      setStep("login");
       onOpenChange?.(true);
     }
   };
@@ -62,7 +63,7 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
           <LoginForm
             onSuccess={(email) => {
               setEmail(email);
-              addSearchParams({ authStep: "code" });
+              setStep("code");
             }}
           />
         </div>
@@ -86,7 +87,7 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
           <div className="flex justify-center">
             <button
               onClick={() => {
-                removeSearchParams(["authStep"]);
+                setStep("login");
               }}
               className="text-muted-foreground text-xs flex items-center gap-2 hover:underline underline-offset-4"
             >

@@ -1,4 +1,4 @@
-export const APP_NAME = "IELTS Writing AI";
+export const APP_NAME = "Deep IELTS";
 export const APP_TAGLINE = "Learn Smarter, Score Higher";
 export const APP_DESCRIPTION =
   "Helps you master IELTS with AI-driven feedback, structured practice, and mock tests. Learn smarter, score higher!";
