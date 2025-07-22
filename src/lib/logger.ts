@@ -1,0 +1,6 @@
+// lib/logger.ts
+import pino from "pino";
+
+const logger = pino();
+
+export default logger;

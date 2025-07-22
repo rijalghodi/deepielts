@@ -13,8 +13,8 @@ export const APP_KEYWORS = [
 ];
 
 export const ACCESS_TOKEN_KEY = "deep_ielts.access_token";
-export const ROLE_KEY = "deep_ielts.role";
 export const REFRESH_TOKEN_KEY = "deep_ielts.refresh_token";
+export const AUTH_CHANGED_KEY = "deep_ielts.auth_changed";
 
 export const BRAND_CONSTANTS = {
   APP_NAME,

@@ -1,20 +1,21 @@
-export class AppError extends Error {
+export class AppError {
   ok = false;
-  status: number;
-  constructor(message: string, status = 400) {
-    super(message);
-    this.status = status;
+  message?: string;
+  code?: number;
+  constructor(p: { message: string; code?: number }) {
+    this.message = p.message;
+    this.code = p.code;
   }
 }
 
 export class AppResponse<T> {
-  ok: boolean;
-  status: number;
+  ok = true;
   data: T;
-  constructor(data: T, status = 200, ok = true) {
-    this.status = status;
-    this.data = data;
-    this.ok = ok;
+  message?: string;
+  constructor(p: { data: T; ok?: boolean; message?: string }) {
+    this.data = p.data;
+    this.ok = p.ok ?? true;
+    this.message = p.message ?? "Success";
   }
 }
 

@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
@@ -6,7 +5,8 @@ import { Toaster } from "sonner";
 
 import "./globals.css";
 
-import { APP_DESCRIPTION, APP_KEYWORS,APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
+import { APP_DESCRIPTION, APP_KEYWORS, APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
+import { AuthProvider } from "@/lib/contexts/auth-context";
 import { DialogSystemProvider } from "@/lib/providers/dialog-system";
 import { ReactQueryProvider } from "@/lib/providers/react-query";
 import { cn } from "@/lib/utils";
@@ -39,9 +39,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={cn("antialiased", fontSans.className)}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn("antialiased", fontSans.className)}>
+        <AuthProvider>
           <ReactQueryProvider>
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <TooltipProvider>
@@ -52,8 +52,8 @@ export default function RootLayout({
               </TooltipProvider>
             </ThemeProvider>
           </ReactQueryProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

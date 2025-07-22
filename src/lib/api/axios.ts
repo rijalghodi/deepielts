@@ -25,7 +25,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // // Add an interceptor to handle token refreshing

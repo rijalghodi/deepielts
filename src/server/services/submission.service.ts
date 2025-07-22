@@ -19,7 +19,7 @@ import { AppError } from "@/types/global";
 export async function createSubmission(
   data: CreateSubmissionBody,
   userId: string,
-  practiceId: string
+  practiceId: string,
 ): Promise<Submission> {
   try {
     const submissionRef = db.collection("submissions").doc();
@@ -36,7 +36,7 @@ export async function createSubmission(
     await submissionRef.set(newSubmission);
     return newSubmission;
   } catch (error) {
-    throw new AppError((error as any).message, HTTP_CODE.INTERNAL_SERVER_ERROR);
+    throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
   }
 }
 
@@ -48,7 +48,7 @@ export async function getSubmission(submissionId: string): Promise<GetSubmission
     const snapshot = await db.collection("submissions").doc(submissionId).get();
 
     if (!snapshot.exists) {
-      throw new AppError("Submission not found", HTTP_CODE.NOT_FOUND);
+      throw new AppError({ message: "Submission not found", code: HTTP_CODE.NOT_FOUND });
     }
 
     const doc = snapshot.data() as Submission;
@@ -57,7 +57,7 @@ export async function getSubmission(submissionId: string): Promise<GetSubmission
     if (doc.practiceId) {
       const practice = await db.collection("practices").doc(doc.practiceId).get();
       if (!practice.exists) {
-        throw new AppError("Practice not found", HTTP_CODE.NOT_FOUND);
+        throw new AppError({ message: "Practice not found", code: HTTP_CODE.NOT_FOUND });
       }
 
       return {
@@ -73,7 +73,7 @@ export async function getSubmission(submissionId: string): Promise<GetSubmission
       updatedAt: doc.updatedAt?.toDate().toISOString(),
     };
   } catch (error) {
-    throw new AppError((error as any).message, HTTP_CODE.INTERNAL_SERVER_ERROR);
+    throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
   }
 }
 
@@ -101,6 +101,6 @@ export async function listSubmissions(practiceId?: string, userId?: string): Pro
       updatedAt: doc.data().updatedAt.toDate().toISOString(),
     })) as GetSubmissionResult[];
   } catch (error) {
-    throw new AppError((error as any).message, HTTP_CODE.INTERNAL_SERVER_ERROR);
+    throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
   }
 }

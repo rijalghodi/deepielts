@@ -20,18 +20,10 @@ export function ClerkLoginForm() {
         title="Sign in to your account"
         className="flex flex-col gap-8 p-6 w-full max-w-[440px] border-0 shadow-none rounded-xl"
       >
-        <AuthHeader
-          title="Welcome back!"
-          description="Please sign in to continue"
-        />
+        <AuthHeader title="Welcome back!" description="Please sign in to continue" />
         <div className="flex flex-col gap-6">
           <Clerk.Connection name="google" asChild>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full"
-              type="button"
-            >
+            <Button variant="outline" size="lg" className="w-full" type="button">
               <IconGoogle />
               Continue with Google
             </Button>
@@ -76,10 +68,7 @@ export function ClerkLoginForm() {
           </div>
         </div>
       </SignIn.Step>
-      <SignIn.Step
-        name="verifications"
-        className="flex flex-col gap-8 p-6 w-full max-w-[440px]"
-      >
+      <SignIn.Step name="verifications" className="flex flex-col gap-8 p-6 w-full max-w-[440px]">
         <SignIn.Strategy name="email_code">
           <div className="flex flex-col gap-6">
             <AuthHeader
@@ -130,22 +119,13 @@ export function ClerkLoginForm() {
             <SignIn.Action submit asChild>
               <Clerk.Loading>
                 {(loading) => (
-                  <Button
-                    variant="default"
-                    size="lg"
-                    className="w-full"
-                    disabled={loading}
-                    loading={loading}
-                  >
+                  <Button variant="default" size="lg" className="w-full" disabled={loading} loading={loading}>
                     Continue <ArrowRight />
                   </Button>
                 )}
               </Clerk.Loading>
             </SignIn.Action>
-            <SignIn.Action
-              navigate="forgot-password"
-              className="hover:underline underline-offset-4"
-            >
+            <SignIn.Action navigate="forgot-password" className="hover:underline underline-offset-4">
               Forgot password?
             </SignIn.Action>
           </div>
@@ -175,13 +155,7 @@ export function ClerkLoginForm() {
             <SignIn.Action submit asChild>
               <Clerk.Loading>
                 {(loading) => (
-                  <Button
-                    variant="default"
-                    size="lg"
-                    className="w-full"
-                    disabled={loading}
-                    loading={loading}
-                  >
+                  <Button variant="default" size="lg" className="w-full" disabled={loading} loading={loading}>
                     Continue <ArrowRight />
                   </Button>
                 )}
@@ -192,10 +166,7 @@ export function ClerkLoginForm() {
       </SignIn.Step>
 
       {/* Add reset password step */}
-      <SignIn.Step
-        name="forgot-password"
-        className="flex flex-col gap-8 p-6 w-full max-w-[440px]"
-      >
+      <SignIn.Step name="forgot-password" className="flex flex-col gap-8 p-6 w-full max-w-[440px]">
         <AuthHeader title="Forgot your password?" />
         <div className="flex flex-col gap-6">
           <SignIn.SupportedStrategy name="reset_password_email_code" asChild>
@@ -212,10 +183,7 @@ export function ClerkLoginForm() {
         </div>
       </SignIn.Step>
 
-      <SignIn.Step
-        name="reset-password"
-        className="flex flex-col gap-8 p-6 w-full max-w-[440px]"
-      >
+      <SignIn.Step name="reset-password" className="flex flex-col gap-8 p-6 w-full max-w-[440px]">
         <AuthHeader title="Reset your password" />
         <div className="flex flex-col gap-6">
           <Clerk.Field name="password" className="flex flex-col gap-1">
@@ -239,26 +207,15 @@ export function ClerkLoginForm() {
   );
 }
 
-export function AuthHeader({
-  title,
-  description,
-}: {
-  title: string;
-  description?: string | React.ReactNode;
-}) {
+export function AuthHeader({ title, description }: { title: string; description?: string | React.ReactNode }) {
   return (
     <div className="text-center flex flex-col gap-3 items-center">
-      <Link
-        href="/"
-        className="flex md:hidden items-center gap-y-1 gap-x-1 mx-auto"
-      >
+      <Link href="/" className="flex md:hidden items-center gap-y-1 gap-x-1 mx-auto">
         <IconLogo size={20} />
         <span className="font-semibold text-base">{APP_NAME}</span>
       </Link>
       <h1 className="text-xl sm:text-2xl font-semibold">{title}</h1>
-      {description && (
-        <p className="text-muted-foreground text-lg">{description}</p>
-      )}
+      {description && <p className="text-muted-foreground text-lg">{description}</p>}
     </div>
   );
 }

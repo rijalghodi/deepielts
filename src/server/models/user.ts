@@ -1,13 +1,10 @@
-import { Timestamp } from "firebase-admin/firestore";
-
 export interface User {
   id?: string;
   name?: string;
   email?: string;
-  password?: string;
   role?: Role;
-  readonly createdAt?: Timestamp;
-  readonly updatedAt?: Timestamp;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
 }
 
 export enum Role {

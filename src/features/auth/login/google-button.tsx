@@ -5,7 +5,9 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { createSession } from "@/lib/api/session.api";
+import { loginByGoogle } from "@/lib/api/auth.api";
+import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { clientAuth } from "@/lib/firebase/firebase-client";
 
 import { Button, ButtonProps } from "@/components/ui/button";
@@ -15,12 +17,12 @@ type Props = ButtonProps;
 
 export function GoogleButton(props: Props) {
   const router = useRouter();
-
+  const { loadUser } = useAuth();
   const { isPending, mutateAsync: googleLoginMutate } = useMutation({
     mutationFn: async () => {
       const userCredential = await signInWithPopup(clientAuth, new GoogleAuthProvider());
       const idToken = await userCredential.user.getIdToken();
-      await createSession(idToken);
+      await loginByGoogle(idToken);
       return idToken;
     },
     onError: (error) => {
@@ -30,6 +32,8 @@ export function GoogleButton(props: Props) {
     },
     onSuccess: async (idToken) => {
       if (!idToken) return;
+      await loadUser();
+      localStorage.setItem(AUTH_CHANGED_KEY, Date.now().toString());
       router.push("/");
     },
   });

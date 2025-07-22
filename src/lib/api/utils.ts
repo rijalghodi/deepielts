@@ -34,7 +34,7 @@ type APIRequest<Q = Record<string, any>, P = Record<string, any>> = {
 // Generic API Method
 const apiRequest = async <T, Q = Record<string, any>, P = Record<string, any>>(
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
-  { endpoint, pathParams, queryParams, data, headers, onUploadProgress, signal }: APIRequest<Q, P>
+  { endpoint, pathParams, queryParams, data, headers, onUploadProgress, signal }: APIRequest<Q, P>,
 ): Promise<T | undefined> => {
   const path = buildPathWithParams(endpoint, pathParams as any);
   const queryString = queryParams ? `?${buildQueryString(queryParams)}` : "";
@@ -59,21 +59,21 @@ const apiRequest = async <T, Q = Record<string, any>, P = Record<string, any>>(
 
 // API method wrappers
 export const apiGet = async <T, Q = Record<string, any>, P = Record<string, any>>(
-  req: APIRequest<Q, P>
+  req: APIRequest<Q, P>,
 ): Promise<T | undefined> => apiRequest<T, Q, P>("GET", req);
 
 export const apiPost = async <T, Q = Record<string, any>, P = Record<string, any>>(
-  req: APIRequest<Q, P>
+  req: APIRequest<Q, P>,
 ): Promise<T | undefined> => apiRequest<T, Q, P>("POST", req);
 
 export const apiPut = async <T, Q = Record<string, any>, P = Record<string, any>>(
-  req: APIRequest<Q, P>
+  req: APIRequest<Q, P>,
 ): Promise<T | undefined> => apiRequest<T, Q, P>("PUT", req);
 
 export const apiPatch = async <T, Q = Record<string, any>, P = Record<string, any>>(
-  req: APIRequest<Q, P>
+  req: APIRequest<Q, P>,
 ): Promise<T | undefined> => apiRequest<T, Q, P>("PATCH", req);
 
 export const apiDelete = async <T, Q = Record<string, any>, P = Record<string, any>>(
-  req: APIRequest<Q, P>
+  req: APIRequest<Q, P>,
 ): Promise<T | undefined> => apiRequest<T, Q, P>("DELETE", req);

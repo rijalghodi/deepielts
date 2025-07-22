@@ -47,10 +47,8 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
     return (
       <>
         <DialogHeader className="text-center">
-          <DialogTitle>Let's get started 👋 </DialogTitle>
-          <DialogDescription>
-            Welcome to <span className="font-medium">{APP_NAME}</span>, please log in to continue
-          </DialogDescription>
+          <DialogTitle>Let's get you started</DialogTitle>
+          <DialogDescription>👋 Welcome to {APP_NAME}. Please log in to continue</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6">
           <GoogleButton variant="outline" />
@@ -76,8 +74,11 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
     return (
       <>
         <DialogHeader className="text-center">
-          <DialogTitle>Verify your email</DialogTitle>
-          <DialogDescription>Please enter the code sent to your email to continue</DialogDescription>
+          <DialogTitle>Check your email</DialogTitle>
+          <DialogDescription>
+            We send a verification code to <span className="font-medium text-foreground">{email}</span>. Bear in mind
+            that the code is valid for 5 minutes
+          </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 items-stretch">
           <VerifyCodeForm email={email} />

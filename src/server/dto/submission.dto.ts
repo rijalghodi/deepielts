@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { QuestionType,Submission } from "../models/submission";
+import { QuestionType, Submission } from "../models/submission";
 
 export const createSubmissionBodySchema = z
   .object({
@@ -19,7 +19,7 @@ export const createSubmissionBodySchema = z
     {
       message: "Attachments are required for task 1",
       path: ["attachments"],
-    }
+    },
   );
 
 export type CreateSubmissionBody = z.infer<typeof createSubmissionBodySchema>;

@@ -13,12 +13,12 @@ const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.Compo
       className={cn("disabled:cursor-not-allowed", className)}
       {...props}
     />
-  )
+  ),
 );
 InputOTP.displayName = "InputOTPRoot";
 
 const InputOTPGroup = React.forwardRef<React.ElementRef<"div">, React.ComponentPropsWithoutRef<"div">>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("flex items-center", className)} {...props} />
+  ({ className, ...props }, ref) => <div ref={ref} className={cn("flex items-center", className)} {...props} />,
 );
 InputOTPGroup.displayName = "InputOTPGroup";
 
@@ -35,7 +35,7 @@ const InputOTPSlot = React.forwardRef<
       className={cn(
         "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
         isActive && "z-10 ring-1 ring-ring",
-        className
+        className,
       )}
       {...props}
     >
@@ -51,8 +51,8 @@ const InputOTPSlot = React.forwardRef<
 InputOTPSlot.displayName = "InputOTPSlot";
 
 const InputOTPSeparator = React.forwardRef<React.ElementRef<"hr">, React.ComponentPropsWithoutRef<"hr">>(
-  ({ ...props }, ref) => <hr ref={ref} {...props} />
+  ({ ...props }, ref) => <hr ref={ref} {...props} />,
 );
 InputOTPSeparator.displayName = "InputOTPSeparator";
 
-export { InputOTP, InputOTPGroup, InputOTP as InputOTPRoot,InputOTPSeparator, InputOTPSlot };
+export { InputOTP, InputOTPGroup, InputOTP as InputOTPRoot, InputOTPSeparator, InputOTPSlot };

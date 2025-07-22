@@ -8,7 +8,7 @@ import { ApiResponse, PaginatedResponse } from "@/types";
 export const submissionCreate = async (
   userId: string,
   practiceId: string,
-  req: CreateSubmissionBody
+  req: CreateSubmissionBody,
 ): Promise<Submission | undefined> => {
   return apiPost({
     endpoint: `/submissions`,
@@ -31,7 +31,7 @@ export const submissionGetKey = (submissionId: string) => ["submission-get", sub
 
 export const submissionList = async (
   practiceId?: string,
-  userId?: string
+  userId?: string,
 ): Promise<PaginatedResponse<GetSubmissionResult[]> | undefined> => {
   const params = new URLSearchParams();
   if (practiceId) params.append("practiceId", practiceId);

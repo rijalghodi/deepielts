@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { sendEmailCode } from "@/lib/api/auth.api";
+import { requestEmailCode } from "@/lib/api/auth.api";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -23,6 +24,7 @@ type Props = {
 
 export function LoginForm({ onSuccess }: Props) {
   const [_error, _setError] = useState<string | null>(null);
+  const { loadUser } = useAuth();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -31,26 +33,23 @@ export function LoginForm({ onSuccess }: Props) {
     },
   });
 
-  const { isPending: _isPending, mutateAsync: sendCodeMutate } = useMutation({
+  const { isPending, mutateAsync: requuestCode } = useMutation({
     mutationFn: async (values: z.infer<typeof schema>) => {
       const { email } = values;
-      return sendEmailCode(email);
+      return requestEmailCode(email);
     },
     onError: (error: any) => {
       toast.error("Failed to send code", {
         description: error?.message || "Please try again",
       });
     },
-    onSuccess: (_data, variables) => {
-      toast.success("Code sent!", {
-        description: "Check your email for the verification code",
-      });
+    onSuccess: async (_data, variables) => {
       onSuccess?.(variables.email);
     },
   });
 
   const handleSubmit = async (values: z.infer<typeof schema>) => {
-    await sendCodeMutate(values);
+    await requuestCode(values);
   };
 
   return (
@@ -72,7 +71,13 @@ export function LoginForm({ onSuccess }: Props) {
 
         {_error && <p className="text-destructive text-sm text-center">{_error}</p>}
 
-        <Button variant="default" className="w-full" type="submit">
+        <Button
+          variant="default"
+          className="w-full"
+          type="submit"
+          disabled={!form.formState.isDirty}
+          loading={isPending}
+        >
           Continue with Code
         </Button>
       </Form>

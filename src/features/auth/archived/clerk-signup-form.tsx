@@ -53,12 +53,7 @@ export function ClerkSignUpForm() {
             <SignUp.Action submit asChild>
               <Clerk.Loading>
                 {(loading) => (
-                  <Button
-                    variant="default"
-                    size="lg"
-                    className="w-full"
-                    loading={loading}
-                  >
+                  <Button variant="default" size="lg" className="w-full" loading={loading}>
                     Continue <ArrowRight />
                   </Button>
                 )}
@@ -74,16 +69,10 @@ export function ClerkSignUpForm() {
         </div>
       </SignUp.Step>
 
-      <SignUp.Step
-        name="verifications"
-        className="flex flex-col gap-8 p-6 w-full max-w-[440px]"
-      >
+      <SignUp.Step name="verifications" className="flex flex-col gap-8 p-6 w-full max-w-[440px]">
         <SignUp.Strategy name="email_code">
           <div className="flex flex-col gap-6">
-            <AuthHeader
-              title="Verify your email"
-              description={<>We sent a code to your email</>}
-            />
+            <AuthHeader title="Verify your email" description={<>We sent a code to your email</>} />
             <Clerk.Field name="code" className="flex flex-col gap-1">
               <Clerk.Label>Email code</Clerk.Label>
               <Clerk.Input asChild>
@@ -97,13 +86,7 @@ export function ClerkSignUpForm() {
               <SignUp.Action submit asChild>
                 <Clerk.Loading>
                   {(loading) => (
-                    <Button
-                      variant="default"
-                      size="lg"
-                      className="w-full"
-                      disabled={loading}
-                      loading={loading}
-                    >
+                    <Button variant="default" size="lg" className="w-full" disabled={loading} loading={loading}>
                       Verify
                     </Button>
                   )}
@@ -121,8 +104,7 @@ export function ClerkSignUpForm() {
                 resend
                 fallback={({ resendableAfter }) => (
                   <span>
-                    Resend after (
-                    <span className="tabular-nums">{resendableAfter}</span>)
+                    Resend after (<span className="tabular-nums">{resendableAfter}</span>)
                   </span>
                 )}
                 asChild
@@ -136,14 +118,8 @@ export function ClerkSignUpForm() {
         </SignUp.Strategy>
       </SignUp.Step>
 
-      <SignUp.Step
-        name="continue"
-        className="flex flex-col gap-8 p-6 w-full max-w-[440px]"
-      >
-        <AuthHeader
-          title="Complete your profile"
-          description="Tell us a bit more about yourself"
-        />
+      <SignUp.Step name="continue" className="flex flex-col gap-8 p-6 w-full max-w-[440px]">
+        <AuthHeader title="Complete your profile" description="Tell us a bit more about yourself" />
         <div className="flex flex-col gap-6">
           <Clerk.Field name="username" className="flex flex-col gap-1">
             <Clerk.Label>Username</Clerk.Label>
@@ -156,13 +132,7 @@ export function ClerkSignUpForm() {
           <SignUp.Action submit asChild>
             <Clerk.Loading>
               {(loading) => (
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="w-full"
-                  disabled={loading}
-                  loading={loading}
-                >
+                <Button variant="default" size="lg" className="w-full" disabled={loading} loading={loading}>
                   Complete sign up <ArrowRight />
                 </Button>
               )}

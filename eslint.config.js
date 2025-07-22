@@ -1,4 +1,3 @@
-// eslint.config.js
 import globals from "globals";
 import js from "@eslint/js";
 import ts from "@typescript-eslint/eslint-plugin";
@@ -94,6 +93,6 @@ export default [
     },
   },
   {
-    ignores: ["node_modules", "dist", "build", "public", ".next"],
+    ignores: ["node_modules", "dist", "build", "public", ".next", "eslint.config.js", ".secrets"],
   },
 ];

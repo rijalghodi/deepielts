@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { verifyEmailCode } from "@/lib/api/auth.api";
+import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -26,6 +28,7 @@ type Props = {
 export function VerifyCodeForm({ email, onSuccess }: Props) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { loadUser } = useAuth();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -44,7 +47,9 @@ export function VerifyCodeForm({ email, onSuccess }: Props) {
         description: error?.message || "Please check your code and try again",
       });
     },
-    onSuccess: (_data) => {
+    onSuccess: async (_data) => {
+      await loadUser();
+      localStorage.setItem(AUTH_CHANGED_KEY, Date.now().toString());
       toast.success("Login successful!", {
         description: "Welcome back!",
       });

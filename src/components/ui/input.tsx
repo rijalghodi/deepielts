@@ -15,7 +15,7 @@ export const inputVariants = cva(
     defaultVariants: {
       error: false,
     },
-  }
+  },
 );
 
 export type InputProps = React.ComponentProps<"input"> & {
@@ -40,7 +40,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "peer w-full",
               error && "text-destructive",
               leftSection && "pl-1",
-              rightSection && "pr-1"
+              rightSection && "pr-1",
             )}
             ref={ref}
             {...props}
@@ -58,7 +58,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 Input.displayName = "Input";
 

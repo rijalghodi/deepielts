@@ -11,6 +11,8 @@ export const clientEnv = createEnv({
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: z.string(),
     NEXT_PUBLIC_FIREBASE_APP_ID: z.string(),
     NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string().optional(),
+    NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN: z.number().optional(),
+    NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN: z.number().optional(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -21,17 +23,23 @@ export const clientEnv = createEnv({
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN: process.env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN ?? 60 * 60 * 24,
+    NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN: process.env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN ?? 60 * 60 * 24 * 30,
   },
 });
 
 export const serverEnv = createEnv({
   server: {
     FIREBASE_ADMIN_PATH: z.string(),
-    JWT_SECRET: z.string(),
+    JWT_ACCESS_SECRET: z.string(),
+    JWT_REFRESH_SECRET: z.string(),
+    RESEND_API_KEY: z.string(),
   },
   runtimeEnv: {
     FIREBASE_ADMIN_PATH: process.env.FIREBASE_ADMIN_PATH,
-    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
+    JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
 });
 
