@@ -2,15 +2,9 @@
 
 import React from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-import { SignupForm } from "./signup-form";
+import { LoginForm } from "./login-form";
 
 type Props = {
   open?: boolean;
@@ -26,11 +20,7 @@ export function AuthDialog({ open, onOpenChange, children, type }: Props) {
       <DialogContent className="max-w-md">
         <DialogTitle className="hidden">Sign in to your account</DialogTitle>
         <DialogDescription className="hidden">Enter your email below to sign in to your account</DialogDescription>
-        {/* <DialogHeader>
-          <DialogTitle>Sign in to your account</DialogTitle>
-          <DialogDescription>Enter your email below to sign in to your account</DialogDescription>
-        </DialogHeader> */}
-        <SignupForm />
+        <LoginForm />
       </DialogContent>
     </Dialog>
   );

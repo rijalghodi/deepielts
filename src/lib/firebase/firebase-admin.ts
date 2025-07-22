@@ -1,0 +1,26 @@
+import admin from "firebase-admin";
+import { readFileSync } from "fs";
+import path from "path";
+import dotenv from "dotenv";
+
+dotenv.config(); // Ensure env is loaded
+
+if (!admin.apps.length) {
+  const serviceAccountPath = process.env.FIREBASE_ADMIN_PATH;
+
+  if (!serviceAccountPath) {
+    throw new Error("FIREBASE_ADMIN_PATH not set in .env");
+  }
+
+  const fullPath = path.resolve(serviceAccountPath);
+  const serviceAccount = JSON.parse(readFileSync(fullPath, "utf8")) as admin.ServiceAccount;
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+
+const auth = admin.auth();
+const db = admin.firestore();
+
+export { admin, auth, db };

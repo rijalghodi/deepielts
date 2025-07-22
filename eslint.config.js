@@ -1,4 +1,5 @@
 // eslint.config.js
+import globals from "globals";
 import js from "@eslint/js";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
@@ -11,12 +12,15 @@ import unusedImports from "eslint-plugin-unused-imports";
 export default [
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
+
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         React: "readonly",
         JSX: "readonly",
+        ...globals.node,
+        ...globals.browser,
       },
       parser: tsParser,
       parserOptions: {

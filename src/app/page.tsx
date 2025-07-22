@@ -1,9 +1,8 @@
 "use client";
 
-
 import { Button } from "@/components/ui/button";
 
-import { AuthDialog } from "@/features/auth/auth-dialog";
+import { AuthDialog } from "@/features/auth/login/auth-dialog";
 
 export default function Home() {
   return (

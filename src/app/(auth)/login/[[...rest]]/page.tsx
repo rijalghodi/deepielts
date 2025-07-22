@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ClerkLoginForm } from "@/features/auth/clerk-login-form";
+import { ClerkLoginForm } from "@/features/auth/archived/clerk-login-form";
 
 export const metadata: Metadata = {
   title: "Login",
