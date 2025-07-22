@@ -19,6 +19,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const QUICK_MENU = [
   {
@@ -74,7 +75,7 @@ export function AppSidebar(props: AppSidebarProps) {
               </SignOutButton>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* <SidebarTrigger /> */}
+          <ThemeToggle />
         </div>
       </SidebarHeader>
       <SidebarContent>

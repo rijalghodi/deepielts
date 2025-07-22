@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-base: hsl(var(--base));
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --font-sans: var(--font-inter);
@@ -45,6 +46,7 @@
 }
 
 :root {
+  --base: 0 0% 98%;
   --background: 0 0% 100%;
   --foreground: 20 14.3% 4.1%;
   --card: 0 0% 100%;
@@ -73,6 +75,7 @@
 }
 
 .dark {
+  --base: 0 0% 10%;
   --background: 20 14.3% 4.1%;
   --foreground: 60 9.1% 97.8%;
   --card: 20 14.3% 4.1%;
@@ -104,7 +107,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-base text-foreground;
   }
 
   button {

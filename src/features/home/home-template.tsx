@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 
 import { AuthDialog } from "../auth/login/auth-dialog";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function HomeTemplate() {
   const { user, loading, loadUser } = useAuth();
@@ -31,6 +32,8 @@ export function HomeTemplate() {
           <Button>Sign up</Button>
         </AuthDialog>
       )}
+
+      <ThemeToggle />
     </div>
   );
 }
