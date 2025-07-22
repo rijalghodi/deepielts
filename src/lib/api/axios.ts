@@ -1,10 +1,10 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import { ACCESS_TOKEN_KEY } from "@/lib/constants/brand";
+import { ACCESS_TOKEN_KEY } from "@/lib/constants";
 import { env } from "@/lib/env";
 
-export const axiosInstance = axios.create({
+export const api = axios.create({
   baseURL: env.NEXT_PUBLIC_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
@@ -12,7 +12,7 @@ export const axiosInstance = axios.create({
 });
 
 // Add an interceptor to include JWT token from cookie in headers
-axiosInstance.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
     const token = Cookies.get(ACCESS_TOKEN_KEY);
 

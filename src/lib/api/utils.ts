@@ -1,23 +1,6 @@
 import type { AxiosProgressEvent, GenericAbortSignal } from "axios";
 
-import { axiosInstance } from "@/services/axios";
-
-// Add an interceptor to include JWT token from cookie in headers
-// axiosInstance.interceptors.request.use(
-//   (config) => {
-//     const token = Cookies.get(ACCESS_TOKEN_KEY);
-
-//     if (token) {
-//       // Explicitly define Authorization header
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   },
-// );
+import { api } from "@/lib/api/axios";
 
 // Utility function to build query strings
 const buildQueryString = (params: Record<string, string | number | boolean>) => {
@@ -59,7 +42,7 @@ const apiRequest = async <T, Q = Record<string, any>, P = Record<string, any>>(
   const url = `${path}${queryString}`;
 
   try {
-    const response = await axiosInstance?.request<T>({
+    const response = await api?.request<T>({
       method,
       url,
       data, // For POST/PUT methods
@@ -94,23 +77,3 @@ export const apiPatch = async <T, Q = Record<string, any>, P = Record<string, an
 export const apiDelete = async <T, Q = Record<string, any>, P = Record<string, any>>(
   req: APIRequest<Q, P>
 ): Promise<T | undefined> => apiRequest<T, Q, P>("DELETE", req);
-
-export class AppError extends Error {
-  ok = false;
-  status;
-  constructor(message: string, status = 400) {
-    super(message);
-    this.status = status;
-  }
-}
-
-export class AppResponse {
-  ok;
-  status;
-  data: any;
-  constructor(data: any, status = 200, ok = true) {
-    this.status = status;
-    this.data = data;
-    this.ok = ok;
-  }
-}

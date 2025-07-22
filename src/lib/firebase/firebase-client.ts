@@ -1,7 +1,7 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
+
 import { env } from "../env";
 
 const firebaseConfig = {
@@ -20,9 +20,7 @@ if (!firebaseConfig.apiKey) {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const googleProvider = new GoogleAuthProvider();
+const clientAuth = getAuth(app);
+const clientStorage = getStorage(app);
 
-export { app, auth, db, googleProvider, storage };
+export { app, clientAuth, clientStorage };

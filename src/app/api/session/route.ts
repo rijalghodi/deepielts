@@ -2,12 +2,11 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
-import { admin, db } from "@/lib/firebase-admin";
-import { signJWT, verifyJwt } from "@/lib/jwt";
+import { admin, db } from "@/lib/firebase";
+import { signJWT, verifyJwt } from "@/server/services/session.service";
 
-import { AppResponse } from "@/services/utils";
-
-import { authMiddleware,User } from "./auth-middleware";
+import { authMiddleware, User } from "./auth-middleware";
+import { AppResponse } from "@/types";
 
 export async function GET(req: NextRequest & { user: User }) {
   try {
@@ -45,7 +44,7 @@ export async function POST(req: Request) {
     });
 
     // Set JWT in HttpOnly cookie
-    cookies().set(ACCESS_TOKEN_KEY, jwtToken, {
+    (await cookies()).set(ACCESS_TOKEN_KEY, jwtToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60,
@@ -59,12 +58,12 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE() {
-  cookies().delete(ACCESS_TOKEN_KEY);
+  (await cookies()).delete(ACCESS_TOKEN_KEY);
   return NextResponse.json({ success: true });
 }
 
 export async function PUT(_: Request) {
-  const oldToken = cookies().get(ACCESS_TOKEN_KEY)?.value;
+  const oldToken = (await cookies()).get(ACCESS_TOKEN_KEY)?.value;
   if (!oldToken) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
@@ -81,7 +80,7 @@ export async function PUT(_: Request) {
       isVerified: decoded?.isVerified,
     });
 
-    cookies().set(ACCESS_TOKEN_KEY, newToken, {
+    (await cookies()).set(ACCESS_TOKEN_KEY, newToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 15 * 60,

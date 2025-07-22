@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
       });
       // Show success message
       setIsEmailSent(true);
-    } catch (err) {
+    } catch (_err) {
       setError("Failed to send reset email");
     }
   };

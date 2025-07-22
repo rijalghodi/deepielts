@@ -14,7 +14,7 @@ export type User = {
 };
 
 export async function authMiddleware(req: Request) {
-  const authToken = cookies().get(ACCESS_TOKEN_KEY);
+  const authToken = (await cookies()).get(ACCESS_TOKEN_KEY);
   if (!authToken) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

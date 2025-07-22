@@ -1,16 +1,15 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { auth, googleProvider } from "@/lib/firebase/firebase";
+import { createSession } from "@/lib/api/session.api";
+import { clientAuth } from "@/lib/firebase/firebase-client";
 
 import { Button, ButtonProps } from "@/components/ui/button";
 import { IconGoogle } from "@/components/ui/icon-google";
-
-import { createSession } from "@/services/firebase/session-service";
 
 type Props = ButtonProps;
 
@@ -19,7 +18,7 @@ export function GoogleButton(props: Props) {
 
   const { isPending, mutateAsync: googleLoginMutate } = useMutation({
     mutationFn: async () => {
-      const userCredential = await signInWithPopup(auth, googleProvider);
+      const userCredential = await signInWithPopup(clientAuth, new GoogleAuthProvider());
       const idToken = await userCredential.user.getIdToken();
       await createSession(idToken);
       return idToken;
