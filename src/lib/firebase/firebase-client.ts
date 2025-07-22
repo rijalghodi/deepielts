@@ -1,5 +1,7 @@
+"use client";
+
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 import { env } from "../env";
@@ -22,5 +24,6 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 const clientAuth = getAuth(app);
 const clientStorage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
 
-export { app, clientAuth, clientStorage };
+export { app, clientAuth, clientStorage, googleProvider };

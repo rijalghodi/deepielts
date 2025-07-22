@@ -3,9 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
 import { admin, db } from "@/lib/firebase";
+
 import { signJWT, verifyJwt } from "@/server/services/session.service";
 
 import { authMiddleware, User } from "./auth-middleware";
+
 import { AppResponse } from "@/types";
 
 export async function GET(req: NextRequest & { user: User }) {

@@ -1,35 +1,61 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
-import { APP_NAME } from "@/lib/constants/brand";
+import { verifyEmailCode } from "@/lib/api/auth.api";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
-import { GoogleButton } from "./google-button";
-
-const v = z.object({
-  code: z.string().min(6),
+const schema = z.object({
+  code: z.string().length(6, "Code must be 6 digits"),
 });
 
-export function VerifyCodeForm() {
-  const [error, setError] = useState<string | null>(null);
+type Props = {
+  email: string;
+  onSuccess?: () => void;
+};
 
-  const form = useForm<z.infer<typeof v>>({
-    resolver: zodResolver(v),
+export function VerifyCodeForm({ email, onSuccess }: Props) {
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     defaultValues: {
       code: "",
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof v>) => {
+  const { isPending, mutateAsync: verifyCodeMutate } = useMutation({
+    mutationFn: async (values: z.infer<typeof schema>) => {
+      const { code } = values;
+      return verifyEmailCode(email, code);
+    },
+    onError: (error: any) => {
+      toast.error("Verification failed", {
+        description: error?.message || "Please check your code and try again",
+      });
+    },
+    onSuccess: (_data) => {
+      toast.success("Login successful!", {
+        description: "Welcome back!",
+      });
+      router.push("/");
+      onSuccess?.();
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof schema>) => {
     setError(null);
-    console.log(data);
+    await verifyCodeMutate(data);
   };
 
   return (
@@ -59,8 +85,8 @@ export function VerifyCodeForm() {
 
         {error && <p className="text-destructive text-sm text-center">{error}</p>}
 
-        <Button variant="default" className="w-full" type="submit">
-          Continue with Code
+        <Button variant="default" className="w-full" type="submit" disabled={isPending}>
+          {isPending ? "Verifying..." : "Verify Code"}
         </Button>
       </Form>
     </form>

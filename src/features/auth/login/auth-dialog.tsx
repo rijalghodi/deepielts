@@ -1,6 +1,11 @@
 "use client";
 
+import { ArrowLeft } from "lucide-react";
 import React, { useState } from "react";
+
+import { APP_NAME } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import { useAdvanceNav } from "@/hooks";
 
 import {
   Dialog,
@@ -11,16 +16,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { LoginForm } from "./login-form";
-import { APP_NAME } from "@/lib/constants";
 import { GoogleButton } from "./google-button";
+import { LoginForm } from "./login-form";
 import { VerifyCodeForm } from "./verify-code-form";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { useAdvanceNav } from "@/hooks";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 type Props = {
   open?: boolean;
@@ -30,16 +28,17 @@ type Props = {
 
 export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
   const { addSearchParams, removeSearchParams, searchParams } = useAdvanceNav();
+  const [email, setEmail] = useState<string>("");
 
   const open = openProp ?? !!searchParams.get("authOpen");
   const step = searchParams.get("authStep") ?? "login";
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      removeSearchParams(["authOpen"]);
+      removeSearchParams(["authOpen", "authStep"]);
       onOpenChange?.(false);
     } else {
-      addSearchParams({ authOpen: "true" });
+      addSearchParams({ authOpen: "true", authStep: "login" });
       onOpenChange?.(true);
     }
   };
@@ -63,7 +62,8 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
           </div>
 
           <LoginForm
-            onSuccess={() => {
+            onSuccess={(email) => {
+              setEmail(email);
               addSearchParams({ authStep: "code" });
             }}
           />
@@ -80,7 +80,7 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
           <DialogDescription>Please enter the code sent to your email to continue</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 items-stretch">
-          <VerifyCodeForm />
+          <VerifyCodeForm email={email} />
 
           <div className="flex justify-center">
             <button

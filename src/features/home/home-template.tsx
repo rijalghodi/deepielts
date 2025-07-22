@@ -1,8 +1,8 @@
-import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import { AuthDialog } from "../auth/login/auth-dialog";
+
 import { Button } from "@/components/ui/button";
-import { useAdvanceNav } from "@/hooks";
+
+import { AuthDialog } from "../auth/login/auth-dialog";
 
 type Props = {};
 
