@@ -1,26 +1,112 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { LoginForm } from "./login-form";
+import { APP_NAME } from "@/lib/constants";
+import { GoogleButton } from "./google-button";
+import { VerifyCodeForm } from "./verify-code-form";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { useAdvanceNav } from "@/hooks";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children?: React.ReactNode;
-  type: "signup" | "login" | "forgot-password" | "reset-password" | "verify-email";
 };
 
-export function AuthDialog({ open, onOpenChange, children, type }: Props) {
+export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
+  const { addSearchParams, removeSearchParams, searchParams } = useAdvanceNav();
+
+  const open = openProp ?? !!searchParams.get("authOpen");
+  const step = searchParams.get("authStep") ?? "login";
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      removeSearchParams(["authOpen"]);
+      onOpenChange?.(false);
+    } else {
+      addSearchParams({ authOpen: "true" });
+      onOpenChange?.(true);
+    }
+  };
+
+  function LoginSection() {
+    return (
+      <>
+        <DialogHeader className="text-center">
+          <DialogTitle>Let's get started 👋 </DialogTitle>
+          <DialogDescription>
+            Welcome to <span className="font-medium">{APP_NAME}</span>, please log in to continue
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-6">
+          <GoogleButton variant="outline" />
+
+          <div className="flex items-center gap-4 text-muted-foreground">
+            <div className="flex-1 border-t" />
+            <span className="text-sm">or</span>
+            <div className="flex-1 border-t" />
+          </div>
+
+          <LoginForm
+            onSuccess={() => {
+              addSearchParams({ authStep: "code" });
+            }}
+          />
+        </div>
+      </>
+    );
+  }
+
+  function VerifyCodeSection() {
+    return (
+      <>
+        <DialogHeader className="text-center">
+          <DialogTitle>Verify your email</DialogTitle>
+          <DialogDescription>Please enter the code sent to your email to continue</DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 items-stretch">
+          <VerifyCodeForm />
+
+          <div className="flex justify-center">
+            <button
+              onClick={() => {
+                removeSearchParams(["authStep"]);
+              }}
+              className="text-muted-foreground text-xs flex items-center gap-2 hover:underline underline-offset-4"
+            >
+              <ArrowLeft className="size-3" /> Back to Login
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent className="max-w-md">
-        <DialogTitle className="hidden">Sign in to your account</DialogTitle>
-        <DialogDescription className="hidden">Enter your email below to sign in to your account</DialogDescription>
-        <LoginForm />
+        <div className={cn("hidden", step === "login" && "block")}>
+          <LoginSection />
+        </div>
+        <div className={cn("hidden", step === "code" && "block")}>
+          <VerifyCodeSection />
+        </div>
       </DialogContent>
     </Dialog>
   );

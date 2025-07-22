@@ -35,8 +35,8 @@ export function GoogleButton(props: Props) {
   });
 
   return (
-    <Button variant="default" onClick={() => googleLoginMutate()} loading={isPending} {...props}>
-      <IconGoogle size={16} className="w-4 h-4 mr-2" /> Continue with Google
+    <Button onClick={() => googleLoginMutate()} loading={isPending} {...props}>
+      <IconGoogle /> Continue with Google
     </Button>
   );
 }

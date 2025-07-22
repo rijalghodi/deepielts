@@ -8,46 +8,49 @@ import { z } from "zod";
 import { APP_NAME } from "@/lib/constants/brand";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 import { GoogleButton } from "./google-button";
 
-const schema = z.object({
-  email: z.string().email(),
+const v = z.object({
+  code: z.string().min(6),
 });
 
-type Props = {
-  onSuccess?: () => void;
-};
-
-export function LoginForm({ onSuccess }: Props) {
+export function VerifyCodeForm() {
   const [error, setError] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const form = useForm<z.infer<typeof v>>({
+    resolver: zodResolver(v),
     defaultValues: {
-      email: "",
+      code: "",
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof schema>) => {
+  const onSubmit = async (data: z.infer<typeof v>) => {
     setError(null);
-    onSuccess?.();
+    console.log(data);
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center gap-3.5">
       <Form {...form}>
         <FormField
-          name="email"
+          name="code"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Your email" {...field} />
+                <InputOTP maxLength={6} className="w-full" onChange={field.onChange} value={field.value}>
+                  <InputOTPGroup className="w-full">
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
               </FormControl>
               <FormMessage />
             </FormItem>

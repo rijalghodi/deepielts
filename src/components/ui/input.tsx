@@ -35,7 +35,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             name={name}
             className={cn(
               "flex-1 px-3 focus-visible:outline-none border-none bg-background",
-              "placeholder:text-muted-foreground/50 text-base",
+              "placeholder:text-muted-foreground/50 text-sm",
               "disabled:cursor-default",
               "peer w-full",
               error && "text-destructive",
