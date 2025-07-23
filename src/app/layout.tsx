@@ -11,6 +11,7 @@ import { DialogSystemProvider } from "@/lib/providers/dialog-system";
 import { ReactQueryProvider } from "@/lib/providers/react-query";
 import { cn } from "@/lib/utils";
 
+import { AppLayout } from "@/components/layouts/app-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
@@ -46,7 +47,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <TooltipProvider>
                 <DialogSystemProvider>
-                  {children}
+                  <AppLayout>{children}</AppLayout>
                   <Toaster richColors position="bottom-center" />
                 </DialogSystemProvider>
               </TooltipProvider>

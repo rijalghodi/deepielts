@@ -20,7 +20,7 @@ export function VerifyCodeEmail({ code }: EmailTemplateProps) {
       }}
     >
       <h1 style={{ fontSize: "28px", marginBottom: "8px", fontWeight: "700", color: "#000" }}>
-        <span style={{ color: "#0043ff" }}>{APP_NAME}</span>
+        <span style={{ color: "#FF6800" }}>{APP_NAME}</span>
       </h1>
       <p style={{ fontSize: "18px", fontWeight: "600", margin: "24px 0 8px" }}>Your login code for {APP_NAME}</p>
       <p style={{ fontSize: "14px", color: "#555" }}>
@@ -41,7 +41,7 @@ export function VerifyCodeEmail({ code }: EmailTemplateProps) {
         {code}
       </div>
 
-      <p style={{ fontSize: "13px", color: "#888", marginTop: "32px" }}>
+      <p style={{ fontSize: "14px", color: "#555", marginTop: "32px" }}>
         If you didn't request a login, don't worry. You can safely ignore this email.
       </p>
     </div>

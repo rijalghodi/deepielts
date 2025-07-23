@@ -5,7 +5,7 @@ import { createContext, type ReactNode, useCallback, useContext, useEffect, useS
 import { getCurrentUser } from "@/lib/api/auth.api";
 import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
 
-type User = { id: string; email: string; role: string } | null;
+type User = { id: string; name: string; email: string; role: string } | null;
 
 const AuthContext = createContext<{
   user: User;
@@ -29,8 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       const res = await getCurrentUser();
       const data = res?.data;
-      if (data?.id && data?.email && data?.role) {
-        setUser({ id: data.id, email: data.email, role: data.role });
+      if (data?.id && data?.name && data?.email && data?.role) {
+        setUser({ id: data.id, name: data.name, email: data.email, role: data.role });
       } else {
         setUser(null);
       }

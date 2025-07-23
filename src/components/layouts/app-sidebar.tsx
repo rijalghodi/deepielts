@@ -1,6 +1,6 @@
-import { SignOutButton } from "@clerk/nextjs";
-import { Calendar, CalendarDays, ChevronDown, Inbox, LogOut, Settings, Sun } from "lucide-react";
-import Link from "next/link";
+import { Edit, LogOut, Palette, Settings } from "lucide-react";
+
+import { logout } from "@/lib/api/auth.api";
 
 import {
   Sidebar,
@@ -14,69 +14,41 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemDiv,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const QUICK_MENU = [
   {
-    title: "Today",
-    url: "/today",
-    icon: () => <Sun />,
-  },
-  {
-    title: "This Week",
-    url: "/week",
-    icon: () => <Calendar />,
-  },
-  {
-    title: "Inbox",
-    url: "/inbox",
-    icon: () => <Inbox />,
-  },
-  {
-    title: "Calendar",
-    url: "/calendar",
-    icon: () => <CalendarDays />,
+    title: "New Test",
+    icon: () => <Edit />,
   },
 ];
 
 type AppSidebarProps = {
-  userEmail?: string;
+  userName?: string;
 };
 
 export function AppSidebar(props: AppSidebarProps) {
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center w-full gap-3 justify-between">
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex justify-start px-1 w-5/6">
-                <Avatar className="h-7 w-7 shrink-0">
-                  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <span className="flex-1 truncate text-left">{props.userEmail ?? "User"}</span>
-                <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-sidebar" align="start">
-              <DropdownMenuItem>
-                <Settings /> Settings
-              </DropdownMenuItem>
-              <SignOutButton>
-                <DropdownMenuItem>
-                  <LogOut /> Logout
-                </DropdownMenuItem>
-              </SignOutButton>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <ThemeToggle />
-        </div>
+        <SidebarMenu>
+          <SidebarMenuItem className="flex justify-end">
+            <SidebarTrigger />
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -85,11 +57,9 @@ export function AppSidebar(props: AppSidebarProps) {
             <SidebarMenu>
               {QUICK_MENU.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
+                  <SidebarMenuButton>
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -104,11 +74,9 @@ export function AppSidebar(props: AppSidebarProps) {
             <SidebarMenu>
               {QUICK_MENU.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
+                  <SidebarMenuButton>
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -116,7 +84,42 @@ export function AppSidebar(props: AppSidebarProps) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size="lg">
+                  <Avatar className="h-7 w-7 shrink-0">
+                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-1 flex-1">
+                    <p className="truncate text-left font-medium">{props.userName ?? "User"}</p>
+                    <p className="text-xs text-muted-foreground">Free Plan</p>
+                  </div>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[240px]" align="start" sideOffset={10}>
+                <DropdownMenuItem>
+                  <Settings /> Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItemDiv className="h-9">
+                  <Palette /> Theme
+                  <DropdownMenuShortcut>
+                    <ThemeToggle variant="horizontal" />
+                  </DropdownMenuShortcut>
+                </DropdownMenuItemDiv>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => logout()}>
+                  <LogOut /> Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

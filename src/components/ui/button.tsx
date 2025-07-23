@@ -12,21 +12,22 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline: "border border-input bg-inherit hover:bg-accent hover:text-accent-foreground",
-        accent: "bg-accent text-accent-foreground shadow-sm hover:bg-accent/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        accent: "bg-accent text-accent-foreground hover:bg-accent/80",
+        ghost: "hover:bg-accent hover:text-foreground",
+        light: "bg-primary/10 text-primary hover:bg-primary/20",
         link: "text-foreground underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2 text-sm [&_svg]:size-4",
-        sm: "h-8 rounded-md px-3 text-xs [&_svg]:size-3.5",
+        sm: "h-8 rounded-md px-3 text-xs rounded-sm [&_svg]:size-3.5",
         lg: "h-10 rounded-md px-4 text-base [&_svg]:size-5",
-        xl: "h-11 rounded-md px-6text-lg [&_svg]:size-6",
+        xl: "h-11 rounded-md px-6 text-lg [&_svg]:size-6",
         icon: "h-9 w-9 [&_svg]:size-4",
         "icon-lg": "h-9 w-9 [&_svg]:size-5",
-        "icon-sm": "h-8 w-8 text-xs [&_svg]:size-4",
+        "icon-sm": "h-8 w-8 text-xs rounded-sm [&_svg]:size-4",
       },
     },
     defaultVariants: {

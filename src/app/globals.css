@@ -29,6 +29,15 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Sidebar */
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
 }
 
 :root {
@@ -39,7 +48,7 @@
   --surface-0: 0 0% 100%;
   --surface-1: 0 0% 96%;
   --surface-2: 0 0% 92%;
-  --surface-3: 0 0% 86%;
+  --surface-3: 0 0% 92%;
 
   /** Contrast colors */
   --contrast-0: 0 0% 12%;
@@ -67,6 +76,16 @@
   --input: var(--surface-3);
   --ring: var(--primary-0);
   --radius: 0.75rem;
+
+  /* Sidebar */
+  --sidebar: var(--surface-0);
+  --sidebar-foreground: var(--contrast-0);
+  --sidebar-primary: var(--primary-0);
+  --sidebar-primary-foreground: var(--surface-0);
+  --sidebar-accent: var(--surface-2);
+  --sidebar-accent-foreground: var(--contrast-0);
+  --sidebar-border: var(--surface-3);
+  --sidebar-ring: var(--primary-0);
 }
 
 .dark {
@@ -104,6 +123,16 @@
   --border: var(--surface-3);
   --input: var(--surface-3);
   --ring: var(--primary-0);
+
+  /* Sidebar */
+  --sidebar: var(--surface-0);
+  --sidebar-foreground: var(--contrast-0);
+  --sidebar-primary: var(--primary-0);
+  --sidebar-primary-foreground: var(--surface-0);
+  --sidebar-accent: var(--surface-2);
+  --sidebar-accent-foreground: var(--contrast-0);
+  --sidebar-border: var(--surface-3);
+  --sidebar-ring: var(--primary-0);
 }
 
 @layer base {
