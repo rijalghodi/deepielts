@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export const inputVariants = cva(
-  "flex justify-between gap-1 items-stretch h-9 w-full bg-inherit rounded-sm border-input border transition-colors disabled:opacity-50 [&_svg]:size-4 overflow-clip focus-within:border-primary",
+  "flex justify-between gap-1 items-stretch h-9 w-full bg-inherit rounded-sm transition-colors disabled:opacity-50 [&_svg]:size-4 overflow-clip focus-within:border-primary",
   {
     variants: {
       error: {
@@ -34,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             name={name}
             className={cn(
-              "flex-1 px-3 focus-visible:outline-none border-none bg-background",
+              "flex-1 px-3 focus-visible:outline-none border-none bg-accent",
               "placeholder:text-muted-foreground/50 text-sm",
               "disabled:cursor-default",
               "peer w-full",

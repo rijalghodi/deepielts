@@ -6,9 +6,9 @@ import { logout } from "@/lib/api/auth.api";
 import { useAuth } from "@/lib/contexts/auth-context";
 
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 import { AuthDialog } from "../auth/login/auth-dialog";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function HomeTemplate() {
   const { user, loading, loadUser } = useAuth();

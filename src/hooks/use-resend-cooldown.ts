@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const RESEND_COOLDOWN_KEY = "resend_cooldown_";
 const COOLDOWN_DURATION = 60; // 60 seconds

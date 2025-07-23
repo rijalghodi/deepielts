@@ -4,17 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import { requestEmailCode } from "@/lib/api/auth.api";
-import { useAuth } from "@/lib/contexts/auth-context";
+import { writeCooldown } from "@/hooks/use-resend-cooldown";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useResendCooldown } from "@/hooks";
-import { writeCooldown } from "@/hooks/use-resend-cooldown";
 
 const schema = z.object({
   email: z.string().email(),
@@ -40,9 +37,7 @@ export function LoginForm({ onSuccess }: Props) {
       return requestEmailCode(email);
     },
     onError: (error: any) => {
-      toast.error("Failed to send code", {
-        description: error?.message || "Please try again",
-      });
+      setError(error?.message || "Failed to send code");
     },
     onSuccess: async (_data, variables) => {
       writeCooldown(variables.email);

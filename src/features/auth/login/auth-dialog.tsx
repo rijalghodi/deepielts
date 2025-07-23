@@ -48,11 +48,11 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
     return (
       <>
         <DialogHeader className="text-center">
-          <DialogTitle>Let's get you started</DialogTitle>
+          <DialogTitle>Let's get started</DialogTitle>
           <DialogDescription>👋 Welcome to {APP_NAME}. Please log in to continue</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6">
-          <GoogleButton variant="outline" />
+          <GoogleButton variant="accent" />
 
           <div className="flex items-center gap-4 text-muted-foreground">
             <div className="flex-1 border-t" />
