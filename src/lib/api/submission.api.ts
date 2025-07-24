@@ -1,7 +1,8 @@
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
-import { Evaluation, Submission } from "@/server/models/submission";
+import { Submission } from "@/server/models/submission";
 
 import { apiGet, apiPost } from "./utils";
+import { api } from "./axios";
 
 import { ApiResponse, PaginatedResponse } from "@/types";
 
@@ -48,7 +49,12 @@ export const submissionListKey = (practiceId?: string, userId?: string) => ["sub
  * Evaluate a submission.
  */
 export const submissionEvaluate = async (submissionId: string) => {
-  return apiPost<ApiResponse<Evaluation>>({
+  return apiPost<ApiResponse<any>>({
     endpoint: `/submissions/${submissionId}/evaluate`,
   });
 };
+
+export async function createSubmission(data: CreateSubmissionBody) {
+  const res = await api.post("/submissions", data);
+  return res.data;
+}

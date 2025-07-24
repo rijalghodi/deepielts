@@ -1,6 +1,6 @@
 "use client";
 
-import { Crown, Sparkle } from "lucide-react";
+import { Crown, Sparkle, Sparkles } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -34,20 +34,20 @@ export function Header() {
   return (
     <div className="flex justify-between items-center w-full">
       <Link href="/" className="flex gap-2 items-center">
-        <Logo width={90} height={32} />
+        <Logo width={100} height={50} />
       </Link>
 
       <div className="flex gap-4">
         <div className="hidden md:block">
           {user ? (
-            <Button size="sm">
+            <Button>
               <Crown />
               Upgrade to Pro
             </Button>
           ) : (
             <AuthDialog>
-              <Button size="sm">
-                Login <Sparkle />
+              <Button>
+                Login <Sparkles />
               </Button>
             </AuthDialog>
           )}

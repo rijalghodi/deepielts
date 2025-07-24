@@ -48,7 +48,7 @@
   --surface-0: 0 0% 100%;
   --surface-1: 0 0% 96%;
   --surface-2: 0 0% 92%;
-  --surface-3: 0 0% 92%;
+  --surface-3: 0 0% 86%;
 
   /** Contrast colors */
   --contrast-0: 0 0% 12%;
@@ -73,7 +73,7 @@
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: var(--contrast-0);
   --border: var(--surface-3);
-  --input: var(--surface-3);
+  --input: var(--surface-1);
   --ring: var(--primary-0);
   --radius: 0.75rem;
 
@@ -93,15 +93,15 @@
   --primary-0: 25 96% 62%;
 
   /** Surface colors */
-  --surface-0: 0 0% 15%;
-  --surface-1: 0 0% 20%;
-  --surface-2: 0 0% 26%;
-  --surface-3: 0 0% 32%;
+  --surface-0: 0 0% 10%;
+  --surface-1: 0 0% 15%;
+  --surface-2: 0 0% 20%;
+  --surface-3: 0 0% 25%;
 
   /** Contrast colors */
   --contrast-0: 0 0% 94%;
-  --contrast-1: 0 0% 80%;
-  --contrast-2: 0 0% 70%;
+  --contrast-1: 0 0% 70%;
+  --contrast-2: 0 0% 60%;
 
   /* Theme colors */
   --background: var(--surface-0);
@@ -121,11 +121,11 @@
   --destructive: 0 72.2% 50.6%;
   --destructive-foreground: var(--contrast-0);
   --border: var(--surface-3);
-  --input: var(--surface-3);
+  --input: var(--surface-1);
   --ring: var(--primary-0);
 
   /* Sidebar */
-  --sidebar: var(--surface-0);
+  --sidebar: var(--surface-1);
   --sidebar-foreground: var(--contrast-0);
   --sidebar-primary: var(--primary-0);
   --sidebar-primary-foreground: var(--surface-0);

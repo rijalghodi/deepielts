@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useTheme } from "next-themes";
 
@@ -11,6 +13,12 @@ type LogoProps = {
 };
 
 export function Logo({ width = 100, height = 100 }: LogoProps) {
-  const { theme } = useTheme();
-  return <Image src={theme === "dark" ? logoDark : logoLight} alt="Logo" width={width} height={height} />;
+  const { theme, resolvedTheme } = useTheme();
+  const isDark = theme === "dark" || resolvedTheme === "dark";
+
+  if (isDark) {
+    return <Image src={logoDark} alt="Logo" width={width} height={height} className="h-auto" />;
+  }
+
+  return <Image src={logoLight} alt="Logo" width={width} height={height} className="h-auto" />;
 }
