@@ -11,7 +11,7 @@ export function HomeTemplate() {
     <div className="flex flex-col gap-4">
       {/* HERO SECTION */}
 
-      <section className="flex flex-col gap-4 relative items-center mt-5">
+      <section className="flex flex-col gap-4 relative items-center py-10 w-full max-w-screen-lg mx-auto">
         <div className="flex items-center gap-2 text-sm bg-muted text-foreground border rounded-full px-3 py-2">
           <Sparkles className="w-4 h-4 text-primary" />
           <span>AI-Powered. Trained on 1000s of real essays</span>
@@ -23,7 +23,8 @@ export function HomeTemplate() {
         <p className="text-2xl text-center text-muted-foreground mt-4">
           Instant feedback. Band 9 insights. Improve faster.
         </p>
-
+      </section>
+      <section className="w-full max-w-screen-lg mx-auto">
         <SubmissionForm />
       </section>
 

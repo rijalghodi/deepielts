@@ -119,5 +119,5 @@ export const FallingStarsBackground: React.FC<FallingStarsBackgroundProps> = ({
     };
   }, [stars]);
 
-  return <canvas ref={canvasRef} className={cn("h-full w-full absolute inset-0", className)} />;
+  return <canvas ref={canvasRef} className={cn("h-full w-full absolute inset-0 z-0", className)} />;
 };

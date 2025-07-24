@@ -41,7 +41,7 @@ export function ThemeToggle({
 
   if (variant === "dropdown") {
     return (
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon-sm">
             <Sun className={cn("absolute transition-all scale-0", theme === "light" && "scale-100")} />

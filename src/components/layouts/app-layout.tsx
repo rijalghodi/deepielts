@@ -48,7 +48,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             background: "radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.05), transparent 70%)",
           }}
         /> */}
-        <FallingStarsBackground />
+        <FallingStarsBackground className="z-0" />
 
         {/* HEADER */}
         <header
@@ -61,7 +61,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         >
           <Header />
         </header>
-        <main className="mx-auto mt-6">
+        <main className="mx-auto mt-6 relative">
           {children}
           {/* filler content to make it scrollable */}
           {Array.from({ length: 100 }).map((_, i) => (

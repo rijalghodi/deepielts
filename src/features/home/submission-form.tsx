@@ -15,6 +15,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { SelectInput } from "@/components/ui/select-input";
 import { Textarea } from "@/components/ui/textarea";
+import { TextareaInput } from "@/components/ui/textarea-input";
+import { QuestionInput } from "./question-input";
 
 const schema = createSubmissionBodySchema;
 
@@ -30,7 +32,7 @@ export function SubmissionForm({ onSuccess }: Props) {
     defaultValues: {
       question: "",
       answer: "",
-      questionType: QuestionType.Task1,
+      questionType: QuestionType.Task1General,
       attachments: [],
     },
   });
@@ -54,46 +56,22 @@ export function SubmissionForm({ onSuccess }: Props) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-3.5">
+    <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-3.5 w-full">
       <Form {...form}>
-        <FormField
-          name="question"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Question</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter the question" {...field} rows={3} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="answer"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Answer</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter your answer" {...field} rows={10} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           name="questionType"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="bg-muted rounded-lg p-4">
+            <FormItem className="">
               <FormLabel>Question Type</FormLabel>
               <FormControl>
                 <SelectInput
                   options={[
-                    { label: "Task 1", value: QuestionType.Task1 },
+                    { label: "Task 1 General", value: QuestionType.Task1General },
+                    { label: "Task 1 Academic", value: QuestionType.Task1Academic },
                     { label: "Task 2", value: QuestionType.Task2 },
                   ]}
+                  placeholder="Select Question Type"
                   {...field}
                 />
               </FormControl>
@@ -101,6 +79,25 @@ export function SubmissionForm({ onSuccess }: Props) {
             </FormItem>
           )}
         />
+        <FormField
+          name="question"
+          control={form.control}
+          render={({ field }) => <QuestionInput taskType={form.watch("questionType") as QuestionType} />}
+        />
+        <FormField
+          name="answer"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem variant="filled">
+              <FormLabel>Answer</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Enter your answer" {...field} rows={10} plainStyle />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           name="attachments"
           control={form.control}
@@ -139,6 +136,7 @@ export function SubmissionForm({ onSuccess }: Props) {
                   onChange={(e) => field.onChange(e.target.value)}
                   maxRows={10}
                   plainStyle
+                  preventResize
                 />
               </FormControl>
               <FormMessage />

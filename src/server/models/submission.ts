@@ -17,6 +17,7 @@ export interface Submission {
 }
 
 export enum QuestionType {
-  Task1 = "task_1",
+  Task1Academic = "task_1_academic",
+  Task1General = "task_1_general",
   Task2 = "task_2",
 }

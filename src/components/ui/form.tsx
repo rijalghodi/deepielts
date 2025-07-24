@@ -65,21 +65,27 @@ const useFormField = () => {
 
 type FormItemContextValue = {
   id: string;
+  variant?: "default" | "filled";
 };
 
 const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue);
 
-const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => {
-    const id = React.useId();
+const FormItem = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { variant?: "default" | "filled" }
+>(({ className, variant = "default", ...props }, ref) => {
+  const id = React.useId();
 
-    return (
-      <FormItemContext.Provider value={{ id }}>
-        <div ref={ref} className={cn("flex flex-col gap-2 bg-muted rounded-lg p-4", className)} {...props} />
-      </FormItemContext.Provider>
-    );
-  },
-);
+  return (
+    <FormItemContext.Provider value={{ id, variant }}>
+      <div
+        ref={ref}
+        className={cn("flex flex-col gap-2", variant === "filled" && "bg-muted rounded-lg p-4", className)}
+        {...props}
+      />
+    </FormItemContext.Provider>
+  );
+});
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<

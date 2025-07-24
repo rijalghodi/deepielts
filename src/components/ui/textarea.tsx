@@ -5,47 +5,46 @@ interface TextareaProps extends React.ComponentProps<"textarea"> {
   minRows?: number;
   maxRows?: number;
   plainStyle?: boolean;
+  preventResize?: boolean;
 }
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, plainStyle, minRows, maxRows, ...props }, ref) => {
+  ({ className, plainStyle, minRows = 1, maxRows = 10, rows = 1, preventResize, ...props }, ref) => {
     const internalRef = React.useRef<HTMLTextAreaElement>(null);
 
-    // Merge refs
-    const textareaRef = React.useMemo(() => {
-      if (typeof ref === "function") {
-        return (node: HTMLTextAreaElement | null) => {
-          ref(node);
-          (internalRef as any).current = node;
-        };
-      }
-      if (ref) {
-        return (node: HTMLTextAreaElement | null) => {
-          if (ref) ref.current = node;
-          (internalRef as any).current = node;
-        };
-      }
-      return internalRef;
-    }, [ref]);
+    // Merge external and internal refs
+    const textareaRef = React.useCallback(
+      (node: HTMLTextAreaElement | null) => {
+        internalRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
+      },
+      [ref],
+    );
 
     const adjustHeight = React.useCallback(() => {
       const textarea = internalRef.current;
-      if (!textarea || (!minRows && !maxRows)) return;
-      textarea.style.height = "auto";
+      if (!textarea) return;
 
       const computed = getComputedStyle(textarea);
-      const lineHeight = Number.parseInt(computed.lineHeight);
-      const paddingTop = Number.parseInt(computed.paddingTop);
-      const paddingBottom = Number.parseInt(computed.paddingBottom);
+      const lineHeight = parseFloat(computed.lineHeight || "20"); // Fallback if lineHeight is not a number
 
-      const minHeight = minRows ? lineHeight * minRows + paddingTop + paddingBottom : 0;
-      const maxHeight = maxRows ? lineHeight * maxRows + paddingTop + paddingBottom : Number.POSITIVE_INFINITY;
+      console.log(lineHeight);
+      const paddingTop = parseFloat(computed.paddingTop || "0");
+      const paddingBottom = parseFloat(computed.paddingBottom || "0");
+
+      textarea.style.height = "auto";
+      const minHeight = lineHeight * minRows + paddingTop + paddingBottom;
+      const maxHeight = maxRows ? lineHeight * maxRows + paddingTop + paddingBottom : Infinity;
 
       const newHeight = Math.min(Math.max(textarea.scrollHeight, minHeight), maxHeight);
       textarea.style.height = `${newHeight}px`;
-
       textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
-    }, [minRows, maxRows]);
+    }, [minRows, maxRows, preventResize]);
+
+    React.useEffect(() => {
+      adjustHeight();
+    }, [props.value, adjustHeight]);
 
     React.useEffect(() => {
       adjustHeight();
@@ -56,8 +55,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       return (
         <textarea
           ref={textareaRef}
-          className={cn("text-sm outline-none", className)}
-          rows={minRows}
+          className={cn("text-sm outline-none max-h-40", preventResize && "resize-none", className)}
+          rows={rows || minRows}
           onInput={adjustHeight}
           {...props}
         />
@@ -70,6 +69,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         data-slot="textarea"
         aria-invalid={props["aria-invalid"]}
         className={cn(
+          preventResize && "resize-none",
           // Layout & Sizing
           "w-full min-w-0 rounded-md px-3 py-2 min-h-16",
 
@@ -87,10 +87,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
           // Disabled
           "disabled:cursor-not-allowed disabled:opacity-50",
-          !minRows && !maxRows && "field-sizing-content min-h-16",
           className,
         )}
-        rows={minRows}
+        rows={rows || minRows}
         onInput={adjustHeight}
         {...props}
       />
