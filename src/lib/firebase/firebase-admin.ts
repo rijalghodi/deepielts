@@ -1,9 +1,8 @@
-import dotenv from "dotenv";
 import admin from "firebase-admin";
 
 import { env } from "../env";
 
-dotenv.config(); // Ensure env is loaded
+// dotenv.config(); // Ensure env is loaded
 
 if (!admin.apps.length) {
   // const serviceAccountPath = process.env.FIREBASE_ADMIN_PATH;

@@ -16,11 +16,7 @@ import { AppError } from "@/types/global";
 /**
  * Create a new submission.
  */
-export async function createSubmission(
-  data: CreateSubmissionBody,
-  userId: string,
-  practiceId: string,
-): Promise<Submission> {
+export async function createSubmission(data: CreateSubmissionBody, userId: string): Promise<Submission> {
   try {
     const submissionRef = db.collection("submissions").doc();
 
@@ -28,7 +24,6 @@ export async function createSubmission(
       ...data,
       id: submissionRef.id,
       userId,
-      practiceId,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     };
@@ -52,20 +47,6 @@ export async function getSubmission(submissionId: string): Promise<GetSubmission
     }
 
     const doc = snapshot.data() as Submission;
-
-    // Get practice
-    if (doc.practiceId) {
-      const practice = await db.collection("practices").doc(doc.practiceId).get();
-      if (!practice.exists) {
-        throw new AppError({ message: "Practice not found", code: HTTP_CODE.NOT_FOUND });
-      }
-
-      return {
-        ...doc,
-        createdAt: doc.createdAt?.toDate().toISOString(),
-        updatedAt: doc.updatedAt?.toDate().toISOString(),
-      };
-    }
 
     return {
       ...doc,

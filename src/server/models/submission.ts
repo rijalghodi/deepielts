@@ -7,7 +7,7 @@ export interface Submission {
   userId?: string;
   answer?: string;
   question?: string;
-  attachments?: string[];
+  attachments?: string;
   questionType?: QuestionType;
   readonly createdAt?: Timestamp;
   readonly updatedAt?: Timestamp;

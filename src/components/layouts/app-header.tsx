@@ -2,7 +2,7 @@
 
 import { Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
@@ -50,11 +50,13 @@ export function Header() {
                 Upgrade to Pro
               </Button>
             ) : (
-              <AuthDialog>
-                <Button>
-                  Login <Sparkles />
-                </Button>
-              </AuthDialog>
+              <Suspense>
+                <AuthDialog>
+                  <Button>
+                    Login <Sparkles />
+                  </Button>
+                </AuthDialog>
+              </Suspense>
             )}
           </div>
           <ThemeToggle />
