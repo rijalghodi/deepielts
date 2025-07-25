@@ -1,5 +1,8 @@
 import * as React from "react";
+
 import { cn } from "@/lib/utils";
+
+import { inputVariants } from "./input";
 
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   minRows?: number;
@@ -55,7 +58,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       return (
         <textarea
           ref={textareaRef}
-          className={cn("text-sm outline-none max-h-40", preventResize && "resize-none", className)}
+          className={cn(
+            "text-sm outline-none placeholder:text-muted-foreground/60",
+            preventResize && "resize-none",
+            className,
+          )}
           rows={rows || minRows}
           onInput={adjustHeight}
           {...props}
@@ -68,27 +75,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         ref={textareaRef}
         data-slot="textarea"
         aria-invalid={props["aria-invalid"]}
-        className={cn(
-          preventResize && "resize-none",
-          // Layout & Sizing
-          "w-full min-w-0 rounded-md px-3 py-2 min-h-16",
-
-          // Typography
-          "text-sm",
-
-          // Visuals
-          "border border-border bg-transparent dark:bg-input shadow-xs transition-[color,box-shadow] outline-none",
-          "placeholder:text-muted-foreground",
-
-          // Focus & Error
-          "focus-visible:border-ring dark:focus-visible:border dark:focus-visible:bg-muted",
-          "aria-invalid:border-destructive",
-          "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
-
-          // Disabled
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          className,
-        )}
+        className={cn(preventResize && "resize-none", inputVariants(), className)}
         rows={rows || minRows}
         onInput={adjustHeight}
         {...props}

@@ -1,10 +1,10 @@
-import { Plus, Upload, X } from "lucide-react";
-import React, { useRef, useState } from "react";
+import { ImageUp, Upload, X } from "lucide-react";
 import Image from "next/image";
-
-import { cn } from "@/lib/utils";
-import { uploadFile } from "@/lib/api";
+import React, { useRef, useState } from "react";
 import { toast } from "sonner";
+
+import { uploadFile } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 export type InputImageProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {
   name?: string;
@@ -14,9 +14,6 @@ export type InputImageProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 
   maxFileSizeMB?: number;
   onResetFile?: () => void;
   onChange?: (fileUrl?: string) => void;
-  enableView?: boolean;
-  enableEdit?: boolean;
-  enableDelete?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
 };
@@ -33,11 +30,9 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
       value,
       error,
       onResetFile,
-      enableView,
-      enableEdit = true,
-      enableDelete,
       disabled,
       readOnly,
+      placeholder = "Drag & drop image here, or click to select",
       ...props
     },
     ref,
@@ -156,10 +151,9 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
     // Render empty file input
     if (!value && !isUploading) {
       return renderUploadLabel(
-        <div className="flex flex-col items-center justify-center gap-2 p-4">
-          <Upload className="text-primary h-5 w-5" />
-          <span className="text-muted-foreground text-center">Drag & drop image here, or click to select</span>
-          <span className="text-muted-foreground text-center text-xs">Max size {maxFileSizeMB} MB</span>
+        <div className="flex flex-col items-center justify-center gap-3 p-4">
+          <ImageUp className="text-primary/90 h-7 w-7" strokeWidth={1.5} />
+          <span className="text-muted-foreground text-center">{placeholder}</span>
         </div>,
       );
     }
@@ -174,7 +168,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
           height={135}
           className="rounded-md object-cover w-full h-full"
         />
-        {enableDelete && (
+        {value && (
           <button
             onClick={handleRemove}
             className="absolute top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -182,7 +176,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
             <X className="h-4 w-4" />
           </button>
         )}
-        {enableEdit && (
+        {value && (
           <button
             onClick={handleTriggerEdit}
             className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center"

@@ -1,7 +1,9 @@
 import React from "react";
-import { Textarea } from "./textarea";
-import { Label } from "./label";
+
 import { cn } from "@/lib/utils";
+
+import { Label } from "./label";
+import { Textarea } from "./textarea";
 
 type TextareaInputProps = {
   label?: string;

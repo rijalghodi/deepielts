@@ -1,6 +1,6 @@
 "use client";
 
-import { Crown, Sparkle, Sparkles } from "lucide-react";
+import { Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -20,40 +20,52 @@ type Menu = {
 };
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const { user } = useAuth();
 
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", () => {
+      setScrolled(window.scrollY > 32);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", () => {});
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="flex justify-between items-center w-full">
-      <Link href="/" className="flex gap-2 items-center">
-        <Logo width={100} height={50} />
-      </Link>
+    <header
+      className={cn(
+        "sticky z-50 top-5 max-w-screen-lg mx-auto py-3 transition-all duration-300 rounded-xl px-3.5 border",
+        scrolled
+          ? "bg-background/50 dark:bg-muted/50 backdrop-blur-lg border-border shadow-lg"
+          : "bg-transparent border-transparent shadow-none",
+      )}
+    >
+      <div className="flex justify-between items-center w-full">
+        <Link href="/" className="flex gap-2 items-center">
+          <Logo width={100} height={50} />
+        </Link>
 
-      <div className="flex gap-4">
-        <div className="hidden md:block">
-          {user ? (
-            <Button>
-              <Crown />
-              Upgrade to Pro
-            </Button>
-          ) : (
-            <AuthDialog>
+        <div className="flex gap-4">
+          <div className="hidden md:block">
+            {user ? (
               <Button>
-                Login <Sparkles />
+                <Crown />
+                Upgrade to Pro
               </Button>
-            </AuthDialog>
-          )}
+            ) : (
+              <AuthDialog>
+                <Button>
+                  Login <Sparkles />
+                </Button>
+              </AuthDialog>
+            )}
+          </div>
+          <ThemeToggle />
         </div>
-        <ThemeToggle />
       </div>
-    </div>
+    </header>
   );
 }

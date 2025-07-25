@@ -69,13 +69,7 @@ export function LoginForm({ onSuccess }: Props) {
 
         {error && <p className="text-destructive text-sm text-center">{error}</p>}
 
-        <Button
-          variant="default"
-          className="w-full"
-          type="submit"
-          disabled={!form.formState.isDirty}
-          loading={isPending}
-        >
+        <Button variant="default" className="w-full" type="submit" loading={isPending}>
           Continue with Code
         </Button>
       </Form>

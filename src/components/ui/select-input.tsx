@@ -1,40 +1,49 @@
 "use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import * as React from "react";
+
+import { cn } from "@/lib/utils";
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { Input } from "./input";
 
 interface SelectInputProps {
   value?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value?: string) => void;
   placeholder?: string;
   options?: Array<{ label: string; value: string } | string>;
   readOnly?: boolean;
   disabled?: boolean;
   required?: boolean;
   className?: string;
-  error?: boolean;
+  focusStyle?: "default" | "none";
+  size?: "sm" | "default";
 }
 
 const SelectInput = React.forwardRef<HTMLButtonElement, SelectInputProps>(
-  ({ value, onChange, placeholder, options = [], disabled, readOnly, error, ...props }, ref) => {
+  (
+    {
+      value,
+      onChange,
+      placeholder,
+      options = [],
+      disabled,
+      readOnly,
+      className,
+      focusStyle,
+      size = "default",
+      ...props
+    },
+    ref,
+  ) => {
     if (readOnly) {
       const valueObj = options.find((option) =>
         typeof option === "string" ? option === value : option.value === value,
       );
       const valueLabel = typeof valueObj === "string" ? valueObj : valueObj?.label;
 
-      return (
-        <Input
-          value={valueLabel}
-          disabled={disabled}
-          readOnly={readOnly}
-          placeholder={placeholder}
-          error={error}
-          {...props}
-        />
-      );
+      return <Input value={valueLabel} disabled={disabled} readOnly={readOnly} placeholder={placeholder} {...props} />;
     }
 
     return (
@@ -45,7 +54,7 @@ const SelectInput = React.forwardRef<HTMLButtonElement, SelectInputProps>(
         }}
         {...props}
       >
-        <SelectTrigger ref={ref} disabled={disabled} className={cn(error && "border-destructive")}>
+        <SelectTrigger ref={ref} disabled={disabled} className={cn(className)} focusStyle={focusStyle} size={size}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

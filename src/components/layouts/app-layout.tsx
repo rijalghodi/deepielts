@@ -1,10 +1,8 @@
 "use client";
 
 import { Loader } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
-import { cn } from "@/lib/utils";
 
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -14,17 +12,6 @@ import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      setScrolled(window.scrollY > 20);
-    });
-
-    return () => {
-      window.removeEventListener("scroll", () => {});
-    };
-  }, []);
 
   if (loading) {
     return (
@@ -51,16 +38,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <FallingStarsBackground className="z-0" />
 
         {/* HEADER */}
-        <header
-          className={cn(
-            "sticky z-50 top-5 max-w-screen-lg mx-auto py-3 transition-all duration-300 rounded-xl px-3.5",
-            scrolled
-              ? "bg-background/50 dark:bg-muted/50 backdrop-blur-lg border shadow-lg"
-              : "bg-transparent border-0 shadow-none",
-          )}
-        >
-          <Header />
-        </header>
+        <Header />
+
         <main className="mx-auto mt-6 relative">
           {children}
           {/* filler content to make it scrollable */}

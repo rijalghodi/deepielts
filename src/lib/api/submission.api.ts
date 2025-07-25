@@ -1,8 +1,8 @@
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
 import { Submission } from "@/server/models/submission";
 
-import { apiGet, apiPost } from "./utils";
 import { api } from "./axios";
+import { apiGet, apiPost } from "./utils";
 
 import { ApiResponse, PaginatedResponse } from "@/types";
 

@@ -1,4 +1,6 @@
+import { cva } from "class-variance-authority";
 import * as React from "react";
+
 import { cn } from "@/lib/utils";
 
 export type InputProps = React.ComponentProps<"input"> & {
@@ -8,6 +10,42 @@ export type InputProps = React.ComponentProps<"input"> & {
   allowedRegex?: RegExp;
   size?: "lg" | "sm" | "default";
 };
+
+export const inputVariants = cva(
+  cn(
+    // Padding
+    "px-3 py-2 rounded-md min-w-0",
+
+    // Border
+    "border border-border shadow-xs outline-none",
+
+    // Background
+    "bg-transparent dark:bg-muted",
+
+    // Placeholder
+    "placeholder:text-muted-foreground/60",
+
+    // Focus
+    // "focus-within:border-ring/50 focus-within:ring-1 focus-within:ring-ring/40",
+
+    // Error
+    "aria-invalid:border-destructive aria-invalid:ring-destructive/70 dark:aria-invalid:ring-destructive/70",
+
+    // Disabled
+    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+  ),
+  {
+    variants: {
+      focusStyle: {
+        none: "focus-within:border-border focus-within:ring-0",
+        default: "focus-within:border-ring data-[state=open]:border-ring",
+      },
+    },
+    defaultVariants: {
+      focusStyle: "default",
+    },
+  },
+);
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
@@ -19,22 +57,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         data-size={size}
         aria-invalid={error}
         className={cn(
-          // Layout & Sizing
-          "flex w-full min-w-0 gap-1 rounded-md px-3 py-1",
+          // Layout
+          "flex w-full gap-1",
+
+          // Sizing
           "data-[size=lg]:h-10 data-[size=sm]:h-8 data-[size=default]:h-9",
           "data-[size=lg]:text-base data-[size=sm]:text-sm data-[size=default]:text-sm",
 
-          // Visuals
-          "border border-border bg-transparent dark:bg-input shadow-xs transition-[color,box-shadow] outline-none",
-          "placeholder:text-placeholder",
-
-          // Focus & Error
-          "focus-within:border-ring dark:focus-within:border dark:focus-within:bg-input/50",
-          "aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
-          error && "text-destructive",
-
-          // Disabled
-          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+          inputVariants(),
         )}
       >
         {leftSection && <div className="flex items-center justify-center pl-2">{leftSection}</div>}

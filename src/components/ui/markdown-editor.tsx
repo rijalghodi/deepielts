@@ -1,23 +1,24 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
+  headingsPlugin,
   InsertThematicBreak,
+  listsPlugin,
   ListsToggle,
+  markdownShortcutPlugin,
   MDXEditor,
   MDXEditorMethods,
-  Separator,
-  UndoRedo,
-  headingsPlugin,
-  listsPlugin,
-  markdownShortcutPlugin,
   quotePlugin,
+  Separator,
   thematicBreakPlugin,
   toolbarPlugin,
+  UndoRedo,
 } from "@mdxeditor/editor";
 import { FC } from "react";
+
+import { cn } from "@/lib/utils";
 
 interface EditorProps {
   markdown?: string;

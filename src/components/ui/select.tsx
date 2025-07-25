@@ -1,10 +1,12 @@
 "use client";
 
-import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
+
+import { inputVariants } from "./input";
 
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
@@ -22,40 +24,28 @@ function SelectTrigger({
   className,
   size = "default",
   children,
+  focusStyle = "default",
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
   size?: "sm" | "default";
+  focusStyle?: "default" | "none";
 }) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       data-size={size}
       className={cn(
+        inputVariants({ focusStyle }),
         // Layout
-        "flex w-fit items-center justify-between gap-2 rounded-md px-3 py-2",
+        "flex w-fit items-center justify-between gap-2",
         "whitespace-nowrap",
 
         // Size variants
         "data-[size=default]:h-9 data-[size=sm]:h-8",
-
-        // Typography
-        "text-sm",
-
-        // Background and borders
-        "bg-transparent border border-border dark:bg-input dark:hover:bg-input/50",
-        "focus-visible:border-ring",
-
-        // Visual feedback
-        "shadow-xs transition-[color,box-shadow] outline-none",
-        "focus-visible:ring-ring/50 focus-visible:ring-[1px]",
-
-        // Accessibility and state
-        "disabled:cursor-not-allowed disabled:opacity-50",
-        "aria-invalid:border-destructive",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
+        "data-[size=default]:text-sm data-[size=sm]:text-xs",
 
         // Placeholder and icon color
-        "data-[placeholder]:text-muted-foreground",
+        "data-[placeholder]:text-muted-foreground/50",
         "[&_svg:not([class*='text-'])]:text-muted-foreground",
 
         // Icon behavior

@@ -1,15 +1,16 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
-  MDXEditor,
   headingsPlugin,
   listsPlugin,
   markdownShortcutPlugin,
+  MDXEditor,
   quotePlugin,
   thematicBreakPlugin,
 } from "@mdxeditor/editor";
 import { FC } from "react";
+
+import { cn } from "@/lib/utils";
 
 interface EditorProps {
   value?: string;

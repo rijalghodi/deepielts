@@ -96,7 +96,7 @@ export function VerifyCodeForm({ email, onSuccess }: Props) {
 
         {error && <p className="text-destructive text-sm text-center">{error}</p>}
 
-        <Button variant="default" className="w-full" type="submit" disabled={isPending}>
+        <Button variant="default" className="w-full" type="submit" loading={isPending}>
           {isPending ? "Verifying..." : "Verify Code"}
         </Button>
       </Form>

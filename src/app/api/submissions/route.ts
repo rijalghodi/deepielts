@@ -1,9 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
-import { AppResponse, AppError } from "@/types/global";
-import { db } from "@/lib/firebase/firebase-admin";
-import { authMiddleware } from "../auth/auth-middleware";
 import { Timestamp } from "firebase-admin/firestore";
+import { NextRequest, NextResponse } from "next/server";
+
+import { db } from "@/lib/firebase/firebase-admin";
+
+import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
+
+import { authMiddleware } from "../auth/auth-middleware";
+
+import { AppError, AppResponse } from "@/types/global";
 
 export async function POST(req: NextRequest) {
   try {

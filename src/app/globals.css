@@ -13,6 +13,7 @@
   --color-placeholder: hsl(var(--contrast-2));
   --color-border: hsl(var(--border));
   --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
   --color-accent-foreground: hsl(var(--accent-foreground));
   --color-accent: hsl(var(--accent));
   --color-accent-hover: hsl(var(--accent-hover));
@@ -26,6 +27,9 @@
   --color-popover: hsl(var(--popover));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-card: hsl(var(--card));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -44,13 +48,18 @@
 :root {
   /** Theme primary colors */
   --primary-0: 24.6 95% 53.1%;
+  --success-0: 137 95% 30%;
+  --destructive-0: 0 84.2% 60.2%;
+
+  --dark: 0 0% 0%;
+  --light: 0 0% 100%;
 
   /** Surface colors */
   --surface-0: 0 0% 100%;
   --surface-1: 0 0% 96%;
   --surface-2: 0 0% 93%;
   --surface-3: 0 0% 90%;
-  --surface-4: 0 0% 86%;
+  --surface-4: 0 0% 85%;
 
   /** Contrast colors */
   --contrast-0: 0 0% 12%;
@@ -60,12 +69,12 @@
   /** Theme colors */
   --background: var(--surface-0);
   --foreground: var(--contrast-0);
-  --card: var(--surface-1);
+  --card: var(--surface-0);
   --card-foreground: var(--contrast-0);
   --popover: var(--surface-0);
   --popover-foreground: var(--contrast-0);
   --primary: var(--primary-0);
-  --primary-foreground: var(--surface-0);
+  --primary-foreground: var(--light);
   --surface: var(--surface-1);
   --surface-foreground: var(--contrast-0);
   --muted: var(--surface-1);
@@ -73,12 +82,14 @@
   --accent: var(--surface-2);
   --accent-foreground: var(--contrast-0);
   --accent-hover: var(--surface-3);
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: var(--contrast-0);
+  --destructive: var(--destructive-0);
+  --destructive-foreground: var(--light);
   --border: var(--surface-4);
   --input: var(--surface-1);
   --ring: var(--primary-0);
   --radius: 0.75rem;
+  --success: var(--success-0);
+  --success-foreground: var(--light);
 
   /* Sidebar */
   --sidebar: var(--surface-1);
@@ -94,13 +105,15 @@
 .dark {
   /** Primary colors */
   --primary-0: 25 96% 62%;
+  --success-0: 137 95% 65%;
+  --destructive-0: 0 84.2% 68%;
 
   /** Surface colors */
   --surface-0: 0 0% 10%;
-  --surface-1: 0 0% 15%;
-  --surface-2: 0 0% 20%;
-  --surface-3: 0 0% 25%;
-  --surface-4: 0 0% 30%;
+  --surface-1: 0 0% 14%;
+  --surface-2: 0 0% 18%;
+  --surface-3: 0 0% 22%;
+  --surface-4: 0 0% 24%;
 
   /** Contrast colors */
   --contrast-0: 0 0% 94%;
@@ -115,7 +128,7 @@
   --popover: var(--surface-1);
   --popover-foreground: var(--contrast-0);
   --primary: var(--primary-0);
-  --primary-foreground: var(--surface-0);
+  --primary-foreground: var(--dark);
   --surface: var(--surface-1);
   --surface-foreground: var(--contrast-0);
   --muted: var(--surface-1);
@@ -123,11 +136,13 @@
   --accent: var(--surface-2);
   --accent-foreground: var(--contrast-0);
   --accent-hover: var(--surface-3);
-  --destructive: 0 72.2% 50.6%;
-  --destructive-foreground: var(--contrast-0);
+  --destructive: var(--destructive-0);
+  --destructive-foreground: var(--dark);
   --border: var(--surface-4);
   --input: var(--surface-1);
   --ring: var(--primary-0);
+  --success: var(--success-0);
+  --success-foreground: var(--dark);
 
   /* Sidebar */
   --sidebar: var(--surface-1);
@@ -150,6 +165,34 @@
 
   button {
     cursor: pointer;
+  }
+}
+
+@layer utilities {
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-reverse {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee var(--marquee-duration, 20s) linear infinite;
+  }
+
+  .animate-marquee-reverse {
+    animation: marquee-reverse var(--marquee-duration, 20s) linear infinite;
   }
 }
 
