@@ -56,15 +56,15 @@ const features = [
 export function FeaturesSection() {
   return (
     <div className="flex flex-col gap-16">
-      <div className="text-center space-y-4">
+      <div className="max-w-2xl mx-auto text-center space-y-4 md:space-y-6">
         <Badge variant="light" size="lg">
           <Sparkles className="h-3 w-3" />
           Introducing
         </Badge>
-        <h2 className="text-4xl md:text-5xl font-semibold leading-normal tracking-tight mb-8">
+        <h2 className="section-title">
           {APP_NAME} <br /> A Free <span className="text-primary">IELTS Writing</span> Checker
         </h2>
-        <p className="text-lg max-w-2xl mx-auto mb-8 text-muted-foreground">
+        <p className="section-desc">
           {APP_NAME} is a free IELTS Writing checker powered by AI, trained on over 10,000 real essays. It predicts your
           score and gives feedback similar to real examiners.
         </p>
@@ -79,7 +79,7 @@ export function FeaturesSection() {
             {/* Content Side */}
             <div className="flex-1 space-y-4">
               <h3 className="text-2xl md:text-3xl font-semibold">{feature.title}</h3>
-              <Separator className="w-16 bg-primary" />
+              <Separator className="w-16 h-0.5 bg-primary/70" />
               <p className="text-lg text-muted-foreground leading-relaxed">{feature.description}</p>
               <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
                 {feature.details.map((d, i) => (

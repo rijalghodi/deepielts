@@ -15,35 +15,34 @@ export interface Testimonial {
 }
 
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
-  <div className="flex flex-col gap-4 size-full items-center justify-center bg-background">
-    <Marquee>
-      <MarqueeFade side="left" />
-      <MarqueeFade side="right" />
-      <MarqueeContent autoFill={false} loop={1000} pauseOnHover={true} direction="left">
-        {testimonials.slice(0, testimonials.length / 2).map((testimonial) => (
-          <MarqueeItem key={testimonial.id}>
-            <TestimonialCard testimonial={testimonial} />
-          </MarqueeItem>
-        ))}
-      </MarqueeContent>
-    </Marquee>
-    <Marquee>
-      <MarqueeFade side="left" />
-      <MarqueeFade side="right" />
-      <MarqueeContent autoFill={false} loop={1000} pauseOnHover={true} direction="right">
-        {testimonials.slice(testimonials.length / 2).map((testimonial) => (
-          <MarqueeItem key={testimonial.id}>
-            <TestimonialCard testimonial={testimonial} />
-          </MarqueeItem>
-        ))}
-      </MarqueeContent>
-    </Marquee>
+  <div className="flex flex-col gap-4 size-full items-center justify-center">
+    {/* Desktop: Horizontal marquee (hidden on small screens) */}
+    <div className="hidden xl:block w-full">
+      <Marquee>
+        <MarqueeFade side="left" />
+        <MarqueeFade side="right" />
+        <MarqueeContent autoFill={false} loop={1000} pauseOnHover={true} direction="left">
+          {testimonials.map((testimonial) => (
+            <MarqueeItem key={testimonial.id}>
+              <TestimonialCard testimonial={testimonial} />
+            </MarqueeItem>
+          ))}
+        </MarqueeContent>
+      </Marquee>
+    </div>
+
+    {/* Mobile: Vertical marquee (hidden on large screens) */}
+    <div className="xl:hidden w-full flex flex-wrap gap-4 justify-center">
+      {testimonials.map((testimonial) => (
+        <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+      ))}
+    </div>
   </div>
 );
 
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   return (
-    <div className="min-w-96 max-w-sm bg-accent rounded-xl p-6">
+    <div className="min-w-0 w-full max-w-sm bg-accent rounded-xl p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Avatar>
@@ -53,7 +52,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
           </Avatar>
           <div>
             <p className="text-lg font-semibold">{testimonial.name}</p>
-            <p className="text-sm text-gray-500">{testimonial.designation}</p>
+            <p className="text-sm text-muted-foreground">{testimonial.designation}</p>
           </div>
         </div>
         <Button variant="ghost" size="icon" asChild>

@@ -48,9 +48,9 @@ export default function FaqSection() {
     <>
       <div className="w-full">
         {/* Title */}
-        <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
+        <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14 space-y-4 md:space-y-6">
           <h2 className="font-semibold text-3xl md:text-5xl md:leading-tight">Frequently Asked Questions</h2>
-          <p className="mt-6 text-muted-foreground">Answers to the most frequently asked questions.</p>
+          <p className="text-muted-foreground">Answers to the most frequently asked questions.</p>
         </div>
         {/* End Title */}
 

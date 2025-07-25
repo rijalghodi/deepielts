@@ -58,9 +58,9 @@ export function TestimonialSection() {
   return (
     <div className="w-full">
       {/* Title */}
-      <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
-        <h2 className="font-semibold text-3xl md:text-5xl md:leading-tight">Testimonials</h2>
-        <p className="mt-6 text-muted-foreground">What our users say about us</p>
+      <div className="max-w-2xl mx-auto text-center lg:mb-14 mb-8">
+        <h2 className="section-title mb-4">Testimonials</h2>
+        <p className="section-desc">What our users say about us</p>
       </div>
       {/* End Title */}
 

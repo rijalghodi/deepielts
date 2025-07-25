@@ -13,12 +13,6 @@ import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";
 import { ThemeToggle } from "../ui/theme-toggle";
 
-type Menu = {
-  title: string;
-  link: string;
-  openInNewTab?: boolean;
-};
-
 export function Header() {
   const { user } = useAuth();
 
@@ -37,7 +31,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky z-50 top-5 max-w-screen-lg mx-auto py-3 transition-all duration-300 rounded-xl px-3.5 border",
+        "sticky z-50 top-4 max-w-screen-lg mx-auto py-3 transition-all duration-300 rounded-xl px-3.5 border",
         scrolled
           ? "bg-background/50 dark:bg-muted/50 backdrop-blur-lg border-border shadow-lg"
           : "bg-transparent border-transparent shadow-none",

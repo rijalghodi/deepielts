@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { PricingCard, PricingCardProps } from "@/components/ui/pricing-card";
 
 const plans: PricingCardProps[] = [
@@ -33,20 +34,42 @@ const plans: PricingCardProps[] = [
     ],
   },
 ];
+
 export default function PricingSection() {
   return (
     <div className="w-full">
       {/* Title */}
       <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
-        <h2 className="font-semibold text-3xl md:text-5xl md:leading-tight">Pricing</h2>
-        <p className="mt-6 text-muted-foreground">Choose the plan that's right for you.</p>
+        <h2 className="section-title">Pricing</h2>
+        <p className="section-desc">Choose the plan that's right for you.</p>
       </div>
-      {/* End Title */}
 
-      <div className="flex gap-4 justify-center">
+      {/* Desktop: Grid layout (hidden on small screens) */}
+      <div className="hidden md:flex gap-4 justify-center">
         {plans.map((plan) => (
           <PricingCard key={plan.title} {...plan} />
         ))}
+      </div>
+
+      {/* Mobile: Carousel layout (hidden on large screens) */}
+      <div className="md:hidden w-full">
+        <Carousel
+          opts={{
+            align: "center",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {plans.map((plan) => (
+              <CarouselItem key={plan.title} className="flex justify-center">
+                <PricingCard {...plan} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-2" />
+          <CarouselNext className="-right-2" />
+        </Carousel>
       </div>
     </div>
   );
