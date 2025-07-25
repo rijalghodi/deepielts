@@ -28,7 +28,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {user && <AppSidebar userName={user.name} />}
 
       {/* Scrollable area */}
-      <div className="flex-1 px-6 relative">
+      <div className="flex-1 relative">
         {/* <div
           className="absolute inset-0 h-screen w-screen"
           style={{
