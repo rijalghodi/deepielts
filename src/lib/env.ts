@@ -32,13 +32,15 @@ export const clientEnv = createEnv({
 
 export const serverEnv = createEnv({
   server: {
-    FIREBASE_ADMIN_PATH: z.string(),
+    FIREBASE_ADMIN_CLIENT_EMAIL: z.string(),
+    FIREBASE_ADMIN_PRIVATE_KEY: z.string(),
     JWT_ACCESS_SECRET: z.string(),
     JWT_REFRESH_SECRET: z.string(),
     RESEND_API_KEY: z.string(),
   },
   runtimeEnv: {
-    FIREBASE_ADMIN_PATH: process.env.FIREBASE_ADMIN_PATH,
+    FIREBASE_ADMIN_CLIENT_EMAIL: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+    FIREBASE_ADMIN_PRIVATE_KEY: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,

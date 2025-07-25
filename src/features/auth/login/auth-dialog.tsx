@@ -47,8 +47,8 @@ export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
   function LoginSection() {
     return (
       <>
-        <DialogHeader className="sm:text-center">
-          <DialogTitle>Welcome to {APP_NAME}</DialogTitle>
+        <DialogHeader className="">
+          <DialogTitle> Welcome to {APP_NAME}</DialogTitle>
           <DialogDescription>Please log in to continue</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6">

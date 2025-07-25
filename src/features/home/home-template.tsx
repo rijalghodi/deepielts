@@ -4,14 +4,14 @@ import React from "react";
 
 import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
 
+import CtaSection from "./cta-section";
+import FaqSection from "./faq-section";
 import FeaturesSection from "./features-section";
 import { HeroSection } from "./hero-section";
 import PricingSection from "./pricing-section";
 import { SubmissionForm } from "./submission-form";
 import { TestimonialSection } from "./testimonial-section";
 import VsTraditionalSection from "./vs-traditional-section";
-import FaqSection from "./faq-section";
-import CtaSection from "./cta-section";
 
 export function HomeTemplate() {
   return (
