@@ -23,9 +23,9 @@ export function VsTraditionalSection() {
         {/* <p className="section-desc max-w-2xl mx-auto">Just to get manual IELTS checks</p> */}
       </div>
 
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-12">
         {/* Cost Breakdown */}
-        <div className="grid md:grid-cols-2 gap-8 mt-12">
+        <div className="grid md:grid-cols-2 gap-8 gap-y-6 mt-12">
           <Card className="border-2 border-destructive/50 bg-destructive/5">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">
@@ -85,12 +85,12 @@ export function VsTraditionalSection() {
 
         {/* Message */}
         <div className="space-y-4 text-center">
-          <p className="sm:text-lg leading-relaxed text-muted-foreground mb-6">
+          <p className="sm:text-lg text-muted-foreground mb-6">
             Preparing for IELTS the traditional way can easily add up to a{" "}
             <strong className="text-destructive">$1000-2000+</strong> total cost.
           </p>
 
-          <p className="sm:text-lg leading-relaxed text-muted-foreground mb-6">
+          <p className="sm:text-lg text-muted-foreground mb-6">
             Meanwhile,AI models like ChatGPT can excel in English and help you prepare for your IELTS score with a more{" "}
             <strong className="text-primary">affordable price</strong> - actually,{" "}
             <strong className="text-green-600">completely free</strong>!

@@ -7,10 +7,7 @@ export function CtaSection() {
   return (
     <div className="text-center space-y-4 sm:space-y-6">
       <h2 className="section-title">Ready to Improve Your IELTS Score?</h2>
-      <p className="section-desc max-w-2xl mx-auto">
-        Join thousands of students who are already using Deep IELTS to get better scores. Start your free practice today
-        and see the difference AI-powered feedback can make.
-      </p>
+      <p className="section-desc max-w-2xl mx-auto">Start your free practice today and see the difference.</p>
       <Button size="xl" className="hover:shadow-glowing-lg transition-shadow">
         Try It Now <span className="hidden sm:inline">- It's Free</span>
         <ArrowRight />

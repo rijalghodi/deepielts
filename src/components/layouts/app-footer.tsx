@@ -7,7 +7,7 @@ import { APP_NAME, APP_SOCIAL_LINKS } from "@/lib/constants/brand";
 export default function AppFooter() {
   return (
     <footer className="w-full bg-background border-t border-border mt-12">
-      <div className="max-w-screen-lg mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="max-w-screen-lg mx-auto px-5 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="text-sm text-muted-foreground">
           &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
         </div>
