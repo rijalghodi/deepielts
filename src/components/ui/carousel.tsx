@@ -214,4 +214,31 @@ function CarouselNext({
   );
 }
 
-export { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious };
+function CarouselPagination({ className, ...props }: React.ComponentProps<"div">) {
+  const { api } = useCarousel();
+  const count = api?.slideNodes().length ?? 0;
+  const current = api?.selectedScrollSnap() ?? 0;
+
+  return (
+    <div className="mt-4 flex items-center justify-center gap-2">
+      {" "}
+      {Array.from({ length: count }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => api?.scrollTo(index)}
+          className={cn("h-3.5 w-3.5 rounded-full border-2", { "border-primary": current === index })}
+        />
+      ))}
+    </div>
+  );
+}
+
+export {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPagination,
+  CarouselPrevious,
+};

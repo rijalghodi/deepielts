@@ -1,6 +1,13 @@
 import React from "react";
 
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPagination,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { PricingCard, PricingCardProps } from "@/components/ui/pricing-card";
 
 const plans: PricingCardProps[] = [
@@ -56,7 +63,7 @@ export default function PricingSection() {
         <Carousel
           opts={{
             align: "center",
-            loop: true,
+            loop: false,
           }}
           className="w-full"
         >
@@ -67,6 +74,7 @@ export default function PricingSection() {
               </CarouselItem>
             ))}
           </CarouselContent>
+          <CarouselPagination />
           <CarouselPrevious className="-left-2" />
           <CarouselNext className="-right-2" />
         </Carousel>
