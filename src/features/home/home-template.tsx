@@ -11,6 +11,7 @@ import { HeroSection } from "./hero-section";
 import PricingSection from "./pricing-section";
 import { SubmissionForm } from "./submission-form";
 import { TestimonialSection } from "./testimonial-section";
+import VsTraditionalSection from "./vs-traditional-section";
 
 export function HomeTemplate() {
   return (
@@ -36,7 +37,7 @@ export function HomeTemplate() {
       {/* CTA SECTION */}
       <section className="bg-muted w-full px-4 md:px-6 py-24 lg:py-32">
         <div className="max-w-screen-lg mx-auto">
-          <CtaSection />
+          <VsTraditionalSection />
         </div>
       </section>
       {/* TESTIMONIAL SECTION */}
@@ -55,6 +56,13 @@ export function HomeTemplate() {
       {/* FAQ SECTION */}
       <section className="flex flex-col gap-4 max-w-screen-lg mx-auto w-full px-4 md:px-6 py-24 lg:py-32">
         <FaqSection />
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="bg-background w-full px-4 md:px-6 py-24 lg:py-32">
+        <div className="max-w-screen-lg mx-auto">
+          <CtaSection />
+        </div>
       </section>
     </div>
   );

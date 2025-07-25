@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --shadow-glowing: 0 0 16px hsl(var(--primary) / 0.5);
+  --shadow-glowing-sm: 0 0 10px hsl(var(--primary) / 0.5);
+  --shadow-glowing-lg: 0 0 30px hsl(var(--primary) / 0.5);
+}
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -43,6 +49,12 @@
   --color-sidebar-accent: hsl(var(--sidebar-accent));
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-border: hsl(var(--sidebar-border));
+
+  /* --shadow-glowing:
+    0 0 20px rgba(var(--primary), 0.3), 0 0 40px rgba(var(--primary), 0.2), 0 0 60px rgba(var(--primary), 0.1);
+  --shadow-glowing-sm: 0 0 10px rgba(var(--primary), 0.3), 0 0 20px rgba(var(--primary), 0.2);
+  --shadow-glowing-lg:
+    0 0 30px rgba(var(--primary), 0.4), 0 0 60px rgba(var(--primary), 0.3), 0 0 90px rgba(var(--primary), 0.2); */
 }
 
 :root {
@@ -193,6 +205,14 @@
 
   .animate-marquee-reverse {
     animation: marquee-reverse var(--marquee-duration, 20s) linear infinite;
+  }
+
+  .section-title {
+    @apply text-3xl sm:text-4xl md:text-5xl font-semibold sm:leading-normal sm:tracking-tight;
+  }
+
+  .section-desc {
+    @apply md:text-lg text-muted-foreground;
   }
 }
 
