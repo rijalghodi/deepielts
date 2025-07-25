@@ -2,33 +2,44 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const faqs = [
   {
-    question: "Can I cancel at anytime?",
+    question: "Is Deep IELTS free?",
     answer:
-      "Yes, you can cancel anytime no questions are asked while you cancel but we would highly appreciate if you will give us some feedback.",
+      "Yes. You can try this app for free and get detailed feedback. But to access unlimited you need to upgrade plan.",
   },
   {
-    question: "My team has credits. How do we use them?",
+    question: "How accurate is Deep IELTS compared to a real IELTS examiner?",
     answer:
-      "Once your team signs up for a subscription plan. This is where we sit down, grab a cup of coffee and dial in the details.",
+      "Deep IELTS uses advanced AI models trained on thousands of real essays and examiner feedback. While it closely mimics examiner scoring and feedback, it is not a substitute for the official IELTS test. However, it provides highly relevant, actionable insights to help you improve.",
   },
   {
-    question: "How does Acme's pricing work?",
-    answer: "Our subscriptions are tiered. Understanding the task at hand and ironing out the wrinkles is key.",
+    question: "What types of IELTS writing tasks can I check?",
+    answer:
+      "Deep IELTS supports Academic Task 1, General Training Task 1, and Task 2 essays. You can upload, paste, or write your answer directly on the platform.",
   },
   {
-    question: "How secure is Acme?",
+    question: "How fast will I get my results?",
     answer:
-      "Protecting the data you trust to Acme is our first priority. This part is really crucial in keeping the project in line to completion.",
+      "Instantly! As soon as you submit your essay, our AI analyzes your writing and provides a band score with detailed feedback within seconds.",
   },
   {
-    question: "How do I get access to a theme I purchased?",
+    question: "Can I trust AI feedback for my IELTS preparation?",
     answer:
-      "If you lose the link for a theme you purchased, don't panic! We've got you covered. You can login to your account, tap your avatar in the upper right corner, and tap Purchases. If you didn't create a login or can't remember the information, you can use our handy Redownload page, just remember to use the same email you originally made your purchases with.",
+      "Our AI is trained on over 10,000 real IELTS essays and examiner comments. It provides feedback on grammar, vocabulary, structure, and task achievement, similar to what you’d get from a human tutor.",
   },
   {
-    question: "Upgrade License Type",
+    question: "Is my data and writing kept private?",
     answer:
-      "There may be times when you need to upgrade your license from the original type you purchased and we have a solution that ensures you can apply your original purchase cost to the new license purchase.",
+      "Absolutely. Your essays are processed securely and are never shared with third parties. We respect your privacy and use your data only to improve your experience.",
+  },
+  {
+    question: "Do I need to create an account to use Deep IELTS?",
+    answer:
+      "You can try the service without an account, but creating one lets you track your progress, save your essays, and access more features.",
+  },
+  {
+    question: "How is Deep IELTS different from ChatGPT or other AI tools?",
+    answer:
+      "Deep IELTS is specifically trained for IELTS writing tasks and scoring criteria. It provides band scores and feedback tailored to the IELTS exam, unlike general-purpose AI chatbots.",
   },
 ];
 

@@ -99,7 +99,7 @@ export const PricingCard = ({
               <span className="text-3xl font-bold">${currentPrice}</span>
               {price && (
                 <span className="text-muted-foreground">
-                  /{billingCycle === "month" ? "month" : billingCycle === "week" ? "week" : "3-month"}
+                  /{billingCycle === "month" ? "month" : billingCycle === "week" ? "week" : "3 month"}
                 </span>
               )}
             </div>
