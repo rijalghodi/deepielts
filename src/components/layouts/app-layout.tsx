@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/contexts/auth-context";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
+import AppFooter from "./app-footer";
 import { Header } from "./app-header";
 import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
@@ -25,6 +26,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
+      <FallingStarsBackground className="z-0" />
       {user && <AppSidebar userName={user.name} />}
 
       {/* Scrollable area */}
@@ -35,18 +37,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             background: "radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.05), transparent 70%)",
           }}
         /> */}
-        <FallingStarsBackground className="z-0" />
 
         {/* HEADER */}
         <Header />
 
-        <main className="mx-auto mt-6 relative">
-          {children}
-          {/* filler content to make it scrollable */}
-          {Array.from({ length: 100 }).map((_, i) => (
-            <p key={i}>Hellox</p>
-          ))}
-        </main>
+        <main className="mx-auto mt-6 relative">{children}</main>
+
+        <AppFooter />
       </div>
     </SidebarProvider>
   );

@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { Check, HelpCircle, Sparkles, X } from "lucide-react";
 import { useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { SelectInput } from "./select-input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 
 interface PricingFeature {
   name: string;
@@ -102,26 +104,26 @@ export const PricingCard = ({
               )}
             </div>
             {price && (
-              <SelectInput
-                options={[
-                  {
-                    label: "1 Week",
-                    value: "week",
-                  },
-                  {
-                    label: "1 Month",
-                    value: "month",
-                  },
-                  {
-                    label: "3 Month",
-                    value: "3-month",
-                  },
-                ]}
+              <Select
                 value={billingCycle}
-                onChange={(value) => setBillingCycle(value as "month" | "week" | "3-month")}
-                placeholder="Select billing cycle"
-                className="w-full max-w-[120px]"
-              />
+                onValueChange={(currentValue) => {
+                  setBillingCycle(currentValue as "month" | "week" | "3-month");
+                }}
+              >
+                <SelectTrigger
+                  className={cn(
+                    "w-full max-w-[120px] shadow-none border-primary/50",
+                    highlighted ? "border-primary/50" : "",
+                  )}
+                >
+                  <SelectValue placeholder="Select billing cycle" />
+                </SelectTrigger>
+                <SelectContent className={cn(highlighted ? "border-primary/50" : "")}>
+                  <SelectItem value="week">1 Week</SelectItem>
+                  <SelectItem value="month">1 Month</SelectItem>
+                  <SelectItem value="3-month">3 Month</SelectItem>
+                </SelectContent>
+              </Select>
             )}
           </div>
 

@@ -1,20 +1,13 @@
+import { Sparkles } from "lucide-react";
 import React from "react";
+
+import { APP_NAME } from "@/lib/constants";
+
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
 
 const features = [
   {
-    id: 0,
-    title: "Unlimited Question Practice",
-    badge: "Practice",
-    description:
-      "Practice as many IELTS questions as you want, across a wide variety of real exam topics. Get instant feedback and never run out of material.",
-    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
-    details: ["Covers all major IELTS writing topics", "No daily or monthly limits", "Practice anytime, anywhere"],
-  },
-  {
-    id: 1,
     title: "Task 1 Academic IELTS Scoring",
     badge: "Academic",
     description:
@@ -27,7 +20,6 @@ const features = [
     ],
   },
   {
-    id: 2,
     title: "Task 1 General IELTS Scoring",
     badge: "General",
     description:
@@ -40,7 +32,6 @@ const features = [
     ],
   },
   {
-    id: 3,
     title: "Task 2 Scoring",
     badge: "Essay",
     description:
@@ -52,35 +43,43 @@ const features = [
       "See how to boost your score with real examples",
     ],
   },
+  {
+    title: "Unlimited Question Practice",
+    badge: "Practice",
+    description:
+      "Practice as many IELTS questions as you want, across a wide variety of real exam topics. Get instant feedback and never run out of material.",
+    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
+    details: ["Covers all major IELTS writing topics", "No daily or monthly limits", "Practice anytime, anywhere"],
+  },
 ];
 
 export function FeaturesSection() {
   return (
-    <section className="flex flex-col gap-16 py-10 max-w-screen-lg mx-auto w-full">
-      <div className="text-center flex flex-col gap-4">
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Introducing</p>
-        <h2 className="text-3xl md:text-4xl font-bold mb-2">{APP_NAME}</h2>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">{APP_DESCRIPTION}</p>
+    <div className="flex flex-col gap-16">
+      <div className="text-center space-y-4">
+        <Badge variant="light" size="lg">
+          <Sparkles className="h-3 w-3" />
+          Introducing
+        </Badge>
+        <h2 className="text-4xl md:text-5xl font-semibold leading-normal tracking-tight mb-8">
+          {APP_NAME} <br /> A Free <span className="text-primary">IELTS Writing</span> Checker
+        </h2>
+        <p className="text-lg max-w-2xl mx-auto mb-8 text-muted-foreground">
+          {APP_NAME} is a free IELTS Writing checker powered by AI, trained on over 10,000 real essays. It predicts your
+          score and gives feedback similar to real examiners.
+        </p>
       </div>
 
-      <div className="flex flex-col gap-20">
+      <div className="flex flex-col gap-24">
         {features.map((feature, idx) => (
           <div
-            key={feature.id}
+            key={idx}
             className={`flex flex-col lg:flex-row gap-8 items-center ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}
           >
             {/* Content Side */}
             <div className="flex-1 space-y-4">
-              <div className="flex items-center gap-3">
-                <Badge
-                  variant="outline"
-                  className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold"
-                >
-                  {feature.badge}
-                </Badge>
-              </div>
-              <h3 className="text-2xl md:text-3xl font-bold">{feature.title}</h3>
-              <Separator className="w-16" />
+              <h3 className="text-2xl md:text-3xl font-semibold">{feature.title}</h3>
+              <Separator className="w-16 bg-primary" />
               <p className="text-lg text-muted-foreground leading-relaxed">{feature.description}</p>
               <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
                 {feature.details.map((d, i) => (
@@ -109,7 +108,7 @@ export function FeaturesSection() {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 

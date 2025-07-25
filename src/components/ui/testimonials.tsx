@@ -3,7 +3,7 @@ import React, { ComponentProps } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import Marquee from "@/components/ui/marquee";
+import { Marquee, MarqueeContent, MarqueeFade, MarqueeItem } from "@/components/ui/marquee";
 
 export interface Testimonial {
   id: string | number;
@@ -15,21 +15,35 @@ export interface Testimonial {
 }
 
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
-  <div className="relative flex flex-col gap-4 justify-center w-full">
-    <div className="z-10 absolute left-0 inset-y-0 w-[15%] bg-gradient-to-r from-background to-transparent" />
-    <div className="z-10 absolute right-0 inset-y-0 w-[15%] bg-gradient-to-l from-background to-transparent" />
-    <Marquee pauseOnHover>
-      <TestimonialList testimonials={testimonials} />
+  <div className="flex flex-col gap-4 size-full items-center justify-center bg-background">
+    <Marquee>
+      <MarqueeFade side="left" />
+      <MarqueeFade side="right" />
+      <MarqueeContent autoFill={false} loop={1000} pauseOnHover={true} direction="left">
+        {testimonials.slice(0, testimonials.length / 2).map((testimonial) => (
+          <MarqueeItem key={testimonial.id}>
+            <TestimonialCard testimonial={testimonial} />
+          </MarqueeItem>
+        ))}
+      </MarqueeContent>
     </Marquee>
-    <Marquee pauseOnHover reverse className="mt-0">
-      <TestimonialList testimonials={testimonials} />
+    <Marquee>
+      <MarqueeFade side="left" />
+      <MarqueeFade side="right" />
+      <MarqueeContent autoFill={false} loop={1000} pauseOnHover={true} direction="right">
+        {testimonials.slice(testimonials.length / 2).map((testimonial) => (
+          <MarqueeItem key={testimonial.id}>
+            <TestimonialCard testimonial={testimonial} />
+          </MarqueeItem>
+        ))}
+      </MarqueeContent>
     </Marquee>
   </div>
 );
 
-const TestimonialList = ({ testimonials }: { testimonials: Testimonial[] }) =>
-  testimonials.map((testimonial) => (
-    <div key={testimonial.id} className="min-w-96 max-w-sm bg-accent rounded-xl p-6">
+const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
+  return (
+    <div className="min-w-96 max-w-sm bg-accent rounded-xl p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Avatar>
@@ -50,7 +64,8 @@ const TestimonialList = ({ testimonials }: { testimonials: Testimonial[] }) =>
       </div>
       <p className="mt-5 text-[17px]">{testimonial.testimonial}</p>
     </div>
-  ));
+  );
+};
 
 const TwitterLogo = (props: ComponentProps<"svg">) => (
   <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>

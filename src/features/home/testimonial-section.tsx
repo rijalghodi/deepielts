@@ -56,11 +56,11 @@ const testimonials: Testimonial[] = [
 
 export function TestimonialSection() {
   return (
-    <div className="w-full px-4 md:px-6 py-24 lg:py-32">
+    <div className="w-full">
       {/* Title */}
       <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
-        <h2 className="text-2xl font-bold md:text-4xl md:leading-tight">Testimonials</h2>
-        <p className="mt-1 text-muted-foreground">What our users say about us</p>
+        <h2 className="font-semibold text-3xl md:text-5xl md:leading-tight">Testimonials</h2>
+        <p className="mt-6 text-muted-foreground">What our users say about us</p>
       </div>
       {/* End Title */}
 

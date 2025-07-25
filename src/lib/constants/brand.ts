@@ -12,6 +12,12 @@ export const APP_KEYWORS = [
   "IELTS Feedback",
 ];
 
+export const APP_SOCIAL_LINKS = {
+  twitter: "https://rijalghodi.xyz/",
+  youtube: "https://rijalghodi.xyz/",
+  instagram: "https://rijalghodi.xyz/",
+};
+
 export const ACCESS_TOKEN_KEY = "deep_ielts.access_token";
 export const REFRESH_TOKEN_KEY = "deep_ielts.refresh_token";
 export const AUTH_CHANGED_KEY = "deep_ielts.auth_changed";

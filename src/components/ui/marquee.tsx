@@ -1,73 +1,40 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+"use client";
+
+import type { HTMLAttributes } from "react";
+import type { MarqueeProps as FastMarqueeProps } from "react-fast-marquee";
+import FastMarquee from "react-fast-marquee";
 
 import { cn } from "@/lib/utils";
 
-interface MarqueeProps {
-  children: ReactNode;
-  className?: string;
-  pauseOnHover?: boolean;
-  reverse?: boolean;
-}
+export type MarqueeProps = HTMLAttributes<HTMLDivElement>;
 
-const Marquee = ({ children, className, pauseOnHover = false, reverse = false }: MarqueeProps) => {
-  const [isPaused, setIsPaused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentWidth, setContentWidth] = useState(0);
-  //   const [containerWidth, setContainerWidth] = useState(0);
+export const Marquee = ({ className, ...props }: MarqueeProps) => (
+  <div className={cn("relative w-full overflow-hidden", className)} {...props} />
+);
 
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (contentRef.current && containerRef.current) {
-        setContentWidth(contentRef.current.scrollWidth);
-        // setContainerWidth(containerRef.current.clientWidth);
-      }
-    };
+export type MarqueeContentProps = FastMarqueeProps;
 
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, [children]);
+export const MarqueeContent = ({ loop = 0, autoFill = true, pauseOnHover = true, ...props }: MarqueeContentProps) => (
+  <FastMarquee autoFill={autoFill} loop={loop} pauseOnHover={pauseOnHover} {...props} />
+);
 
-  //   const animationDuration = contentWidth > 0 ? contentWidth / speed : 10;
-
-  const handleMouseEnter = () => {
-    if (pauseOnHover) {
-      setIsPaused(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (pauseOnHover) {
-      setIsPaused(false);
-    }
-  };
-
-  return (
-    <div
-      ref={containerRef}
-      className={cn("overflow-hidden", className)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div
-        ref={contentRef}
-        className={cn(
-          "flex gap-4",
-          isPaused ? "animate-none" : "animate-marquee",
-          reverse && "animate-marquee-reverse",
-        )}
-        style={
-          {
-            "--marquee-duration": `10s`,
-          } as React.CSSProperties
-        }
-      >
-        {children}
-        {children} {/* Duplicate content for seamless loop */}
-      </div>
-    </div>
-  );
+export type MarqueeFadeProps = HTMLAttributes<HTMLDivElement> & {
+  side: "left" | "right";
 };
 
-export default Marquee;
+export const MarqueeFade = ({ className, side, ...props }: MarqueeFadeProps) => (
+  <div
+    className={cn(
+      "absolute top-0 bottom-0 z-10 h-full w-24 from-background to-transparent",
+      side === "left" ? "left-0 bg-gradient-to-r" : "right-0 bg-gradient-to-l",
+      className,
+    )}
+    {...props}
+  />
+);
+
+export type MarqueeItemProps = HTMLAttributes<HTMLDivElement>;
+
+export const MarqueeItem = ({ className, ...props }: MarqueeItemProps) => (
+  <div className={cn("mx-2 flex-shrink-0 object-contain", className)} {...props} />
+);
