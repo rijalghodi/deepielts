@@ -220,8 +220,7 @@ function CarouselPagination({ className, ...props }: React.ComponentProps<"div">
   const current = api?.selectedScrollSnap() ?? 0;
 
   return (
-    <div className="mt-4 flex items-center justify-center gap-2">
-      {" "}
+    <div className={cn("mt-4 flex items-center justify-center gap-2", className)} {...props}>
       {Array.from({ length: count }).map((_, index) => (
         <button
           key={index}

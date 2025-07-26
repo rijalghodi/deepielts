@@ -1,5 +1,7 @@
+import { Percent } from "lucide-react";
 import React from "react";
 
+import { Badge } from "@/components/ui/badge";
 import {
   Carousel,
   CarouselContent,
@@ -46,9 +48,13 @@ export default function PricingSection() {
   return (
     <div className="w-full">
       {/* Title */}
-      <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
-        <h2 className="section-title">Pricing</h2>
-        <p className="section-desc">Choose the plan that's right for you.</p>
+      <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14 space-y-4">
+        <Badge variant="light" size="lg">
+          <Percent className="h-3 w-3 mr-1" />
+          Affordable
+        </Badge>
+        <h2 className="section-title">Pricing Plans</h2>
+        <p className="section-desc">Start with the free plan, and upgrade to Pro anytime for more features.</p>
       </div>
 
       {/* Desktop: Grid layout (hidden on small screens) */}

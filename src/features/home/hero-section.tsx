@@ -8,7 +8,7 @@ export function HeroSection() {
     <div className="flex flex-col gap-8 items-center">
       <Badge variant="outline" className="!font-normal !bg-muted !py-1.5 px-3.5">
         <Sparkles className="w-4 h-4 text-primary" />
-        <span>AI-Powered. Trained on 1000s of real essays</span>
+        <span>AI-Powered. Trained on real essays</span>
       </Badge>
 
       <h1 className="text-[36px] md:text-[60px] lg:text-[64px] leading-tight tracking-normal font-semibold text-center">

@@ -3,7 +3,6 @@ import React, { ComponentProps } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Marquee, MarqueeContent, MarqueeFade, MarqueeItem } from "@/components/ui/marquee";
 
 export interface Testimonial {
   id: string | number;
@@ -17,7 +16,7 @@ export interface Testimonial {
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
   <div className="flex flex-col gap-4 size-full items-center justify-center">
     {/* Desktop: Horizontal marquee (hidden on small screens) */}
-    <div className="hidden xl:block w-full">
+    {/* <div className="hidden xl:block w-full">
       <Marquee>
         <MarqueeFade side="left" />
         <MarqueeFade side="right" />
@@ -29,10 +28,10 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
           ))}
         </MarqueeContent>
       </Marquee>
-    </div>
+    </div> */}
 
     {/* Mobile: Vertical marquee (hidden on large screens) */}
-    <div className="xl:hidden w-full flex flex-wrap gap-4 justify-center">
+    <div className="w-full flex flex-wrap gap-4 justify-center">
       {testimonials.map((testimonial) => (
         <TestimonialCard key={testimonial.id} testimonial={testimonial} />
       ))}

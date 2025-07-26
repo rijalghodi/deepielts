@@ -12,6 +12,7 @@ import { ReactQueryProvider } from "@/lib/providers/react-query";
 import { cn } from "@/lib/utils";
 
 import { AppLayout } from "@/components/layouts/app-layout";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
@@ -47,7 +48,9 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <TooltipProvider>
                 <DialogSystemProvider>
-                  <AppLayout>{children}</AppLayout>
+                  <SidebarProvider>
+                    <AppLayout>{children}</AppLayout>
+                  </SidebarProvider>
                   <Toaster richColors position="bottom-center" />
                 </DialogSystemProvider>
               </TooltipProvider>

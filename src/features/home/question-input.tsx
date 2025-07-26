@@ -51,7 +51,9 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
           />
         </div>
         {taskType === QuestionType.Task1Academic && (
-          <InputImage placeholder="Upload Task 1 Image" value={image} onChange={handleImageChange} />
+          <div className="flex items-center justify-center">
+            <InputImage placeholder="Upload Task 1 Image" value={image} onChange={handleImageChange} />
+          </div>
         )}
       </div>
 

@@ -3,16 +3,18 @@
 import { Loader } from "lucide-react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
+import { cn } from "@/lib/utils";
 
 import { AppSidebar } from "@/components/layouts/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, useSidebar } from "@/components/ui/sidebar";
 
 import AppFooter from "./app-footer";
-import { Header } from "./app-header";
+import { AppHeader } from "./app-header";
 import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
+  const { open, isMobile } = useSidebar();
 
   if (loading) {
     return (
@@ -25,26 +27,42 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SidebarProvider>
-      <FallingStarsBackground className="z-0" />
+    <div className="relative w-screen">
       {user && <AppSidebar userName={user.name} />}
 
-      {/* Scrollable area */}
-      <div className="flex-1 relative">
-        {/* <div
-          className="absolute inset-0 h-screen w-screen"
+      <AppHeader />
+
+      <div
+        className={cn("relative w-screen transition-[padding-left] duration-200 ease-linear overflow-hidden")}
+        style={{
+          paddingLeft: isMobile ? "0" : open && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0",
+          marginTop: 60,
+        }}
+      >
+        <FallingStarsBackground className="z-0" />
+        <div
           style={{
-            background: "radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.05), transparent 70%)",
+            background: "z-0 radial-gradient(at center, rgba(255, 255, 255, 0.02), transparent 50%)",
+            width: 1000,
+            height: 1000,
+            borderRadius: "100%",
+            transform: "translate(-50%, -50%)",
           }}
-        /> */}
-
-        {/* HEADER */}
-        <Header />
-
-        <main className="mx-auto mt-6 relative">{children}</main>
-
+          className={`absolute top-0 left-0`}
+        />
+        <div
+          style={{
+            background: "z-0 radial-gradient(at center, rgba(255, 255, 255, 0.02), transparent 50%)",
+            width: 1000,
+            height: 1000,
+            borderRadius: "100%",
+            transform: "translate(50%, -50%)",
+          }}
+          className={`absolute top-0 right-0`}
+        />
+        {children}
         <AppFooter />
       </div>
-    </SidebarProvider>
+    </div>
   );
 }

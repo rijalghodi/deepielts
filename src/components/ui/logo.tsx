@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useTheme } from "next-themes";
 
+import { cn } from "@/lib/utils";
+
 import logoDark from "~/logo-dark.png";
 import logoLight from "~/logo-light.png";
 
@@ -12,13 +14,13 @@ type LogoProps = {
   height?: number;
 };
 
-export function Logo({ width = 100, height = 100 }: LogoProps) {
+export function Logo({ width = 100, height = 100, className }: LogoProps) {
   const { theme, resolvedTheme } = useTheme();
   const isDark = theme === "dark" || resolvedTheme === "dark";
 
   if (isDark) {
-    return <Image src={logoDark} alt="Logo" width={width} height={height} className="h-auto" />;
+    return <Image src={logoDark} alt="Logo" width={width} height={height} className={cn("h-auto", className)} />;
   }
 
-  return <Image src={logoLight} alt="Logo" width={width} height={height} className="h-auto" />;
+  return <Image src={logoLight} alt="Logo" width={width} height={height} className={cn("h-auto", className)} />;
 }

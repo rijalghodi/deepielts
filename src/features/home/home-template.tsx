@@ -20,7 +20,7 @@ export function HomeTemplate() {
       <section className="max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-8 pb-8">
         <HeroSection />
       </section>
-      <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36">
+      <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden">
         <div className="hidden sm:block absolute top-0 right-0 -rotate-10 text-foreground">
           <div className="font-bold text-lg">Try this out</div>
           <DoodleArrow width={90} height={80} />
@@ -28,13 +28,13 @@ export function HomeTemplate() {
         <SubmissionForm />
       </section>
 
-      <section className="bg-muted w-full px-5 sm:px-6 py-24 lg:py-32">
+      <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
         <div className="max-w-screen-lg mx-auto">
           <FeaturesSection />
         </div>
       </section>
 
-      <section className="bg-muted w-full px-5 sm:px-6 py-24 lg:py-32">
+      <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
         <div className="max-w-screen-lg mx-auto">
           <VsTraditionalSection />
         </div>
@@ -52,11 +52,13 @@ export function HomeTemplate() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4 max-w-screen-lg mx-auto w-full px-5 md:px-6 py-24 lg:py-32">
-        <FaqSection />
+      <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
+        <div className="max-w-screen-lg mx-auto">
+          <FaqSection />
+        </div>
       </section>
 
-      <section className="bg-background w-full px-5 md:px-6 py-24 lg:py-32">
+      <section className="w-full px-5 md:px-6 py-24 lg:py-32">
         <div className="max-w-screen-lg mx-auto">
           <CtaSection />
         </div>

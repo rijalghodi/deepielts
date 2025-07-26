@@ -1,5 +1,7 @@
+import { Star } from "lucide-react";
 import React from "react";
 
+import { Badge } from "@/components/ui/badge";
 import Testimonials, { Testimonial } from "@/components/ui/testimonials";
 
 const testimonials: Testimonial[] = [
@@ -58,8 +60,12 @@ export function TestimonialSection() {
   return (
     <div className="w-full">
       {/* Title */}
-      <div className="max-w-2xl mx-auto text-center lg:mb-14 mb-8">
-        <h2 className="section-title mb-4">Testimonials</h2>
+      <div className="max-w-2xl mx-auto text-center lg:mb-14 mb-8 space-y-4">
+        <Badge variant="light" size="lg">
+          <Star className="h-3 w-3 mr-1" />
+          Trusted
+        </Badge>
+        <h2 className="section-title">Testimonials</h2>
         <p className="section-desc">What our users say about us</p>
       </div>
       {/* End Title */}
