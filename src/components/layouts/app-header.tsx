@@ -32,7 +32,7 @@ export function AppHeader() {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-50 transition-all duration-200 ease-linear px-5"
+      className="fixed inset-x-0 top-2 z-50 transition-all duration-200 ease-linear px-5"
       style={{ left: isMobile ? "0" : open && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0" }}
     >
       <div
@@ -45,7 +45,7 @@ export function AppHeader() {
       >
         <div className="flex justify-between items-center w-full">
           <Link href="/" className="flex gap-2 items-center">
-            <Logo width={100} height={50} className="w-[80px] h-auto md:w-[100px]" />
+            <Logo width={80} height={50} className="w-[60px] h-auto md:w-[70px]" />
           </Link>
 
           <div className="flex gap-4">
