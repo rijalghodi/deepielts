@@ -1,4 +1,4 @@
-import { Dices, SquareMousePointer } from "lucide-react";
+import { Dices, SquareMousePointer, WandSparkles } from "lucide-react";
 import React, { useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 import { QuestionType } from "@/server/models/submission";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Props = {
   taskType: QuestionType;
@@ -42,10 +43,10 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
           <Textarea
             placeholder={
               taskType === QuestionType.Task1Academic
-                ? "Enter an IELTS Task 1 Academic question..."
+                ? "Enter a Task 1 Academic question or topic..."
                 : taskType === QuestionType.Task1General
-                  ? "Enter an IELTS Task 1 General question..."
-                  : "Enter an IELTS Task 2 question..."
+                  ? "Enter a Task 1 General question or topic..."
+                  : "Enter a Task 2 question or topic..."
             }
             minRows={2}
             maxRows={10}
@@ -65,13 +66,21 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
 
       {/* TOOL */}
       <div className="flex flex-wrap items-center justify-center w-full gap-2">
-        <Button variant="accent" size="sm">
+        {/* TODO: Add question selection */}
+        {/* <Button variant="accent" size="sm">
           <SquareMousePointer />
           Select Question
-        </Button>
-        <Button variant="accent" size="sm">
-          <Dices /> Randomize Question
-        </Button>
+        </Button> */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="sm">
+              <WandSparkles /> Generate Question
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="w-[300px]" side="bottom">
+            To get a specific question, enter a topic in a text box. Otherwise, a random question will be generated.
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );
