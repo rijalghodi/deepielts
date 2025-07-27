@@ -15,8 +15,8 @@ type LogoProps = {
 };
 
 export function Logo({ width = 100, height = 100, className }: LogoProps) {
-  const { theme, resolvedTheme } = useTheme();
-  const isDark = theme === "dark" || resolvedTheme === "dark";
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   if (isDark) {
     return <Image src={logoDark} alt="Logo" width={width} height={height} className={cn("h-auto", className)} />;

@@ -13,12 +13,13 @@ import { Badge } from "@/components/ui/badge";
 export function HeroSection() {
   const { user } = useAuth();
   return (
-    <div className={cn("flex flex-col gap-4 md:gap-6 lg:gap-8 items-center", user && "gap-4 md:gap-4 lg:gap-4")}>
+    <div className={cn("space-y-6 lg:space-y-8 items-center", user && "space-y-6")}>
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.3, ease: "easeOut" }}
+        className="flex justify-center"
       >
         <Badge variant="light" size="lg">
           <Sparkles className="w-4 h-4 text-primary" />

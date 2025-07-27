@@ -15,7 +15,7 @@ export function HomeTemplate() {
   return (
     <div className="flex flex-col gap-0 relative">
       {/* HERO SECTION */}
-      <section className="max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-8 pb-8">
+      <section className="max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-16 sm:pt-8 pb-8">
         <HeroSection />
       </section>
       <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden">
