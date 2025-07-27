@@ -26,7 +26,7 @@ export function AnswerInput({ onChange, value }: Props) {
         <div className="flex flex-col gap-3 flex-1">
           <Label>Your Answer</Label>
           <Textarea
-            placeholder="Enter your answer"
+            placeholder="Enter your answer..."
             minRows={5}
             maxRows={10}
             plainStyle

@@ -40,7 +40,13 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
         <div className="flex flex-col gap-3 flex-1">
           <Label>Question</Label>
           <Textarea
-            placeholder="Enter an IELTS question or topic..."
+            placeholder={
+              taskType === QuestionType.Task1Academic
+                ? "Enter an IELTS Task 1 Academic question..."
+                : taskType === QuestionType.Task1General
+                  ? "Enter an IELTS Task 1 General question..."
+                  : "Enter an IELTS Task 2 question..."
+            }
             minRows={2}
             maxRows={10}
             plainStyle

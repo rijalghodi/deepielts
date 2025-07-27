@@ -1,15 +1,28 @@
 export const APP_NAME = "Deep IELTS";
-export const APP_TAGLINE = "Learn Smarter, Score Higher";
+export const APP_TAGLINE = "IELTS Writing Checker Powered by AI";
 export const APP_DESCRIPTION =
-  "Helps you master IELTS with AI-driven feedback, structured practice, and mock tests. Learn smarter, score higher!";
-export const APP_KEYWORS = [
+  "Deep IELTS is a free AI-powered IELTS Writing Checker, trained on over 10,000 real essays. It gives accurate score predictions and practical feedback—just like a real examiner.";
+export const APP_KEYWORDS = [
   "IELTS",
-  "AI",
-  "Practice",
-  "Writing Task 1",
-  "Writing Task 2",
-  "Mock Test",
-  "IELTS Feedback",
+  "AI IELTS",
+  "IELTS Writing",
+  "IELTS Writing Checker",
+  "Free IELTS Writing Checker",
+  "IELTS Writing Feedback",
+  "Free IELTS Writing Feedback",
+  "IELTS Writing Practice",
+  "IELTS Writing Mock Test",
+  "IELTS Writing Score Prediction",
+  "IELTS Writing Band Prediction",
+  "IELTS Writing Task 1",
+  "IELTS Writing Task 2",
+  "IELTS Writing Evaluation",
+  "AI for IELTS Writing",
+  "IELTS Essay Feedback",
+  "IELTS Writing Assessment",
+  "IELTS Writing Tips",
+  "Improve IELTS Writing",
+  "Deep IELTS",
 ];
 
 export const APP_SOCIAL_LINKS = {
@@ -26,7 +39,7 @@ export const BRAND_CONSTANTS = {
   APP_NAME,
   APP_TAGLINE,
   APP_DESCRIPTION,
-  APP_KEYWORS,
+  APP_KEYWORDS,
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
 };

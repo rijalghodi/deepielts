@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 
 import "./globals.css";
 
-import { APP_DESCRIPTION, APP_KEYWORS, APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
+import { APP_DESCRIPTION, APP_KEYWORDS, APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
 import { AuthProvider } from "@/lib/contexts/auth-context";
 import { DialogSystemProvider } from "@/lib/providers/dialog-system";
 import { ReactQueryProvider } from "@/lib/providers/react-query";
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: `%s - ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
-  keywords: APP_KEYWORS,
+  keywords: APP_KEYWORDS,
   authors: [
     {
       name: "Rijal Ghodi",
