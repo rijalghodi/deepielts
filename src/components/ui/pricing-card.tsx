@@ -143,7 +143,7 @@ export const PricingCard = ({
                 key={index}
                 className="flex items-start gap-2"
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
                 <div

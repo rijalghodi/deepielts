@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Sparkles } from "lucide-react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,6 +12,7 @@ import { createSubmission } from "@/lib/api/submission.api";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
 import { SelectInput } from "@/components/ui/select-input";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
@@ -57,49 +59,97 @@ export function SubmissionForm({ onSuccess }: Props) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-5 w-full">
+    <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-5 w-full relative">
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
+        className="hidden sm:block absolute top-0 right-0 -rotate-10 text-foreground"
+      >
+        <div className="font-bold text-lg">Try this out</div>
+        <DoodleArrow width={90} height={80} />
+      </motion.div>
       <Form {...form}>
-        <FormField
-          name="questionType"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Question Type</FormLabel>
-              <FormControl>
-                <SelectInput
-                  className="sm:max-w-[300px] w-full"
-                  options={[
-                    { label: "Task 1 General", value: QuestionType.Task1General },
-                    { label: "Task 1 Academic", value: QuestionType.Task1Academic },
-                    { label: "Task 2", value: QuestionType.Task2 },
-                  ]}
-                  placeholder="Select Question Type"
-                  focusStyle="none"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
+        >
+          <FormField
+            name="questionType"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Question Type</FormLabel>
+                <FormControl>
+                  <SelectInput
+                    className="sm:max-w-[300px] w-full"
+                    options={[
+                      { label: "Task 1 General", value: QuestionType.Task1General },
+                      { label: "Task 1 Academic", value: QuestionType.Task1Academic },
+                      { label: "Task 2", value: QuestionType.Task2 },
+                    ]}
+                    placeholder="Select Question Type"
+                    focusStyle="none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </motion.div>
 
-        <QuestionInput
-          taskType={form.watch("questionType") as QuestionType}
-          onChange={(value) => form.setValue("question", value, { shouldDirty: true })}
-          onImageChange={(value) => form.setValue("attachments", value, { shouldDirty: true })}
-          value={form.watch("question")}
-          imageValue={form.watch("attachments")}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3, ease: "easeOut", delay: 0.3 }}
+        >
+          <QuestionInput
+            taskType={form.watch("questionType") as QuestionType}
+            onChange={(value) => form.setValue("question", value, { shouldDirty: true })}
+            onImageChange={(value) => form.setValue("attachments", value, { shouldDirty: true })}
+            value={form.watch("question")}
+            imageValue={form.watch("attachments")}
+          />
+        </motion.div>
 
-        <AnswerInput
-          onChange={(value) => form.setValue("answer", value, { shouldDirty: true })}
-          value={form.watch("answer")}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3, ease: "easeOut", delay: 0 }}
+        >
+          <AnswerInput
+            onChange={(value) => form.setValue("answer", value, { shouldDirty: true })}
+            value={form.watch("answer")}
+          />
+        </motion.div>
 
-        {error && <p className="text-destructive text-sm text-center">{error}</p>}
-        <Button variant="default" className="w-full" type="submit" size="xl" loading={isPending}>
-          <Sparkles strokeWidth={1.5} /> Check Score
-        </Button>
+        {error && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="text-destructive text-sm text-center"
+          >
+            {error}
+          </motion.p>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3, ease: "easeOut", delay: 0 }}
+        >
+          <Button variant="default" className="w-full" type="submit" size="xl" loading={isPending}>
+            <Sparkles strokeWidth={1.5} /> Check Score
+          </Button>
+        </motion.div>
       </Form>
     </form>
   );

@@ -2,8 +2,6 @@
 
 import React from "react";
 
-import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
-
 import CtaSection from "./cta-section";
 import FaqSection from "./faq-section";
 import FeaturesSection from "./features-section";
@@ -21,10 +19,6 @@ export function HomeTemplate() {
         <HeroSection />
       </section>
       <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden">
-        <div className="hidden sm:block absolute top-0 right-0 -rotate-10 text-foreground">
-          <div className="font-bold text-lg">Try this out</div>
-          <DoodleArrow width={90} height={80} />
-        </div>
         <SubmissionForm />
       </section>
 
