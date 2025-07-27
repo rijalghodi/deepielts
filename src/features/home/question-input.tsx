@@ -1,4 +1,4 @@
-import { Dices, SquareMousePointer, WandSparkles } from "lucide-react";
+import { WandSparkles } from "lucide-react";
 import React, { useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -8,9 +8,9 @@ import { inputVariants } from "@/components/ui/input";
 import { InputImage } from "@/components/ui/input-image";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { QuestionType } from "@/server/models/submission";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Props = {
   taskType: QuestionType;

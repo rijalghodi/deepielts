@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Check, HelpCircle, Sparkles, X } from "lucide-react";
 import { useState } from "react";
 
@@ -139,13 +138,7 @@ export const PricingCard = ({
           <div className="text-sm font-medium">What's included:</div>
           <ul className="space-y-2.5">
             {features.map((feature, index) => (
-              <motion.li
-                key={index}
-                className="flex items-start gap-2"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
+              <li key={index} className="flex items-start gap-2">
                 <div
                   className={`mt-0.5 rounded-full p-0.5 ${
                     feature.included
@@ -167,7 +160,7 @@ export const PricingCard = ({
                   <span className={`text-sm ${!feature.included ? "text-muted-foreground" : ""}`}>{feature.name}</span>
                   {feature.tooltip && <HelpCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />}
                 </div>
-              </motion.li>
+              </li>
             ))}
           </ul>
         </div>
