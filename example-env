@@ -5,3 +5,6 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/signup
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
 
 NEXT_PUBLIC_BASE_URL=<deploy domain>
+
+# Dify AI API Configuration
+DIFY_API_KEY=<get from dify.ai>

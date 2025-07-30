@@ -1,20 +1,14 @@
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
 import { Submission } from "@/server/models/submission";
 
-import { api } from "./axios";
 import { apiGet, apiPost } from "./utils";
 
 import { ApiResponse, PaginatedResponse } from "@/types";
 
-export const submissionCreate = async (
-  userId: string,
-  practiceId: string,
-  req: CreateSubmissionBody,
-): Promise<Submission | undefined> => {
+export const submissionCreate = async (req: CreateSubmissionBody): Promise<ApiResponse<Submission> | undefined> => {
   return apiPost({
     endpoint: `/submissions`,
     data: req,
-    queryParams: { userId, practiceId },
   });
 };
 
@@ -53,8 +47,3 @@ export const submissionEvaluate = async (submissionId: string) => {
     endpoint: `/submissions/${submissionId}/evaluate`,
   });
 };
-
-export async function createSubmission(data: CreateSubmissionBody) {
-  const res = await api.post("/submissions", data);
-  return res.data;
-}

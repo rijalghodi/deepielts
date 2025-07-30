@@ -9,6 +9,46 @@ import { authMiddleware } from "../auth/auth-middleware";
 
 import { AppError, AppResponse } from "@/types/global";
 
+const DIFY_API_KEY = process.env.DIFY_API_KEY;
+const DIFY_WORKFLOW_URL = "https://api.dify.ai/v1/workflows/run";
+
+async function analyzeWithDify(question: string, userAnswer: string) {
+  if (!DIFY_API_KEY) {
+    throw new Error("Dify API key not configured");
+  }
+
+  try {
+    console.log("question", question);
+    console.log("userAnswer", userAnswer);
+    const response = await fetch(DIFY_WORKFLOW_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${DIFY_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inputs: {
+          question: question,
+          userAnswer: userAnswer,
+        },
+        response_mode: "blocking",
+        user: "user_1234567890",
+      }),
+    });
+
+    if (!response.ok) {
+      console.log(response);
+      throw new Error(`Dify API error: ${response.status} ${response.statusText} ${response.body}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Dify analysis error:", error);
+    throw new Error(`Failed to analyze submission with Dify: ${error}`);
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     // Authenticate user
@@ -20,6 +60,12 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = createSubmissionBodySchema.parse(body);
 
+    const difyAnalysisResult = await analyzeWithDify(data.question, data.answer);
+
+    console.log("difyAnalysisResult", difyAnalysisResult);
+
+    const analysisResult = difyAnalysisResult.data.outputs;
+
     // Create submission in Firestore under /users/{{userId}}/submissions
     const submissionsRef = db.collection("users").doc(user.uid).collection("submissions");
     const submissionRef = submissionsRef.doc();
@@ -30,10 +76,16 @@ export async function POST(req: NextRequest) {
       userId: user.uid,
       createdAt: now,
       updatedAt: now,
+      analysis: analysisResult,
     };
     await submissionRef.set(newSubmission);
 
-    return NextResponse.json(new AppResponse({ data: newSubmission, message: "Submission created" }));
+    return NextResponse.json(
+      new AppResponse({
+        data: newSubmission,
+        message: "Submission created and analyzed",
+      }),
+    );
   } catch (error: any) {
     return NextResponse.json(
       new AppError({ message: error.message || "Failed to create submission", code: error.code || 500 }),
