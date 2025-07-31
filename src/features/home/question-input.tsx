@@ -8,7 +8,6 @@ import { inputVariants } from "@/components/ui/input";
 import { InputImage } from "@/components/ui/input-image";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { QuestionType } from "@/server/models/submission";
 
@@ -35,11 +34,11 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
   };
 
   return (
-    <div className={cn(inputVariants({ focusStyle: "none" }), "flex flex-col gap-4 p-5")}>
-      {/* QUESTION */}
-      <div className="flex gap-2 flex-col md:flex-row">
-        <div className="flex flex-col gap-3 flex-1">
-          <Label>Question</Label>
+    <div className="flex flex-col gap-2">
+      <Label>Question</Label>
+      <div className={cn(inputVariants({ focusStyle: "none" }), "space-y-4 p-4 w-full")}>
+        {/* QUESTION */}
+        <div className="flex gap-2 flex-col md:flex-row w-full">
           <Textarea
             placeholder={
               taskType === QuestionType.Task1Academic
@@ -51,36 +50,23 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
             minRows={2}
             maxRows={10}
             plainStyle
-            className="text-base sm:text-base"
+            className="text-base sm:text-base flex-1"
             preventResize
             value={question}
             onChange={handleQuestionChange}
           />
+          {taskType === QuestionType.Task1Academic && (
+            <div className="flex items-center justify-center">
+              <InputImage placeholder="Upload Task 1 Image" value={image} onChange={handleImageChange} />
+            </div>
+          )}
         </div>
-        {taskType === QuestionType.Task1Academic && (
-          <div className="flex items-center justify-center">
-            <InputImage placeholder="Upload Task 1 Image" value={image} onChange={handleImageChange} />
-          </div>
-        )}
-      </div>
-
-      {/* TOOL */}
-      <div className="flex flex-wrap items-center justify-center w-full gap-2">
-        {/* TODO: Add question selection */}
-        {/* <Button variant="accent" size="sm">
-          <SquareMousePointer />
-          Select Question
-        </Button> */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="outline" size="sm">
-              <WandSparkles /> Generate Question
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent className="w-[300px]" side="bottom">
-            To get a specific question, enter a topic in a text box. Otherwise, a random question will be generated.
-          </TooltipContent>
-        </Tooltip>
+        {/* TOOL */}
+        <div className="flex flex-wrap items-center justify-center w-full gap-2">
+          <Button variant="outline" size="sm">
+            <WandSparkles /> Generate Question
+          </Button>
+        </div>
       </div>
     </div>
   );

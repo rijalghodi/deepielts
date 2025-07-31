@@ -20,35 +20,24 @@ export function AnswerInput({ onChange, value }: Props) {
   };
 
   return (
-    <div className={cn(inputVariants({ focusStyle: "none" }), "flex flex-col gap-4 p-5")}>
-      {/* QUESTION */}
-      <div className="flex gap-2">
-        <div className="flex flex-col gap-3 flex-1">
-          <Label>Your Answer</Label>
-          <Textarea
-            placeholder="Enter your answer..."
-            minRows={5}
-            maxRows={10}
-            plainStyle
-            className="text-base sm:text-base"
-            preventResize
-            value={answer}
-            onChange={handleAnswerChange}
-          />
-          {/* {!answer ||
-            (answer.length === 0 && (
-              <div className="flex items-center justify-center gap-2 mt-2">
-                <Button variant="accent" size="sm">
-                  <WandSparkles /> Generate Answer
-                </Button>
-              </div>
-            ))} */}
-        </div>
-      </div>
+    <div className="flex flex-col gap-2">
+      <Label>Your Answer</Label>
+      <div className={cn(inputVariants({ focusStyle: "none" }), "flex flex-col gap-4 p-4 w-full")}>
+        <Textarea
+          placeholder="Enter your answer..."
+          minRows={5}
+          maxRows={10}
+          plainStyle
+          className="text-base sm:text-base"
+          preventResize
+          value={answer}
+          onChange={handleAnswerChange}
+        />
 
-      {/* TOOL */}
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">340 words</span>
+        {/* TOOL */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground">340 words</span>
+        </div>
       </div>
     </div>
   );
