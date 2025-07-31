@@ -36,9 +36,14 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
   return (
     <div className="flex flex-col gap-2">
       <Label>Question</Label>
-      <div className={cn(inputVariants({ focusStyle: "none" }), "space-y-4 p-4 w-full")}>
+      <div className={cn(inputVariants({ focusStyle: "none" }), "space-y-2 p-4 w-full")}>
         {/* QUESTION */}
-        <div className="flex gap-2 flex-col md:flex-row w-full">
+        <div className="flex gap-5 gap-y-3 flex-col md:flex-row w-full">
+          {taskType === QuestionType.Task1Academic && (
+            <div className="">
+              <InputImage placeholder="Upload Task 1 Image" value={image} onChange={handleImageChange} />
+            </div>
+          )}
           <Textarea
             placeholder={
               taskType === QuestionType.Task1Academic
@@ -55,11 +60,6 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
             value={question}
             onChange={handleQuestionChange}
           />
-          {taskType === QuestionType.Task1Academic && (
-            <div className="flex items-center justify-center">
-              <InputImage placeholder="Upload Task 1 Image" value={image} onChange={handleImageChange} />
-            </div>
-          )}
         </div>
         {/* TOOL */}
         <div className="flex flex-wrap items-center justify-center w-full gap-2">

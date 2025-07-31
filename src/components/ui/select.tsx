@@ -37,7 +37,7 @@ function SelectTrigger({
       className={cn(
         inputVariants({ focusStyle }),
         // Layout
-        "flex w-fit items-center justify-between gap-2",
+        "flex w-fit items-center justify-between gap-2 px-3 py-2",
         "whitespace-nowrap",
 
         // Size variants

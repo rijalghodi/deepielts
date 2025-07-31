@@ -14,7 +14,7 @@ export type InputProps = React.ComponentProps<"input"> & {
 export const inputVariants = cva(
   cn(
     // Padding
-    "px-3 py-2 rounded-md min-w-0",
+    "rounded-md min-w-0",
 
     // Border
     "border border-border shadow-xs outline-none",
@@ -67,7 +67,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           inputVariants(),
         )}
       >
-        {leftSection && <div className="flex items-center justify-center pl-2">{leftSection}</div>}
+        {leftSection && <div className="flex items-center justify-center pl-3">{leftSection}</div>}
 
         <input
           ref={ref}
@@ -78,7 +78,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onChange?.(e);
           }}
           className={cn(
-            "flex-1 bg-transparent",
+            "flex-1 bg-transparent px-3 py-2",
             "placeholder:text-placeholder",
             "focus-visible:outline-none focus-visible:ring-0",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -91,7 +91,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
 
         {rightSection && (
-          <div className="flex items-center justify-center min-w-10 px-2 bg-inherit">{rightSection}</div>
+          <div className="flex items-center justify-center min-w-10 pr-3 bg-inherit">{rightSection}</div>
         )}
       </div>
     );
