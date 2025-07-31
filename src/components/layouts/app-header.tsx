@@ -33,10 +33,10 @@ export function AppHeader() {
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -20, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: -20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.3 }}
       className="fixed inset-x-0 top-2 z-50 transition-all duration-200 ease-linear px-5"
       style={{ left: isMobile ? "0" : open && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0" }}
     >

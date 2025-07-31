@@ -71,25 +71,19 @@ export function SubmissionForm({ onSuccess }: Props) {
   };
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
       <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-5 w-full relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
-          className="hidden sm:block absolute top-0 right-0 -rotate-10 text-foreground"
-        >
+        <div className="hidden sm:block absolute top-0 right-0 -rotate-10 text-foreground">
           <div className="font-bold text-lg">Try this out</div>
           <DoodleArrow width={90} height={80} />
-        </motion.div>
+        </div>
         <Form {...form}>
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
-          >
+          <div>
             <FormField
               name="questionType"
               control={form.control}
@@ -113,14 +107,9 @@ export function SubmissionForm({ onSuccess }: Props) {
                 </FormItem>
               )}
             />
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, ease: "easeOut", delay: 0.3 }}
-          >
+          <div>
             <QuestionInput
               taskType={form.watch("questionType") as QuestionType}
               onChange={(value) => form.setValue("question", value, { shouldDirty: true })}
@@ -128,41 +117,22 @@ export function SubmissionForm({ onSuccess }: Props) {
               value={form.watch("question")}
               imageValue={form.watch("attachments")}
             />
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, ease: "easeOut", delay: 0 }}
-          >
+          <div>
             <AnswerInput
               onChange={(value) => form.setValue("answer", value, { shouldDirty: true })}
               value={form.watch("answer")}
             />
-          </motion.div>
+          </div>
 
-          {error && (
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="text-destructive text-sm text-center"
-            >
-              {error}
-            </motion.p>
-          )}
+          {error && <p className="text-destructive text-sm text-center">{error}</p>}
 
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, ease: "easeOut", delay: 0 }}
-          >
+          <div>
             <Button variant="default" className="w-full" type="submit" size="xl" loading={isPending}>
               <Sparkles strokeWidth={1.5} /> Check Score
             </Button>
-          </motion.div>
+          </div>
         </Form>
       </form>
       {/* Loading Bar */}
@@ -174,6 +144,6 @@ export function SubmissionForm({ onSuccess }: Props) {
         onClose={() => setIsAnalysisSheetOpen(false)}
         analysis={analysisResult}
       />
-    </>
+    </motion.div>
   );
 }
