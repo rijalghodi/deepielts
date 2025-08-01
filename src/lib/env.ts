@@ -14,6 +14,7 @@ export const clientEnv = createEnv({
     NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string().optional(),
     NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN: z.number().optional(),
     NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN: z.number().optional(),
+    NEXT_PUBLIC_DIFY_WORKFLOW_URL: z.string(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -27,6 +28,7 @@ export const clientEnv = createEnv({
     NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN: process.env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN ?? 60 * 60 * 24,
     NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN: process.env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN ?? 60 * 60 * 24 * 30,
+    NEXT_PUBLIC_DIFY_WORKFLOW_URL: process.env.NEXT_PUBLIC_DIFY_WORKFLOW_URL,
   },
 });
 
@@ -37,6 +39,7 @@ export const serverEnv = createEnv({
     JWT_ACCESS_SECRET: z.string(),
     JWT_REFRESH_SECRET: z.string(),
     RESEND_API_KEY: z.string(),
+    DIFY_API_KEY: z.string(),
   },
   runtimeEnv: {
     FIREBASE_ADMIN_CLIENT_EMAIL: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
@@ -44,6 +47,7 @@ export const serverEnv = createEnv({
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    DIFY_API_KEY: process.env.DIFY_API_KEY,
   },
 });
 

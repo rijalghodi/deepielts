@@ -8,9 +8,10 @@ import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { authMiddleware } from "../auth/auth-middleware";
 
 import { AppError, AppResponse } from "@/types/global";
+import { env } from "@/lib/env";
 
-const DIFY_API_KEY = process.env.DIFY_API_KEY;
-const DIFY_WORKFLOW_URL = "https://api.dify.ai/v1/workflows/run";
+const DIFY_API_KEY = env.DIFY_API_KEY;
+const DIFY_WORKFLOW_URL = env.NEXT_PUBLIC_DIFY_WORKFLOW_URL;
 
 async function analyzeWithDify(question: string, userAnswer: string) {
   if (!DIFY_API_KEY) {
