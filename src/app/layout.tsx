@@ -12,6 +12,7 @@ import { ReactQueryProvider } from "@/lib/providers/react-query";
 import { cn } from "@/lib/utils";
 
 import { AppLayout } from "@/components/layouts/app-layout";
+import { AsideProvider } from "@/components/ui/aside";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -48,8 +49,10 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <TooltipProvider>
                 <DialogSystemProvider>
-                  <SidebarProvider>
-                    <AppLayout>{children}</AppLayout>
+                  <SidebarProvider defaultOpen={false}>
+                    <AsideProvider>
+                      <AppLayout>{children}</AppLayout>
+                    </AsideProvider>
                   </SidebarProvider>
                   <Toaster richColors position="bottom-center" />
                 </DialogSystemProvider>
