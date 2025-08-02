@@ -1,7 +1,5 @@
 "use client";
 
-import { Loader } from "lucide-react";
-
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
@@ -13,18 +11,8 @@ import { AppHeader } from "./app-header";
 import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const { open, isMobile } = useSidebar();
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen w-screen">
-        <div className="flex flex-col items-center gap-12">
-          <Loader className="animate-spin w-6 h-6" />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative w-screen">
