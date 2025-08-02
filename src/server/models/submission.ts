@@ -22,7 +22,7 @@ export enum QuestionType {
   Task2 = "task2",
 }
 
-type IELTSAnalysis = {
+export type IELTSAnalysis = {
   score: {
     totalScore: number;
     scores: {

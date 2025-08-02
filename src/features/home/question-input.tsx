@@ -52,8 +52,8 @@ export function QuestionInput({ taskType, onChange, onImageChange, value, imageV
                   ? "Enter a Task 1 General question or topic..."
                   : "Enter a Task 2 question or topic..."
             }
-            minRows={2}
-            maxRows={10}
+            minRows={3}
+            maxRows={6}
             plainStyle
             className="text-base sm:text-base flex-1"
             preventResize
