@@ -49,7 +49,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <TooltipProvider>
                 <DialogSystemProvider>
-                  <SidebarProvider>
+                  <SidebarProvider defaultOpen={false}>
                     <AsideProvider>
                       <AppLayout>{children}</AppLayout>
                     </AsideProvider>
