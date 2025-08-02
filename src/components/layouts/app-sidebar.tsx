@@ -13,6 +13,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
@@ -50,6 +51,7 @@ export function AppSidebar(props: AppSidebarProps) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <SidebarRail />
       <SidebarContent>
         <SidebarGroup>
           {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
