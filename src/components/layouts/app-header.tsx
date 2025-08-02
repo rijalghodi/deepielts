@@ -14,10 +14,12 @@ import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";
 import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, useSidebar } from "../ui/sidebar";
 import { ThemeToggle } from "../ui/theme-toggle";
+import { ASIDE_WIDTH, useAside } from "../ui/aside";
 
 export function AppHeader() {
   const { user } = useAuth();
-  const { open, isMobile } = useSidebar();
+  const { open: sidebarOpen, isMobile } = useSidebar();
+  const { open: asideOpen } = useAside();
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -38,7 +40,10 @@ export function AppHeader() {
       viewport={{ once: true }}
       transition={{ duration: 0.3 }}
       className="fixed inset-x-0 top-2 z-50 transition-all duration-200 ease-linear px-5"
-      style={{ left: isMobile ? "0" : open && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0" }}
+      style={{
+        left: isMobile ? "0" : sidebarOpen && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0",
+        right: asideOpen ? ASIDE_WIDTH : "0",
+      }}
     >
       <div
         className={cn(

@@ -8,12 +8,12 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Slot } from "@radix-ui/react-slot";
 
 const ASIDE_COOKIE_NAME = "aside_state";
 const ASIDE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-export const ASIDE_WIDTH = "16rem";
-export const ASIDE_WIDTH_MOBILE = "18rem";
-export const ASIDE_WIDTH_ICON = "3rem";
+export const ASIDE_WIDTH = "32rem";
+export const ASIDE_WIDTH_MOBILE = "100svw";
 const ASIDE_KEYBOARD_SHORTCUT = "b";
 
 type AsideContextProps = {
@@ -53,7 +53,7 @@ function AsideProvider({
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
 
-  // This is the internal state of the sidebar.
+  // This is the internal state of the aside.
   // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen);
   const open = openProp ?? _open;
@@ -114,7 +114,6 @@ function AsideProvider({
         style={
           {
             "--aside-width": ASIDE_WIDTH,
-            "--aside-width-icon": ASIDE_WIDTH_ICON,
             ...style,
           } as React.CSSProperties
         }
@@ -129,14 +128,14 @@ function AsideProvider({
 
 function Aside({
   side = "right",
-  variant = "sidebar",
+  variant = "aside",
   collapsible = "offcanvas",
   className,
   children,
   ...props
 }: React.ComponentProps<"div"> & {
   side?: "left" | "right";
-  variant?: "sidebar" | "floating" | "inset";
+  variant?: "aside" | "floating" | "inset";
   collapsible?: "offcanvas" | "icon" | "none";
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useAside();
@@ -145,7 +144,7 @@ function Aside({
     return (
       <aside
         data-slot="aside"
-        className={cn("bg-sidebar text-sidebar-foreground flex h-full w-(--aside-width) flex-col", className)}
+        className={cn("bg-aside text-aside-foreground flex h-full w-(--aside-width) flex-col", className)}
         {...props}
       >
         {children}
@@ -160,7 +159,7 @@ function Aside({
           data-aside="aside"
           data-slot="aside"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--aside-width) p-0 [&>button]:hidden"
+          className="bg-aside text-aside-foreground w-(--aside-width) p-0 [&>button]:hidden"
           style={
             {
               "--aside-width": ASIDE_WIDTH_MOBILE,
@@ -179,7 +178,7 @@ function Aside({
 
   return (
     <aside
-      className="group peer text-sidebar-foreground hidden md:block"
+      className="group peer text-aside-foreground hidden md:block"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -201,7 +200,7 @@ function Aside({
       <div
         data-slot="aside-container"
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--aside-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+          "fixed bg-aside inset-y-0 z-10 hidden h-svh w-(--aside-width) transition-[left,right,width] duration-200 ease-linear md:flex",
           side === "left"
             ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--aside-width)*-1)]"
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--aside-width)*-1)]",
@@ -216,7 +215,9 @@ function Aside({
         <div
           data-aside="aside"
           data-slot="aside-inner"
-          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+          className={cn(
+            "group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm",
+          )}
         >
           {children}
         </div>
@@ -225,8 +226,27 @@ function Aside({
   );
 }
 
-function AsideTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+function AsideTrigger({
+  className,
+  onClick,
+  asChild,
+  ...props
+}: React.ComponentProps<typeof Button> & { asChild?: boolean }) {
   const { toggleAside } = useAside();
+
+  if (asChild) {
+    return (
+      <Slot
+        data-aside="trigger"
+        data-slot="aside-trigger"
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+          onClick?.(event);
+          toggleAside();
+        }}
+        {...props}
+      />
+    );
+  }
 
   return (
     <Button
@@ -259,10 +279,10 @@ function AsideRail({ className, ...props }: React.ComponentProps<"button">) {
       onClick={toggleAside}
       title="Toggle Aside"
       className={cn(
-        "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:-left-4 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
+        "hover:after:bg-aside-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:-left-4 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
         "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
-        "hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
+        "hover:group-data-[collapsible=offcanvas]:bg-aside group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
         "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
         "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
         className,

@@ -14,10 +14,7 @@ function AsideContent() {
 
 export function AppAside() {
   return (
-    <Aside>
-      <AsideTrigger />
-      <AsideContent />
-      <AsideRail />
+    <Aside className="shadow-xl">
       <AsideContent />
     </Aside>
   );
