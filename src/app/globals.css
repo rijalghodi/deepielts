@@ -46,7 +46,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* Sidebar */
-  --color-sidebar: hsl(var(--surface));
+  --color-sidebar: hsl(var(--sidebar));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));
   --color-sidebar-primary: hsl(var(--sidebar-primary));
   --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));

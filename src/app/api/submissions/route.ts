@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase-admin/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
+import { env } from "@/lib/env";
 import { db } from "@/lib/firebase/firebase-admin";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
@@ -8,7 +9,6 @@ import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { authMiddleware } from "../auth/auth-middleware";
 
 import { AppError, AppResponse } from "@/types/global";
-import { env } from "@/lib/env";
 
 const DIFY_API_KEY = env.DIFY_API_KEY;
 const DIFY_WORKFLOW_URL = env.NEXT_PUBLIC_DIFY_WORKFLOW_URL;

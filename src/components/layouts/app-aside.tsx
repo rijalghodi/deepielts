@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Aside, AsideRail, AsideTrigger } from "@/components/ui/aside";
+import { Aside } from "@/components/ui/aside";
 
 function AsideContent() {
   return (
@@ -14,7 +14,7 @@ function AsideContent() {
 
 export function AppAside() {
   return (
-    <Aside className="shadow-xl">
+    <Aside className="shadow-md">
       <AsideContent />
     </Aside>
   );

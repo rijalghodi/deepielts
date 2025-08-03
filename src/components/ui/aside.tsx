@@ -1,5 +1,6 @@
 "use client";
 
+import { Slot } from "@radix-ui/react-slot";
 import { PanelRightIcon } from "lucide-react";
 import * as React from "react";
 
@@ -8,12 +9,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Slot } from "@radix-ui/react-slot";
 
 const ASIDE_COOKIE_NAME = "aside_state";
 const ASIDE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-export const ASIDE_WIDTH = "32rem";
-export const ASIDE_WIDTH_MOBILE = "100svw";
+export const ASIDE_WIDTH = "440px";
+export const ASIDE_WIDTH_MOBILE = "440px";
 const ASIDE_KEYBOARD_SHORTCUT = "b";
 
 type AsideContextProps = {
@@ -50,7 +50,7 @@ function AsideProvider({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile(1200);
   const [openMobile, setOpenMobile] = React.useState(false);
 
   // This is the internal state of the aside.

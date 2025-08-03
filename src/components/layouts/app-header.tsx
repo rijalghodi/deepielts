@@ -10,11 +10,11 @@ import { cn } from "@/lib/utils";
 
 import { AuthDialog } from "@/features/auth/login/auth-dialog";
 
+import { ASIDE_WIDTH, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";
 import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, useSidebar } from "../ui/sidebar";
 import { ThemeToggle } from "../ui/theme-toggle";
-import { ASIDE_WIDTH, useAside } from "../ui/aside";
 
 export function AppHeader() {
   const { user } = useAuth();

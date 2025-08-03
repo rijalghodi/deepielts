@@ -43,7 +43,7 @@ type AppSidebarProps = {
 
 export function AppSidebar(props: AppSidebarProps) {
   return (
-    <Sidebar collapsible="icon" className="shadow-xl">
+    <Sidebar collapsible="icon" className="shadow-md">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="flex justify-end">

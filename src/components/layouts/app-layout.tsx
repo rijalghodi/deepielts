@@ -1,18 +1,18 @@
 "use client";
 
+import { Blocks } from "lucide-react";
+
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
 import { AppSidebar } from "@/components/layouts/app-sidebar";
-import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
 
+import { AppAside } from "./app-aside";
 import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
-import { FallingStarsBackground } from "../ui/falling-stars-bg";
-import { AppAside } from "./app-aside";
 import { AsideInset, AsideTrigger } from "../ui/aside";
-import { Button } from "../ui/button";
-import { ArrowRight, Blocks } from "lucide-react";
+import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
