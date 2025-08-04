@@ -1,8 +1,10 @@
 import { WandSparkles } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
+import TASK_1_GENERAL_QUESTIONS from "@/lib/constants/task-1-general-questions.json";
+import TASK_2_QUESTIONS from "@/lib/constants/task-2-questions.json";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -13,8 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
-import TASK_1_GENERAL_QUESTIONS from "@/lib/constants/task-1-general-questions.json";
-import TASK_2_QUESTIONS from "@/lib/constants/task-2-questions.json";
 
 type Props = {
   taskType: QuestionType;
@@ -30,6 +30,10 @@ export function QuestionInput({ taskType }: Props) {
         : TASK_2_QUESTIONS[Math.floor(Math.random() * TASK_2_QUESTIONS.length)];
     setValue("question", question.question, { shouldDirty: true });
   };
+
+  useEffect(() => {
+    setValue("question", "");
+  }, [taskType]);
 
   return (
     <FormItem>
@@ -68,7 +72,7 @@ export function QuestionInput({ taskType }: Props) {
                           : "Enter a Task 2 question or topic..."
                     }
                     minRows={3}
-                    maxRows={6}
+                    maxRows={5}
                     plainStyle
                     preventResize
                     value={field.value}
