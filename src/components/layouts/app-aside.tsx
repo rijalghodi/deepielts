@@ -276,16 +276,16 @@ function AIAnalysis() {
 export function AppAside() {
   const { analysis } = useAnalysisStore();
   return (
-    <Aside className="shadow-lg">
+    <Aside variant="floating" className="shadow-lg">
       <AsideHeader>
-        <header className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <H2>AI Analysis</H2>
           <AsideTrigger asChild>
             <Button variant="ghost" size="icon-sm">
               <XIcon className="w-4 h-4" />
             </Button>
           </AsideTrigger>
-        </header>
+        </div>
       </AsideHeader>
       <AsideContent>{!analysis ? <NoAnalysis /> : <AIAnalysis />}</AsideContent>
       {analysis && (

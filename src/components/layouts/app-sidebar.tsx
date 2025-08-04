@@ -59,17 +59,12 @@ export function AppSidebar(props: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
-      <SidebarHeader>
+      <SidebarHeader className="">
         <SidebarMenu>
-          <SidebarMenuItem className="flex justify-end">
-            <SidebarTrigger />
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="flex justify-between pt-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
+                <SidebarMenuButton size="lg" className="flex-1">
                   <Avatar className="h-7 w-7 shrink-0">
                     <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
@@ -80,7 +75,7 @@ export function AppSidebar(props: AppSidebarProps) {
                   </div>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[240px]" align="start" sideOffset={10}>
+              <DropdownMenuContent className="w-[240px]" align="start" side="right" sideOffset={10}>
                 <DropdownMenuItem>
                   <Settings /> Settings
                 </DropdownMenuItem>
@@ -97,7 +92,11 @@ export function AppSidebar(props: AppSidebarProps) {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <SidebarTrigger />
           </SidebarMenuItem>
+        </SidebarMenu>
+        <SidebarMenu>
+          <SidebarMenuItem></SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarRail />

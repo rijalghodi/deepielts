@@ -79,7 +79,7 @@
   --surface-1: 0 0% 96%;
   --surface-2: 0 0% 93%;
   --surface-3: 0 0% 90%;
-  --surface-4: 0 0% 90%;
+  --surface-4: 0 0% 87%;
 
   /** Contrast colors */
   --contrast-0: 0 0% 12%;
@@ -128,7 +128,7 @@
   --aside-primary-foreground: var(--surface-0);
   --aside-accent: var(--surface-2);
   --aside-accent-foreground: var(--contrast-0);
-  --aside-border: var(--surface-3);
+  --aside-border: var(--surface-4);
   --aside-ring: var(--primary-0);
 }
 

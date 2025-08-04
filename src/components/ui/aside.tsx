@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 const ASIDE_COOKIE_NAME = "aside_state";
 const ASIDE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 export const ASIDE_WIDTH = "480px";
-export const ASIDE_WIDTH_MOBILE = "380px";
+export const ASIDE_WIDTH_MOBILE = "480px";
 const ASIDE_KEYBOARD_SHORTCUT = "b";
 
 type AsideContextProps = {
@@ -128,14 +128,14 @@ function AsideProvider({
 
 function Aside({
   side = "right",
-  variant = "floating",
+  variant = "default",
   collapsible = "offcanvas",
   className,
   children,
   ...props
 }: React.ComponentProps<"div"> & {
   side?: "left" | "right";
-  variant?: "aside" | "floating" | "inset";
+  variant?: "default" | "floating" | "inset";
   collapsible?: "offcanvas" | "icon" | "none";
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useAside();
@@ -159,18 +159,21 @@ function Aside({
           data-aside="aside"
           data-slot="aside"
           data-mobile="true"
-          className="bg-aside text-aside-foreground w-screen p-0 [&>button]:hidden"
+          className="text-aside-foreground [&>button]:hidden"
+          containerClassName="sm:w-(--aside-width)"
           style={
             {
               "--aside-width": ASIDE_WIDTH_MOBILE,
             } as React.CSSProperties
           }
           side={side}
+          variant={variant === "floating" ? "floating" : "default"}
+          withClose={false}
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Aside</SheetTitle>
           </SheetHeader>
-          <aside className="flex h-full w-full flex-col">{children}</aside>
+          {children}
         </SheetContent>
       </Sheet>
     );
@@ -206,7 +209,7 @@ function Aside({
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--aside-width)*-1)]",
           // Adjust the padding for floating and inset variants.
           variant === "floating" || variant === "inset"
-            ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--aside-width-icon)+(--spacing(4))+2px)]"
+            ? "p-2.5 group-data-[collapsible=icon]:w-[calc(var(--aside-width-icon)+(--spacing(4))+2.5px)]"
             : "group-data-[collapsible=icon]:w-(--aside-width-icon) group-data-[side=left]:border-l group-data-[side=right]:border-l",
         )}
         {...props}
@@ -215,7 +218,7 @@ function Aside({
           data-aside="aside"
           data-slot="aside-inner"
           className={cn(
-            "group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm",
+            "group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-xl group-data-[variant=floating]:border group-data-[variant=floating]:shadow-lg",
             className,
           )}
         >
@@ -229,9 +232,9 @@ function Aside({
 function AsideHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      data-slot="sidebar-header"
-      data-sidebar="header"
-      className={cn("flex flex-col gap-2 px-4 py-3", className)}
+      data-slot="aside-header"
+      data-aside="header"
+      className={cn("flex flex-col gap-2 px-4 py-2", className)}
       {...props}
     />
   );
@@ -240,8 +243,8 @@ function AsideHeader({ className, ...props }: React.ComponentProps<"div">) {
 function AsideFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      data-slot="sidebar-footer"
-      data-sidebar="footer"
+      data-slot="aside-footer"
+      data-aside="footer"
       className={cn("flex flex-col gap-2 px-4 py-3", className)}
       {...props}
     />
@@ -329,7 +332,7 @@ function AsideInset({ className, ...props }: React.ComponentProps<"main">) {
 }
 
 function AsideContent({ children }: { children: React.ReactNode }) {
-  return <div className="flex min-h-0 flex-col gap-2 overflow-auto px-4 h-full">{children}</div>;
+  return <div className="flex-1 flex min-h-0 flex-col gap-2 overflow-auto px-4">{children}</div>;
 }
 
 export { Aside, AsideContent, AsideFooter, AsideHeader, AsideInset, AsideProvider, AsideRail, AsideTrigger, useAside };
