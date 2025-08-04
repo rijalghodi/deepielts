@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+    "question": "You recently stayed in a hotel and had a bad experience. Write a letter to the hotel manager to complain about the service."
+  },
+  {
+    "id": "2",
+    "question": "You borrowed a book from a friend and damaged it. Write a letter to apologize and offer to replace it."
+  },
+  {
+    "id": "3",
+    "question": "You are planning to move to a new city for work. Write a letter to a friend who lives there asking for advice about housing, jobs, and lifestyle."
+  },
+  {
+    "id": "4",
+    "question": "You ordered an item online but it arrived late and damaged. Write a letter to the company requesting a refund or replacement."
+  },
+  {
+    "id": "5",
+    "question": "You are going on vacation and want your neighbor to take care of your house. Write a letter to explain your travel plans and what you need them to do."
+  },
+  {
+    "id": "6",
+    "question": "You recently attended a training course. Write a letter to your manager to thank them and explain how the course will help you in your job."
+  },
+  {
+    "id": "7",
+    "question": "You saw an advertisement for a part-time job and want to apply. Write a letter to the employer explaining why you are suitable."
+  },
+  {
+    "id": "8",
+    "question": "You moved to a new house and want to invite a friend to visit. Write a letter with your new address and suggest a date for the visit."
+  },
+  {
+    "id": "9",
+    "question": "You lost something valuable on a recent trip. Write a letter to the hotel where you stayed to ask if they found it."
+  },
+  {
+    "id": "10",
+    "question": "You are unhappy with the internet service in your area. Write a letter to the service provider explaining the problems and requesting improvement."
+  },
+  {
+    "id": "11",
+    "question": "You would like to join a local gym. Write a letter to inquire about membership plans, facilities, and classes."
+  },
+  {
+    "id": "12",
+    "question": "You attended a public event and were very impressed by the organization. Write a letter to the event organizer to express your appreciation."
+  },
+  {
+    "id": "13",
+    "question": "You recently bought a faulty product and want to complain. Write a letter to the store manager describing the problem and asking for a resolution."
+  },
+  {
+    "id": "14",
+    "question": "You are going to study abroad and need to arrange accommodation. Write a letter to the college asking for help."
+  },
+  {
+    "id": "15",
+    "question": "You met someone at a conference and want to stay in touch. Write a letter to introduce yourself again and suggest how you can work together."
+  },
+  {
+    "id": "16",
+    "question": "You have just returned from a holiday organized by a travel agency. Write a letter to give feedback on the experience."
+  },
+  {
+    "id": "17",
+    "question": "You have a suggestion for improving facilities in your local community center. Write a letter to the manager to propose your idea."
+  },
+  {
+    "id": "18",
+    "question": "You want to rent a room in another town for six months. Write a letter to the landlord explaining your situation and needs."
+  },
+  {
+    "id": "19",
+    "question": "You received poor customer service at a restaurant. Write a letter to the manager to describe what happened and ask for a response."
+  },
+  {
+    "id": "20",
+    "question": "You are applying for a job and need a reference. Write a letter to a former employer asking for a recommendation letter."
+  }
+]

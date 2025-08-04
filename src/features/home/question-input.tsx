@@ -13,13 +13,23 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
+import TASK_1_GENERAL_QUESTIONS from "@/lib/constants/task-1-general-questions.json";
+import TASK_2_QUESTIONS from "@/lib/constants/task-2-questions.json";
 
 type Props = {
   taskType: QuestionType;
 };
 
 export function QuestionInput({ taskType }: Props) {
-  const { control } = useFormContext<z.infer<typeof createSubmissionBodySchema>>();
+  const { control, setValue } = useFormContext<z.infer<typeof createSubmissionBodySchema>>();
+
+  const handleGenerateQuestion = () => {
+    const question =
+      taskType === QuestionType.Task1General
+        ? TASK_1_GENERAL_QUESTIONS[Math.floor(Math.random() * TASK_1_GENERAL_QUESTIONS.length)]
+        : TASK_2_QUESTIONS[Math.floor(Math.random() * TASK_2_QUESTIONS.length)];
+    setValue("question", question.question, { shouldDirty: true });
+  };
 
   return (
     <FormItem>
@@ -63,11 +73,12 @@ export function QuestionInput({ taskType }: Props) {
                     preventResize
                     value={field.value}
                     onChange={field.onChange}
+                    className="text-base"
                   />
                   {/* TOOL */}
                   <div className="flex flex-wrap items-center justify-center w-full gap-2">
                     {taskType !== QuestionType.Task1Academic && (
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={handleGenerateQuestion}>
                         <WandSparkles /> Generate Question
                       </Button>
                     )}
