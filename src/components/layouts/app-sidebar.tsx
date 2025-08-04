@@ -1,6 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import { Edit, LogOut, Palette, Settings } from "lucide-react";
 
 import { logout } from "@/lib/api/auth.api";
+import { submissionList, submissionListKey } from "@/lib/api/submission.api";
 
 import {
   Sidebar,
@@ -29,8 +31,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { submissionList, submissionListKey } from "@/lib/api/submission.api";
-import { useQuery } from "@tanstack/react-query";
 
 const QUICK_MENU = [
   {
