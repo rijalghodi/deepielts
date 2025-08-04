@@ -53,7 +53,7 @@ const SidebarMobileTriggerButton = () => {
   return (
     <div className="fixed top-20 left-0 z-[5]">
       <SidebarTrigger asChild>
-        <Button variant="default" size="lg" className="rounded-none rounded-r-full">
+        <Button variant="outline" size="lg" className="rounded-none rounded-r-full">
           <Menu />
         </Button>
       </SidebarTrigger>

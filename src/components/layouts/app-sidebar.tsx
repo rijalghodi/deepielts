@@ -49,13 +49,11 @@ type AppSidebarProps = {
 };
 
 export function AppSidebar(props: AppSidebarProps) {
-  const { open, setOpen } = useSidebar();
+  const { open } = useSidebar();
   const { data: submissions } = useQuery({
     queryKey: submissionListKey(),
     queryFn: () => submissionList({ page: 1, limit: 10 }),
   });
-
-  console.log(submissions);
 
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
