@@ -16,10 +16,6 @@ interface HeadingProps {
   className?: string;
 }
 
-function H1({ children, className = "" }: HeadingProps) {
-  return <h1 className={`text-2xl font-bold text-primary ${className}`}>{children}</h1>;
-}
-
 function H2({ children, className = "" }: HeadingProps) {
   return <h2 className={`text-lg font-semibold ${className}`}>{children}</h2>;
 }
