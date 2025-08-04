@@ -58,7 +58,7 @@ export function AppHeader() {
             <Logo width={80} height={50} className="w-[60px] h-auto md:w-[70px]" />
           </Link>
 
-          <div className="flex gap-4">
+          <div className="flex gap-2 items-center">
             <div>
               {user ? (
                 <Button>
