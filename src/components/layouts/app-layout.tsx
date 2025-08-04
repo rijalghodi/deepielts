@@ -1,83 +1,74 @@
 "use client";
 
-import { Bot, X } from "lucide-react";
+import { Bot, Menu, X } from "lucide-react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
 import { AppSidebar } from "@/components/layouts/app-sidebar";
-import { SidebarInset } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AppAside } from "./app-aside";
 import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
 import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
+import { Button } from "../ui/button";
 import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
 const AsideTriggerButton = () => {
   const { isMobile, open, openMobile } = useAside();
+  const isOpen = (!isMobile && open) || (isMobile && openMobile);
   return (
     <div className="fixed top-1/2 -translate-y-1/2 right-0 z-50">
       <AsideTrigger asChild>
-        <button
+        <Button
+          variant="contrast"
+          size="lg"
           className={cn(
-            "h-10 text-sm flex items-center justify-center gap-2 px-3 font-semibold bg-purple-700 border text-white",
-            "shadow-lg py-2.5 hover:bg-purple-900 transition-all duration-200 w-32",
-            "-rotate-90 lg:rotate-0 origin-right mr-5 lg:mr-0",
-            "rounded-t-lg lg:rounded-none lg:rounded-l-full",
-            "whitespace-nowrap overflow-x-auto",
-            ((!isMobile && open) || (isMobile && openMobile)) && "w-12",
+            "rounded-none rounded-l-full w-36 transition-all duration-200",
+            isOpen && !isMobile && "w-12",
+            isMobile && "-rotate-90 origin-right mr-5 rounded-none rounded-t-lg",
           )}
         >
-          {(!isMobile && open) || (isMobile && openMobile) ? (
+          {isOpen ? (
             <X className="h-4 w-4" />
           ) : (
             <>
               <Bot className="h-4 w-4" /> AI Assitant{" "}
             </>
           )}
-        </button>
+        </Button>
       </AsideTrigger>
     </div>
   );
 };
 
 const SidebarMobileTriggerButton = () => {
-  const { isMobile, open, openMobile } = useAside();
+  const { isMobile } = useSidebar();
+
+  if (!isMobile) {
+    return null;
+  }
+
   return (
-    <div className="fixed top-1/2 -translate-y-1/2 right-0 z-50">
-      <AsideTrigger asChild>
-        <button
-          className={cn(
-            "h-10 text-sm flex items-center justify-center gap-2 px-3 font-semibold bg-purple-700 border text-white",
-            "shadow-lg py-2.5 hover:bg-purple-900 transition-all duration-200 w-32",
-            "-rotate-90 lg:rotate-0 origin-right mr-5 lg:mr-0",
-            "rounded-t-lg lg:rounded-none lg:rounded-l-full",
-            "whitespace-nowrap overflow-x-auto",
-            ((!isMobile && open) || (isMobile && openMobile)) && "w-12",
-          )}
-        >
-          {(!isMobile && open) || (isMobile && openMobile) ? (
-            <X className="h-4 w-4" />
-          ) : (
-            <>
-              <Bot className="h-4 w-4" /> AI Assitant{" "}
-            </>
-          )}
-        </button>
-      </AsideTrigger>
+    <div className="fixed top-20 left-0 z-[5]">
+      <SidebarTrigger asChild>
+        <Button variant="default" size="lg" className="rounded-none rounded-r-full">
+          <Menu />
+        </Button>
+      </SidebarTrigger>
     </div>
   );
 };
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  // const { open, openMobile, isMobile } = useAside();
 
   return (
     <>
       {user && <AppSidebar userName={user.name} />}
       <AsideTriggerButton />
+      <SidebarMobileTriggerButton />
       <SidebarInset>
         <AsideInset>
           <AppHeader />
