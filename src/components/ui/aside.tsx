@@ -12,8 +12,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 
 const ASIDE_COOKIE_NAME = "aside_state";
 const ASIDE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-export const ASIDE_WIDTH = "440px";
-export const ASIDE_WIDTH_MOBILE = "440px";
+export const ASIDE_WIDTH = "480px";
+export const ASIDE_WIDTH_MOBILE = "380px";
 const ASIDE_KEYBOARD_SHORTCUT = "b";
 
 type AsideContextProps = {
@@ -159,7 +159,7 @@ function Aside({
           data-aside="aside"
           data-slot="aside"
           data-mobile="true"
-          className="bg-aside text-aside-foreground w-(--aside-width) p-0 [&>button]:hidden"
+          className="bg-aside text-aside-foreground w-screen p-0 [&>button]:hidden"
           style={
             {
               "--aside-width": ASIDE_WIDTH_MOBILE,
@@ -189,7 +189,7 @@ function Aside({
       <div
         data-slot="aside-gap"
         className={cn(
-          "relative w-(--aside-width) bg-transparent transition-[width] duration-200 ease-linear",
+          "relative w-(--aside-width) transition-[width] duration-200 ease-linear",
           "group-data-[collapsible=offcanvas]:w-0",
           "group-data-[side=right]:rotate-180",
           variant === "floating" || variant === "inset"
@@ -306,4 +306,8 @@ function AsideInset({ className, ...props }: React.ComponentProps<"main">) {
   );
 }
 
-export { Aside, AsideInset, AsideProvider, AsideRail, AsideTrigger, useAside };
+function AsideContent({ children }: { children: React.ReactNode }) {
+  return <div className="h-svh flex flex-col overflow-y-auto">{children}</div>;
+}
+
+export { Aside, AsideInset, AsideProvider, AsideRail, AsideTrigger, useAside, AsideContent };

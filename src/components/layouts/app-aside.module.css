@@ -1,0 +1,121 @@
+/* Common layout classes */
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1.25rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section {
+  padding: 1rem;
+}
+
+.sectionBorder {
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.75rem;
+}
+
+.sectionBg {
+  background-color: hsl(var(--primary) / 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+}
+
+/* Text classes */
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(var(--primary));
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.smallText {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.centerText {
+  text-align: center;
+}
+
+/* Grid and layout */
+.criteriaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  padding: 0 1rem;
+}
+
+.criteriaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.scoreBadge {
+  height: 1.25rem;
+  width: 1.25rem;
+  font-size: 0.75rem;
+  background-color: hsl(var(--primary) / 0.1);
+  font-weight: 600;
+  font-family: monospace;
+  color: hsl(var(--primary));
+  border: 1px solid hsl(var(--primary));
+  border-radius: 0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* List styles */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Spacing utilities */
+.spaceY2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.spaceY3 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.spaceY5 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Button container */
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

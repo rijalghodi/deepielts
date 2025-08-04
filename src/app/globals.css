@@ -40,6 +40,7 @@
   --color-success: hsl(var(--success));
   --color-success-foreground: hsl(var(--success-foreground));
 
+  --radius-xs: calc(var(--radius) - 6px);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -78,7 +79,7 @@
   --surface-1: 0 0% 96%;
   --surface-2: 0 0% 93%;
   --surface-3: 0 0% 90%;
-  --surface-4: 0 0% 85%;
+  --surface-4: 0 0% 88%;
 
   /** Contrast colors */
   --contrast-0: 0 0% 12%;
