@@ -1,73 +1,84 @@
 import { WandSparkles } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
+import { useFormContext } from "react-hook-form";
+import { z } from "zod";
 
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { inputVariants } from "@/components/ui/input";
 import { InputImage } from "@/components/ui/input-image";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
+import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 
 type Props = {
   taskType: QuestionType;
-  onChange?: (value: string) => void;
-  onImageChange?: (value?: string) => void;
-  value?: string;
-  imageValue?: string;
 };
 
-export function QuestionInput({ taskType, onChange, onImageChange, value, imageValue }: Props) {
-  const [question, setQuestion] = useState(value);
-  const [image, setImage] = useState<string | undefined>(imageValue);
-
-  const handleQuestionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setQuestion(e.target.value);
-    onChange?.(e.target.value);
-  };
-
-  const handleImageChange = (value?: string) => {
-    setImage(value);
-    onImageChange?.(value);
-  };
+export function QuestionInput({ taskType }: Props) {
+  const { control } = useFormContext<z.infer<typeof createSubmissionBodySchema>>();
 
   return (
-    <div className="flex flex-col gap-2">
-      <Label>Question</Label>
-      <div className={cn(inputVariants({ focusStyle: "none" }), "space-y-2 p-4 w-full")}>
-        {/* QUESTION */}
-        <div className="flex gap-5 gap-y-3 flex-col md:flex-row w-full">
-          {taskType === QuestionType.Task1Academic && (
-            <div className="">
-              <InputImage placeholder="Upload Task 1 Image" value={image} onChange={handleImageChange} />
-            </div>
-          )}
-          <Textarea
-            placeholder={
-              taskType === QuestionType.Task1Academic
-                ? "Enter a Task 1 Academic question or topic..."
-                : taskType === QuestionType.Task1General
-                  ? "Enter a Task 1 General question or topic..."
-                  : "Enter a Task 2 question or topic..."
-            }
-            minRows={3}
-            maxRows={6}
-            plainStyle
-            className="text-base sm:text-base flex-1"
-            preventResize
-            value={question}
-            onChange={handleQuestionChange}
+    <FormItem>
+      <FormLabel>Question</FormLabel>
+      <div className="flex flex-col md:flex-row gap-2 w-full">
+        {/* IMAGE INPUT */}
+        {taskType === QuestionType.Task1Academic && (
+          <FormField
+            name="attachments"
+            control={control}
+            render={({ field }) => (
+              <FormItem className="">
+                <FormControl>
+                  <InputImage placeholder="Upload Task 1 Image" value={field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        {/* TOOL */}
-        <div className="flex flex-wrap items-center justify-center w-full gap-2">
-          <Button variant="outline" size="sm">
-            <WandSparkles /> Generate Question
-          </Button>
-        </div>
+        )}
+
+        <FormField
+          name="question"
+          control={control}
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <div className={cn(inputVariants({ focusStyle: "none" }), "p-4 flex flex-col gap-2")}>
+                  {/* QUESTION */}
+                  <Textarea
+                    placeholder={
+                      taskType === QuestionType.Task1Academic
+                        ? "Enter a Task 1 Academic question or topic..."
+                        : taskType === QuestionType.Task1General
+                          ? "Enter a Task 1 General question or topic..."
+                          : "Enter a Task 2 question or topic..."
+                    }
+                    minRows={3}
+                    maxRows={6}
+                    plainStyle
+                    preventResize
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                  {/* TOOL */}
+                  <div className="flex flex-wrap items-center justify-center w-full gap-2">
+                    {taskType !== QuestionType.Task1Academic && (
+                      <Button variant="outline" size="sm">
+                        <WandSparkles /> Generate Question
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
-    </div>
+    </FormItem>
   );
 }

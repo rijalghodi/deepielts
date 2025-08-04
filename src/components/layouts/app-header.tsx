@@ -18,8 +18,8 @@ import { ThemeToggle } from "../ui/theme-toggle";
 
 export function AppHeader() {
   const { user } = useAuth();
-  const { open: sidebarOpen, isMobile } = useSidebar();
-  const { open: asideOpen } = useAside();
+  const { open: sidebarOpen, isMobile: isSidebarMobile } = useSidebar();
+  const { open: asideOpen, isMobile: isAsideMobile } = useAside();
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -41,8 +41,8 @@ export function AppHeader() {
       transition={{ duration: 0.3 }}
       className="fixed inset-x-0 top-2 z-50 transition-all duration-200 ease-linear px-5"
       style={{
-        left: isMobile ? "0" : sidebarOpen && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0",
-        right: asideOpen ? ASIDE_WIDTH : "0",
+        left: isSidebarMobile ? "0" : sidebarOpen && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0",
+        right: isAsideMobile ? "0" : asideOpen ? ASIDE_WIDTH : "0",
       }}
     >
       <div

@@ -9,8 +9,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { submissionCreate } from "@/lib/api/submission.api";
+import { useAnalysisStore } from "@/lib/zustand/analysis-store";
 
-import { AnalysisSheet } from "@/components/ui/analysis-sheet";
+import { useAside } from "@/components/ui/aside";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
@@ -31,8 +32,8 @@ type Props = {
 
 export function SubmissionForm({ onSuccess }: Props) {
   const [error, setError] = useState<string | null>(null);
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
-  const [isAnalysisSheetOpen, setIsAnalysisSheetOpen] = useState(false);
+  const { setAnalysis } = useAnalysisStore();
+  const { setOpen } = useAside();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -55,8 +56,8 @@ export function SubmissionForm({ onSuccess }: Props) {
       console.log("data", data);
       // Handle the new response structure with analysis
       if (data?.analysis) {
-        setAnalysisResult(data.analysis);
-        setIsAnalysisSheetOpen(true);
+        setAnalysis(data.analysis);
+        setOpen(true);
       }
 
       onSuccess?.(data);
@@ -66,7 +67,7 @@ export function SubmissionForm({ onSuccess }: Props) {
 
   const handleSubmit = async (values: z.infer<typeof schema>) => {
     setError(null);
-    setAnalysisResult(null);
+    setAnalysis(null);
     await submit(values);
   };
 
@@ -83,52 +84,39 @@ export function SubmissionForm({ onSuccess }: Props) {
           <DoodleArrow width={90} height={80} />
         </div>
         <Form {...form}>
-          <div>
-            <FormField
-              name="questionType"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Question Type</FormLabel>
-                  <FormControl>
-                    <SelectInput
-                      className="sm:max-w-[300px] w-full"
-                      options={[
-                        { label: "Task 1 General", value: QuestionType.Task1General },
-                        { label: "Task 1 Academic", value: QuestionType.Task1Academic },
-                        { label: "Task 2", value: QuestionType.Task2 },
-                      ]}
-                      placeholder="Select Question Type"
-                      focusStyle="none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            name="questionType"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Question Type</FormLabel>
+                <FormControl>
+                  <SelectInput
+                    className="sm:max-w-[300px] w-full"
+                    options={[
+                      { label: "Task 1 General", value: QuestionType.Task1General },
+                      { label: "Task 1 Academic", value: QuestionType.Task1Academic },
+                      { label: "Task 2", value: QuestionType.Task2 },
+                    ]}
+                    placeholder="Select Question Type"
+                    focusStyle="none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div>
-            <QuestionInput
-              taskType={form.watch("questionType") as QuestionType}
-              onChange={(value) => form.setValue("question", value, { shouldDirty: true })}
-              onImageChange={(value) => form.setValue("attachments", value, { shouldDirty: true })}
-              value={form.watch("question")}
-              imageValue={form.watch("attachments")}
-            />
+            <QuestionInput taskType={form.watch("questionType") as QuestionType} />
           </div>
 
-          <div>
-            <AnswerInput
-              onChange={(value) => form.setValue("answer", value, { shouldDirty: true })}
-              value={form.watch("answer")}
-            />
-          </div>
+          <AnswerInput />
 
           {error && <p className="text-destructive text-sm text-center">{error}</p>}
 
-          <div>
+          <div className="flex justify-center">
             <Button variant="default" className="w-full" type="submit" size="xl" loading={isPending}>
               <Sparkles strokeWidth={1.5} /> Check Score
             </Button>
@@ -137,13 +125,6 @@ export function SubmissionForm({ onSuccess }: Props) {
       </form>
       {/* Loading Bar */}
       <LoadingBar isVisible={isPending} />
-
-      {/* Analysis Sheet */}
-      <AnalysisSheet
-        isOpen={isAnalysisSheetOpen}
-        onClose={() => setIsAnalysisSheetOpen(false)}
-        analysis={analysisResult}
-      />
     </motion.div>
   );
 }

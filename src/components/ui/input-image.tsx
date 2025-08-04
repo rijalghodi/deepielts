@@ -123,7 +123,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
           handleDrop(files);
         }}
         className={cn(
-          "relative border-2 border-dashed rounded-md cursor-pointer flex justify-center items-center aspect-[4/3] w-[180px] text-xs hover:bg-accent",
+          "relative border rounded-md cursor-pointer flex justify-center items-center min-w-[180px] min-h-[100px] text-xs hover:bg-accent",
           error ? "border-destructive" : "border-border",
           isDragging && "border-primary bg-muted/50",
           disabled && "opacity-50",

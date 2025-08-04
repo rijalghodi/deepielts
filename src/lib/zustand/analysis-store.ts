@@ -4,7 +4,7 @@ import { IELTSAnalysis } from "@/server/models/submission";
 
 type Store = {
   analysis: IELTSAnalysis | null;
-  setAnalysis: (analysis: IELTSAnalysis) => void;
+  setAnalysis: (analysis: IELTSAnalysis | null) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
   generating: boolean;
