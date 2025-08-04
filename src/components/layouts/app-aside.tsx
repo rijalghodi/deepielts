@@ -5,7 +5,7 @@ import React from "react";
 
 import { useAnalysisStore } from "@/lib/zustand/analysis-store";
 
-import { Aside, AsideContent, useAside } from "@/components/ui/aside";
+import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
@@ -17,15 +17,15 @@ interface HeadingProps {
 }
 
 function H1({ children, className = "" }: HeadingProps) {
-  return <h1 className={`text-5xl font-bold text-primary ${className}`}>{children}</h1>;
+  return <h1 className={`text-2xl font-bold text-primary ${className}`}>{children}</h1>;
 }
 
 function H2({ children, className = "" }: HeadingProps) {
-  return <h2 className={`text-2xl font-semibold ${className}`}>{children}</h2>;
+  return <h2 className={`text-lg font-semibold ${className}`}>{children}</h2>;
 }
 
 function H3({ children, className = "" }: HeadingProps) {
-  return <h3 className={`text-xl text-primary font-semibold ${className}`}>{children}</h3>;
+  return <h3 className={`text-lg text-primary font-semibold ${className}`}>{children}</h3>;
 }
 
 function H4({ children, className = "" }: HeadingProps) {
@@ -196,7 +196,6 @@ function DownloadButton() {
 // Main AI Analysis Component
 function AIAnalysis() {
   const { analysis } = useAnalysisStore();
-  const { setOpen } = useAside();
 
   console.log(analysis);
 
@@ -245,13 +244,11 @@ function AIAnalysis() {
 
   return (
     <article className="flex flex-col p-4 gap-5">
-      <AnalysisHeader onClose={() => setOpen(false)} />
       <OverallScore score={defaultData.overallScore} />
       <CriteriaGrid {...defaultData.criteria} />
       <AssessmentSection {...defaultData.taskResponse} />
       <AssessmentSection {...defaultData.coherence} />
       <DetailedAssessment paragraphs={defaultData.paragraphs} />
-      <DownloadButton />
     </article>
   );
 }
@@ -259,9 +256,22 @@ function AIAnalysis() {
 export function AppAside() {
   return (
     <Aside className="shadow-lg">
+      <AsideHeader>
+        <header className="flex items-center justify-between">
+          <H2>AI Analysis</H2>
+          <AsideTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <XIcon className="w-4 h-4" />
+            </Button>
+          </AsideTrigger>
+        </header>
+      </AsideHeader>
       <AsideContent>
         <AIAnalysis />
       </AsideContent>
+      <AsideFooter>
+        <DownloadButton />
+      </AsideFooter>
     </Aside>
   );
 }

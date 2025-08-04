@@ -207,13 +207,22 @@
     cursor: pointer;
   }
 
+  /* .writing-mode-horizontal-tb {
+    writing-mode: horizontal-tb;
+  }
+  .writing-mode-unset {
+    writing-mode: unset;
+  }
+  .writing-mode-sideways-rl {
+    writing-mode: sideways-rl;
+  }
   .writing-mode-vertical-rl {
     writing-mode: vertical-rl;
   }
 
   .writing-mode-vertical-lr {
     writing-mode: vertical-lr;
-  }
+  } */
 }
 
 @layer utilities {

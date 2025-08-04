@@ -1,6 +1,6 @@
 "use client";
 
-import { Blocks } from "lucide-react";
+import { Bot, X } from "lucide-react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
@@ -11,19 +11,33 @@ import { SidebarInset } from "@/components/ui/sidebar";
 import { AppAside } from "./app-aside";
 import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
-import { AsideInset, AsideTrigger } from "../ui/aside";
+import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
 import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+  const { open } = useAside();
 
   return (
     <>
       {user && <AppSidebar userName={user.name} />}
       <div className="fixed top-1/2 -translate-y-1/2 right-0 z-50">
         <AsideTrigger asChild>
-          <button className="flex items-center gap-2 bg-foreground text-background rounded-r-md px-5 font-semibold shadow-lg py-2.5 [writing-mode:vertical-lr] rotate-180 hover:bg-foreground/90 hover:text-primary transition-colors duration-200">
-            Open Toolbox <Blocks className="w-4 h-4" />
+          <button
+            className={cn(
+              "h-10 text-sm flex items-center justify-center gap-2 bg-foreground text-background px-3 font-semibold shadow-lg py-2.5 hover:bg-foreground/90 hover:text-primary transition-all duration-200 w-36",
+              "-rotate-90 lg:rotate-0 origin-right mr-5 lg:mr-0",
+              "rounded-t-md lg:rounded-none lg:rounded-l-full",
+              open && "w-12",
+            )}
+          >
+            {open ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <>
+                <Bot className="h-4 w-4" /> AI Assitant{" "}
+              </>
+            )}
           </button>
         </AsideTrigger>
       </div>

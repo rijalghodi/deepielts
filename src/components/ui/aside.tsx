@@ -226,6 +226,28 @@ function Aside({
   );
 }
 
+function AsideHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="sidebar-header"
+      data-sidebar="header"
+      className={cn("flex flex-col gap-2 px-4 py-3", className)}
+      {...props}
+    />
+  );
+}
+
+function AsideFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="sidebar-footer"
+      data-sidebar="footer"
+      className={cn("flex flex-col gap-2 px-4 py-3", className)}
+      {...props}
+    />
+  );
+}
+
 function AsideTrigger({
   className,
   onClick,
@@ -307,7 +329,7 @@ function AsideInset({ className, ...props }: React.ComponentProps<"main">) {
 }
 
 function AsideContent({ children }: { children: React.ReactNode }) {
-  return <div className="h-svh flex flex-col overflow-y-auto">{children}</div>;
+  return <div className="flex min-h-0 flex-col gap-2 overflow-auto">{children}</div>;
 }
 
-export { Aside, AsideInset, AsideProvider, AsideRail, AsideTrigger, useAside, AsideContent };
+export { Aside, AsideContent, AsideFooter, AsideHeader, AsideInset, AsideProvider, AsideRail, AsideTrigger, useAside };
