@@ -5,7 +5,6 @@ import React, { useState } from "react";
 
 import { APP_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { useAdvanceNav } from "@/hooks";
 
 import {
   Dialog,

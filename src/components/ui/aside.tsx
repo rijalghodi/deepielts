@@ -128,7 +128,7 @@ function AsideProvider({
 
 function Aside({
   side = "right",
-  variant = "aside",
+  variant = "floating",
   collapsible = "offcanvas",
   className,
   children,
@@ -200,7 +200,7 @@ function Aside({
       <div
         data-slot="aside-container"
         className={cn(
-          "fixed bg-aside inset-y-0 z-10 hidden h-svh w-(--aside-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+          "fixed inset-y-0 z-10 hidden h-svh w-(--aside-width) transition-[left,right,width] duration-200 ease-linear md:flex",
           side === "left"
             ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--aside-width)*-1)]"
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--aside-width)*-1)]",
@@ -208,7 +208,6 @@ function Aside({
           variant === "floating" || variant === "inset"
             ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--aside-width-icon)+(--spacing(4))+2px)]"
             : "group-data-[collapsible=icon]:w-(--aside-width-icon) group-data-[side=left]:border-l group-data-[side=right]:border-l",
-          className,
         )}
         {...props}
       >
@@ -217,6 +216,7 @@ function Aside({
           data-slot="aside-inner"
           className={cn(
             "group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm",
+            className,
           )}
         >
           {children}

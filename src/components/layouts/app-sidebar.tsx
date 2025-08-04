@@ -18,6 +18,7 @@ import {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
@@ -48,6 +49,7 @@ type AppSidebarProps = {
 };
 
 export function AppSidebar(props: AppSidebarProps) {
+  const { open, setOpen } = useSidebar();
   const { data: submissions } = useQuery({
     queryKey: submissionListKey(),
     queryFn: () => submissionList({ page: 1, limit: 10 }),
@@ -63,45 +65,6 @@ export function AppSidebar(props: AppSidebarProps) {
             <SidebarTrigger />
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarHeader>
-      <SidebarRail />
-      <SidebarContent>
-        <SidebarGroup>
-          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {QUICK_MENU.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarSeparator />
-        {/* List */}
-        <SidebarGroup>
-          <SidebarGroupLabel>History</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {submissions?.data?.items.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton className="flex justify-between">
-                    <div className="whitespace-nowrap truncate overflow-hidden flex-1">
-                      {item.question?.slice(0, 30)}
-                    </div>
-                    <span className="text-xs text-muted-foreground">{item.analysis?.score?.totalScore || 0}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -136,7 +99,47 @@ export function AppSidebar(props: AppSidebarProps) {
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarHeader>
+      <SidebarRail />
+      <SidebarContent>
+        <SidebarGroup>
+          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {QUICK_MENU.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarSeparator />
+        {/* List */}
+        {open && (
+          <SidebarGroup>
+            <SidebarGroupLabel>History</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {submissions?.data?.items.map((item) => (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton className="flex justify-between">
+                      <div className="whitespace-nowrap truncate overflow-hidden flex-1">
+                        {item.question?.slice(0, 30)}
+                      </div>
+                      <span className="text-xs text-muted-foreground">{item.analysis?.score?.totalScore || 0}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+      </SidebarContent>
+      <SidebarFooter></SidebarFooter>
     </Sidebar>
   );
 }
