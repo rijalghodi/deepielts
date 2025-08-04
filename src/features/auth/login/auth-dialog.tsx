@@ -27,18 +27,15 @@ type Props = {
 };
 
 export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
-  const { addSearchParams, removeSearchParams, searchParams } = useAdvanceNav();
   const [email, setEmail] = useState<string>("");
 
-  const open = openProp ?? !!searchParams.get("authOpen");
+  const open = openProp;
   const [step, setStep] = useState<"login" | "code">("code");
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      removeSearchParams(["authOpen"]);
       onOpenChange?.(false);
     } else {
-      addSearchParams({ authOpen: "true" });
       setStep("login");
       onOpenChange?.(true);
     }

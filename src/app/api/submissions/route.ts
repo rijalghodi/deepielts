@@ -180,6 +180,8 @@ export async function GET(req: NextRequest) {
           limit,
           totalCount,
           totalPages,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1,
         },
       }),
     );

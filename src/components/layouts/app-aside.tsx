@@ -207,17 +207,17 @@ function AIAnalysis() {
   const overallScore = analysis.score.totalScore;
 
   const criteria = {
-    tr: analysis.score.scores.taskResponse.score,
-    cc: analysis.score.scores.coherenceCohesion.score,
-    lr: analysis.score.scores.lexicalResource.score,
-    gra: analysis.score.scores.grammar.score,
+    tr: analysis.score.scores.tr.score,
+    cc: analysis.score.scores.cc.score,
+    lr: analysis.score.scores.lr.score,
+    gra: analysis.score.scores.gra.score,
   };
 
   // Map criteria scores to assessment sections
   const taskResponseSection = {
     title: "Task Response",
-    description: analysis.score.scores.taskResponse.comment,
-    items: Object.entries(analysis.score.scores.taskResponse.subCriteria).map(([key, score]) => ({
+    description: analysis.score.scores.tr.comment,
+    items: Object.entries(analysis.score.scores.tr.subCriteria).map(([key, score]) => ({
       score,
       label: key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()),
     })),
@@ -225,8 +225,8 @@ function AIAnalysis() {
 
   const coherenceSection = {
     title: "Coherence & Cohesion",
-    description: analysis.score.scores.coherenceCohesion.comment,
-    items: Object.entries(analysis.score.scores.coherenceCohesion.subCriteria).map(([key, score]) => ({
+    description: analysis.score.scores.cc.comment,
+    items: Object.entries(analysis.score.scores.cc.subCriteria).map(([key, score]) => ({
       score,
       label: key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()),
     })),
@@ -234,8 +234,8 @@ function AIAnalysis() {
 
   const lexicalSection = {
     title: "Lexical Resource",
-    description: analysis.score.scores.lexicalResource.comment,
-    items: Object.entries(analysis.score.scores.lexicalResource.subCriteria).map(([key, score]) => ({
+    description: analysis.score.scores.lr.comment,
+    items: Object.entries(analysis.score.scores.lr.subCriteria).map(([key, score]) => ({
       score,
       label: key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()),
     })),
@@ -243,8 +243,8 @@ function AIAnalysis() {
 
   const grammarSection = {
     title: "Grammar",
-    description: analysis.score.scores.grammar.comment,
-    items: Object.entries(analysis.score.scores.grammar.subCriteria).map(([key, score]) => ({
+    description: analysis.score.scores.gra.comment,
+    items: Object.entries(analysis.score.scores.gra.subCriteria).map(([key, score]) => ({
       score,
       label: key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase()),
     })),
@@ -254,12 +254,9 @@ function AIAnalysis() {
   const paragraphs = analysis.feedback.map((entry, index) => ({
     number: index + 1,
     original: entry.original,
-    comments: [
-      entry.comments.taskResponse,
-      entry.comments.coherenceCohesion,
-      entry.comments.lexicalResource,
-      entry.comments.grammar,
-    ].filter((comment) => comment && comment.trim() !== ""),
+    comments: [entry.comments.tr, entry.comments.cc, entry.comments.lr, entry.comments.gra].filter(
+      (comment) => comment && comment.trim() !== "",
+    ),
     revised: entry.rewrite,
   }));
 

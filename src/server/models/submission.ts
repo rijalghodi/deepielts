@@ -26,10 +26,10 @@ export type IELTSAnalysis = {
   score: {
     totalScore: number;
     scores: {
-      taskResponse: CriteriaScore;
-      coherenceCohesion: CriteriaScore;
-      lexicalResource: CriteriaScore;
-      grammar: CriteriaScore;
+      tr: CriteriaScore;
+      cc: CriteriaScore;
+      lr: CriteriaScore;
+      gra: CriteriaScore;
     };
   };
   feedback: FeedbackEntry[];
@@ -43,10 +43,10 @@ type CriteriaScore = {
 
 type FeedbackEntry = {
   comments: {
-    taskResponse: string;
-    coherenceCohesion: string;
-    lexicalResource: string;
-    grammar: string;
+    tr: string;
+    cc: string;
+    lr: string;
+    gra: string;
   };
   rewrite: string;
   original: string;

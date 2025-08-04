@@ -49,6 +49,8 @@ export type Pagination = {
   limit: number;
   totalCount: number;
   totalPages: number;
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
 };
 
 export type PaginatedResponse<T> = ApiResponse<{

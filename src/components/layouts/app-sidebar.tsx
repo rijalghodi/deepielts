@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Edit, LogOut, Palette, Settings } from "lucide-react";
+import { Edit, LogOut, Palette, PieChart, Settings } from "lucide-react";
 
 import { logout } from "@/lib/api/auth.api";
 import { submissionList, submissionListKey } from "@/lib/api/submission.api";
@@ -34,8 +34,12 @@ import {
 
 const QUICK_MENU = [
   {
-    title: "New Test",
+    title: "New Check",
     icon: () => <Edit />,
+  },
+  {
+    title: "Progress",
+    icon: () => <PieChart />,
   },
 ];
 
