@@ -1,5 +1,5 @@
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
-import { Submission } from "@/server/models/submission";
+import { QuestionType, Submission } from "@/server/models/submission";
 
 import { apiGet, apiPost } from "./utils";
 
@@ -24,26 +24,19 @@ export const submissionGetKey = (submissionId: string) => ["submission-get", sub
  * List all submissions. Filter by practice ID and user ID.
  */
 
-export const submissionList = async (
-  practiceId?: string,
-  userId?: string,
-): Promise<PaginatedResponse<GetSubmissionResult[]> | undefined> => {
-  const params = new URLSearchParams();
-  if (practiceId) params.append("practiceId", practiceId);
-  if (userId) params.append("userId", userId);
-
+export const submissionList = async (q?: {
+  questionType?: QuestionType;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortDir?: string;
+}): Promise<PaginatedResponse<GetSubmissionResult[]> | undefined> => {
   return apiGet<PaginatedResponse<GetSubmissionResult[]> | undefined>({
-    endpoint: `/submissions?${params.toString()}`,
+    endpoint: "/submissions",
+    queryParams: {
+      ...q,
+    },
   });
 };
 
 export const submissionListKey = (practiceId?: string, userId?: string) => ["submission-list", practiceId, userId];
-
-/**
- * Evaluate a submission.
- */
-export const submissionEvaluate = async (submissionId: string) => {
-  return apiPost<ApiResponse<any>>({
-    endpoint: `/submissions/${submissionId}/evaluate`,
-  });
-};

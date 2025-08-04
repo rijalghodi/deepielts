@@ -29,6 +29,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { submissionList, submissionListKey } from "@/lib/api/submission.api";
+import { useQuery } from "@tanstack/react-query";
 
 const QUICK_MENU = [
   {
@@ -42,6 +44,13 @@ type AppSidebarProps = {
 };
 
 export function AppSidebar(props: AppSidebarProps) {
+  const { data: submissions } = useQuery({
+    queryKey: submissionListKey(),
+    queryFn: () => submissionList({ page: 1, limit: 10 }),
+  });
+
+  console.log(submissions);
+
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader>
@@ -71,14 +80,16 @@ export function AppSidebar(props: AppSidebarProps) {
         <SidebarSeparator />
         {/* List */}
         <SidebarGroup>
-          <SidebarGroupLabel>List</SidebarGroupLabel>
+          <SidebarGroupLabel>History</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {QUICK_MENU.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton>
-                    <item.icon />
-                    <span>{item.title}</span>
+              {submissions?.data?.items.map((item) => (
+                <SidebarMenuItem key={item.id}>
+                  <SidebarMenuButton className="flex justify-between">
+                    <div className="whitespace-nowrap truncate overflow-hidden flex-1">
+                      {item.question?.slice(0, 30)}
+                    </div>
+                    <span className="text-xs text-muted-foreground">{item.analysis?.score?.totalScore || 0}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

@@ -19,6 +19,23 @@ export class AppResponse<T> {
   }
 }
 
+export class AppPaginatedResponse<T> {
+  ok = true;
+  data: {
+    items: T;
+    pagination: Pagination;
+  };
+  message?: string;
+  constructor(p: { data: T; pagination: Pagination; ok?: boolean; message?: string }) {
+    this.data = {
+      items: p.data,
+      pagination: p.pagination,
+    };
+    this.ok = p.ok ?? true;
+    this.message = p.message ?? "Success";
+  }
+}
+
 export type ApiResponse<T> = {
   ok?: boolean;
   message?: string;
@@ -29,12 +46,15 @@ export type ApiResponse<T> = {
 
 export type Pagination = {
   page: number;
-  lastPage: number;
-  totalItems: number;
-  itemsPerPage: number;
+  limit: number;
+  totalCount: number;
+  totalPages: number;
 };
 
-export type PaginatedResponse<T> = ApiResponse<T & { pagination: Pagination }>;
+export type PaginatedResponse<T> = ApiResponse<{
+  items: T;
+  pagination: Pagination;
+}>;
 
 export type PaginatedRequest = {
   page?: number;

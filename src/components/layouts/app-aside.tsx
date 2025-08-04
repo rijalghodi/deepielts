@@ -288,7 +288,7 @@ export function AppAside() {
         <header className="flex items-center justify-between">
           <H2>AI Analysis</H2>
           <AsideTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon-sm">
               <XIcon className="w-4 h-4" />
             </Button>
           </AsideTrigger>
