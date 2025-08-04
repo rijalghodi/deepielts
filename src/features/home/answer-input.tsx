@@ -36,6 +36,7 @@ export function AnswerInput() {
               preventResize
               value={field.value}
               onChange={field.onChange}
+              className="text-base"
             />
 
             {/* TOOL */}
