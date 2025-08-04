@@ -329,7 +329,7 @@ function AsideInset({ className, ...props }: React.ComponentProps<"main">) {
 }
 
 function AsideContent({ children }: { children: React.ReactNode }) {
-  return <div className="flex min-h-0 flex-col gap-2 overflow-auto">{children}</div>;
+  return <div className="flex min-h-0 flex-col gap-2 overflow-auto px-4 h-full">{children}</div>;
 }
 
 export { Aside, AsideContent, AsideFooter, AsideHeader, AsideInset, AsideProvider, AsideRail, AsideTrigger, useAside };

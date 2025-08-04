@@ -25,9 +25,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <AsideTrigger asChild>
           <button
             className={cn(
-              "h-10 text-sm flex items-center justify-center gap-2 bg-foreground text-background px-3 font-semibold shadow-lg py-2.5 hover:bg-foreground/90 hover:text-primary transition-all duration-200 w-36",
+              "h-10 text-sm flex items-center justify-center gap-2 bg-foreground text-background px-3 font-semibold",
+              "shadow-lg py-2.5 hover:bg-foreground/90 hover:text-primary transition-all duration-200 w-36",
               "-rotate-90 lg:rotate-0 origin-right mr-5 lg:mr-0",
               "rounded-t-md lg:rounded-none lg:rounded-l-full",
+              "whitespace-nowrap overflow-x-auto",
               open && "w-12",
             )}
           >
