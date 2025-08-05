@@ -32,7 +32,6 @@ type Props = {
 const FORM_STORAGE_KEY = "ielts_submission_form_data";
 
 export function SubmissionForm({ onSuccess }: Props) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { appendAnalysis, clearAnalysis, setGenerating, setError, generating } = useAIAnalysisStore();
   const { setOpen } = useAside();
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -105,7 +104,6 @@ export function SubmissionForm({ onSuccess }: Props) {
     let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
 
     try {
-      setIsSubmitting(true);
       setError(null);
       clearAnalysis();
       setGenerating(true);
@@ -151,7 +149,6 @@ export function SubmissionForm({ onSuccess }: Props) {
           console.error("Error releasing reader lock:", e);
         }
       }
-      setIsSubmitting(false);
     }
   };
 
@@ -204,8 +201,8 @@ export function SubmissionForm({ onSuccess }: Props) {
               className="w-full"
               type="submit"
               size="xl"
-              loading={isSubmitting || generating}
-              disabled={isSubmitting || generating}
+              loading={generating}
+              disabled={generating}
             >
               <Sparkles strokeWidth={1.5} />
               {generating ? "Generating Analysis..." : "Check Score"}
@@ -214,7 +211,7 @@ export function SubmissionForm({ onSuccess }: Props) {
         </Form>
       </form>
       {/* Loading Bar */}
-      <LoadingBar isVisible={isSubmitting || generating} />
+      <LoadingBar isVisible={generating} />
     </motion.div>
   );
 }

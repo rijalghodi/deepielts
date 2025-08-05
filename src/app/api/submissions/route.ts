@@ -14,6 +14,7 @@ import { handleError } from "@/server/services/interceptor";
 import { authMiddleware } from "../auth/auth-middleware";
 
 import { AppError, AppPaginatedResponse } from "@/types/global";
+export const runtime = "nodejs";
 
 // Query parameter schema for filtering and sorting
 const getSubmissionsQuerySchema = z.object({
@@ -74,9 +75,9 @@ export async function POST(req: NextRequest) {
 
     const readable = new ReadableStream({
       async start(controller) {
-        async function streamOpenAI(prompt: string) {
+        const streamOpenAI = async (prompt: string) => {
           const stream = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-4.1-nano",
             stream: true,
             messages: [{ role: "system", content: prompt }],
           });
@@ -87,26 +88,56 @@ export async function POST(req: NextRequest) {
               controller.enqueue(encoder.encode(content));
             }
           }
+        };
+        try {
+          await streamOpenAI(getScoreParsePrompt({ scoreJson }));
+          controller.enqueue(encoder.encode("\n---\n"));
+          await streamOpenAI(detailFeedbackPrompt);
+          controller.enqueue(encoder.encode("\n---\n"));
+          await streamOpenAI(modelEssayPrompt);
+        } catch (err) {
+          controller.enqueue(encoder.encode("\n[Error occurred during streaming]\n"));
+        } finally {
+          controller.close();
         }
-
-        // Parse score json
-        await streamOpenAI(getScoreParsePrompt({ scoreJson }));
-
-        // Optional separator between score json and detail feedback
-        controller.enqueue(encoder.encode("\n---\n"));
-
-        // Generate detail feedback
-        await streamOpenAI(detailFeedbackPrompt);
-
-        // Optional separator between detail feedback and model essay
-        controller.enqueue(encoder.encode("\n---\n"));
-
-        // Generate model essay
-        await streamOpenAI(modelEssayPrompt);
-
-        controller.close();
       },
     });
+
+    // const readable = new ReadableStream({
+    //   async start(controller) {
+    //     async function streamOpenAI(prompt: string) {
+    //       const stream = await openai.chat.completions.create({
+    //         model: "gpt-4",
+    //         stream: true,
+    //         messages: [{ role: "system", content: prompt }],
+    //       });
+
+    //       for await (const chunk of stream) {
+    //         const content = chunk.choices?.[0]?.delta?.content;
+    //         if (content) {
+    //           controller.enqueue(encoder.encode(content));
+    //         }
+    //       }
+    //     }
+
+    //     // Parse score json
+    //     await streamOpenAI(getScoreParsePrompt({ scoreJson }));
+
+    //     // Optional separator between score json and detail feedback
+    //     controller.enqueue(encoder.encode("\n---\n"));
+
+    //     // Generate detail feedback
+    //     await streamOpenAI(detailFeedbackPrompt);
+
+    //     // Optional separator between detail feedback and model essay
+    //     controller.enqueue(encoder.encode("\n---\n"));
+
+    //     // Generate model essay
+    //     await streamOpenAI(modelEssayPrompt);
+
+    //     controller.close();
+    //   },
+    // });
 
     return new Response(readable, {
       headers: {
