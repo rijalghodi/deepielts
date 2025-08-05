@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import React from "react";
 
 interface LoadingBarProps {
@@ -11,15 +11,16 @@ export function LoadingBar({ isVisible }: LoadingBarProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full h-1.5 overflow-hidden z-50">
+    <div className="fixed bottom-0 left-0 w-full h-2 overflow-hidden z-50">
       <motion.div
-        className="h-full w-1/2 bg-gradient-to-r from-primary/10 via-primary to-primary/10"
-        animate={{ x: ["-100%", "150%"] }}
+        className="h-full w-full bg-primary/70"
+        animate={{ x: ["-100%", "100%"] }}
         transition={{
           duration: 2,
           ease: "linear",
           repeat: Infinity,
         }}
+        style={{ position: "absolute", left: 0 }}
       />
     </div>
   );

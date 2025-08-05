@@ -25,7 +25,7 @@ export enum QuestionType {
 export type IELTSAnalysis = {
   score: {
     totalScore: number;
-    scores: {
+    detail: {
       tr: CriteriaScore;
       cc: CriteriaScore;
       lr: CriteriaScore;
@@ -38,7 +38,7 @@ export type IELTSAnalysis = {
 type CriteriaScore = {
   score: number;
   comment: string;
-  subCriteria: Record<string, number>;
+  criteria: Record<string, number>;
 };
 
 type FeedbackEntry = {
