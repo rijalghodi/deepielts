@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
-import { AppAside } from "./app-aside";
+import { AIAside } from "./ai-aside";
 import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
 import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
@@ -104,7 +104,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </AsideInset>
       </SidebarInset>
-      <AppAside />
+      <AIAside />
     </>
   );
 

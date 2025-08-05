@@ -1,15 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { submissionCreate } from "@/lib/api/submission.api";
-import { useAnalysisStore } from "@/lib/zustand/analysis-store";
+import { submissionCreateStream } from "@/lib/api/submission.api";
+import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { useAside } from "@/components/ui/aside";
 import { Button } from "@/components/ui/button";
@@ -31,8 +30,8 @@ type Props = {
 };
 
 export function SubmissionForm({ onSuccess }: Props) {
-  const [error, setError] = useState<string | null>(null);
-  const { setAnalysis } = useAnalysisStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setAnalysis, appendAnalysis, clearAnalysis, setGenerating, setError, generating } = useAIAnalysisStore();
   const { setOpen } = useAside();
 
   const form = useForm<z.infer<typeof schema>>({
@@ -41,34 +40,63 @@ export function SubmissionForm({ onSuccess }: Props) {
       question: "",
       answer: "",
       questionType: QuestionType.Task1General,
-      attachments: undefined,
-    },
-  });
-
-  const { isPending, mutateAsync: submit } = useMutation({
-    mutationFn: async (values: z.infer<typeof schema>) => {
-      return submissionCreate(values).then((res) => res?.data);
-    },
-    onError: (error: any) => {
-      setError(error?.message || "Failed to submit");
-    },
-    onSuccess: (data) => {
-      console.log("data", data);
-      // Handle the new response structure with analysis
-      if (data?.analysis) {
-        setAnalysis(data.analysis);
-        setOpen(true);
-      }
-
-      onSuccess?.(data);
-      form.reset();
+      attachment: undefined,
     },
   });
 
   const handleSubmit = async (values: z.infer<typeof schema>) => {
-    setError(null);
-    setAnalysis(null);
-    await submit(values);
+    let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
+
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      clearAnalysis();
+      setGenerating(true);
+      setOpen(true);
+
+      const stream = await submissionCreateStream(values);
+
+      if (!stream) {
+        throw new Error("Failed to get response stream");
+      }
+
+      reader = stream.getReader();
+      const decoder = new TextDecoder();
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) {
+            break;
+          }
+
+          const chunk = decoder.decode(value, { stream: true });
+          appendAnalysis(chunk);
+        }
+      } finally {
+        if (reader) {
+          reader.releaseLock();
+        }
+      }
+
+      setGenerating(false);
+      onSuccess?.({ success: true });
+      form.reset();
+    } catch (error: any) {
+      console.error("Submission error:", error);
+      setError(error?.message || "Failed to submit");
+      setGenerating(false);
+    } finally {
+      if (reader) {
+        try {
+          reader.releaseLock();
+        } catch (e) {
+          console.error("Error releasing reader lock:", e);
+        }
+      }
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -114,17 +142,23 @@ export function SubmissionForm({ onSuccess }: Props) {
 
           <AnswerInput />
 
-          {error && <p className="text-destructive text-sm text-center">{error}</p>}
-
           <div className="flex justify-center">
-            <Button variant="default" className="w-full" type="submit" size="xl" loading={isPending}>
-              <Sparkles strokeWidth={1.5} /> Check Score
+            <Button
+              variant="default"
+              className="w-full"
+              type="submit"
+              size="xl"
+              loading={isSubmitting || generating}
+              disabled={isSubmitting || generating}
+            >
+              <Sparkles strokeWidth={1.5} />
+              {generating ? "Generating Analysis..." : "Check Score"}
             </Button>
           </div>
         </Form>
       </form>
       {/* Loading Bar */}
-      <LoadingBar isVisible={isPending} />
+      <LoadingBar isVisible={isSubmitting || generating} />
     </motion.div>
   );
 }

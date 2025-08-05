@@ -2,10 +2,12 @@ import { admin, db } from "@/lib/firebase";
 
 import { Role, User } from "../models";
 
+import { StringifyTimestamp } from "@/types";
+
 /**
  * Get a user by email from Firestore. Returns { id, ...data } or null if not found.
  */
-export async function getUserByEmail(email: string): Promise<User | null> {
+export async function getUserByEmail(email: string): Promise<StringifyTimestamp<User> | null> {
   const userQuery = await db.collection("users").where("email", "==", email).limit(1).get();
   if (userQuery.empty) return null;
   const userDoc = userQuery.docs[0];
@@ -21,7 +23,7 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 /**
  * Create a new user in Firebase Auth and Firestore, returns { id, ...data }.
  */
-export async function createUserWithEmail(email: string): Promise<User> {
+export async function createUserWithEmail(email: string): Promise<StringifyTimestamp<User>> {
   // Create user in Firebase Auth
   const userRecord = await admin.auth().createUser({
     email,
@@ -50,7 +52,7 @@ export async function createUserWithEmail(email: string): Promise<User> {
 /**
  * Get a user by Firestore document ID. Returns { id, ...data } or null if not found.
  */
-export async function getUserById(id: string): Promise<User | null> {
+export async function getUserById(id: string): Promise<StringifyTimestamp<User> | null> {
   const userDoc = await db.collection("users").doc(id).get();
   if (!userDoc.exists) return null;
   const userData = userDoc.data();
@@ -58,7 +60,7 @@ export async function getUserById(id: string): Promise<User | null> {
   return {
     id: userDoc.id,
     ...userData,
-    createdAt: userData.createdAt?.toISOString?.() || userData.createdAt,
-    updatedAt: userData.updatedAt?.toISOString?.() || userData.updatedAt,
+    createdAt: userData.createdAt?.toDate().toISOString(),
+    updatedAt: userData.updatedAt?.toDate().toISOString(),
   };
 }

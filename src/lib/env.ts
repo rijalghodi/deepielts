@@ -40,6 +40,7 @@ export const serverEnv = createEnv({
     JWT_REFRESH_SECRET: z.string(),
     RESEND_API_KEY: z.string(),
     DIFY_API_KEY: z.string(),
+    OPENAI_API_KEY: z.string(),
   },
   runtimeEnv: {
     FIREBASE_ADMIN_CLIENT_EMAIL: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
@@ -48,6 +49,7 @@ export const serverEnv = createEnv({
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     DIFY_API_KEY: process.env.DIFY_API_KEY,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   },
 });
 

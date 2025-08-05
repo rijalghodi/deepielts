@@ -1,62 +1,25 @@
-import { Query, Timestamp } from "firebase-admin/firestore";
+import { Query } from "firebase-admin/firestore";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { env } from "@/lib/env";
 import { db } from "@/lib/firebase/firebase-admin";
+import logger from "@/lib/logger";
+import { openai } from "@/lib/openai/openai";
+import { getDetailFeedbackPrompt, getModelEssayPrompt, getScoreParsePrompt, getScorePrompt } from "@/lib/prompts/utils";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
+import { handleError } from "@/server/services/interceptor";
 
 import { authMiddleware } from "../auth/auth-middleware";
 
-import { AppError, AppPaginatedResponse, AppResponse } from "@/types/global";
-
-const DIFY_API_KEY = env.DIFY_API_KEY;
-const DIFY_WORKFLOW_URL = env.NEXT_PUBLIC_DIFY_WORKFLOW_URL;
-
-async function analyzeWithDify(question: string, userAnswer: string) {
-  if (!DIFY_API_KEY) {
-    throw new Error("Dify API key not configured");
-  }
-
-  try {
-    console.log("question", question);
-    console.log("userAnswer", userAnswer);
-    const response = await fetch(DIFY_WORKFLOW_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${DIFY_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        inputs: {
-          question: question,
-          userAnswer: userAnswer,
-        },
-        response_mode: "blocking",
-        user: "user_1234567890",
-      }),
-    });
-
-    if (!response.ok) {
-      console.log(response);
-      throw new Error(`Dify API error: ${response.status} ${response.statusText} ${response.body}`);
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error("Dify analysis error:", error);
-    throw new Error(`Failed to analyze submission with Dify: ${error}`);
-  }
-}
+import { AppError, AppPaginatedResponse } from "@/types/global";
 
 // Query parameter schema for filtering and sorting
 const getSubmissionsQuerySchema = z.object({
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(10),
-  questionType: z.enum(QuestionType).optional(),
+  questionType: z.enum(Object.values(QuestionType) as [string, ...string[]]).optional(),
   sortBy: z.enum(["createdAt", "analysis.score"]).default("createdAt"),
   sortDir: z.enum(["asc", "desc"]).default("desc"),
 });
@@ -64,7 +27,11 @@ const getSubmissionsQuerySchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Authenticate user
-    await authMiddleware(req);
+    const authResponse = await authMiddleware(req);
+    if (authResponse instanceof NextResponse) {
+      return authResponse; // Return the error response from auth middleware
+    }
+
     // @ts-expect-error: user is attached to req by authMiddleware but not typed
     const user = req.user;
     if (!user?.uid) throw new AppError({ message: "Unauthorized", code: 401 });
@@ -72,44 +39,98 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = createSubmissionBodySchema.parse(body);
 
-    const difyAnalysisResult = await analyzeWithDify(data.question, data.answer);
+    const { question, answer, attachment, questionType } = data;
 
-    console.log("difyAnalysisResult", difyAnalysisResult);
+    const scorePrompt = getScorePrompt({
+      taskType: questionType,
+      question,
+      answer,
+      attachment,
+    });
 
-    const analysisResult = difyAnalysisResult.data.outputs;
+    const detailFeedbackPrompt = getDetailFeedbackPrompt({
+      taskType: questionType,
+      question,
+      answer,
+      attachment,
+    });
 
-    // Create submission in Firestore under /users/{{userId}}/submissions
-    const submissionsRef = db.collection("users").doc(user.uid).collection("submissions");
-    const submissionRef = submissionsRef.doc();
-    const now = Timestamp.now();
-    const newSubmission = {
-      ...data,
-      id: submissionRef.id,
-      userId: user.uid,
-      createdAt: now,
-      updatedAt: now,
-      analysis: analysisResult,
-    };
-    await submissionRef.set(newSubmission);
+    const modelEssayPrompt = getModelEssayPrompt({
+      taskType: questionType,
+      question,
+      answer,
+      attachment,
+    });
 
-    return NextResponse.json(
-      new AppResponse({
-        data: newSubmission,
-        message: "Submission created and analyzed",
-      }),
-    );
+    // Generate score json
+    const generatedScore = await openai.chat.completions.create({
+      model: "gpt-4.1-nano",
+      stream: false,
+      messages: [{ role: "system", content: scorePrompt }],
+    });
+
+    const scoreJson = generatedScore.choices[0].message.content;
+
+    if (!scoreJson) throw new AppError({ message: "Failed to generate score", code: 500 });
+
+    const encoder = new TextEncoder();
+
+    const readable = new ReadableStream({
+      async start(controller) {
+        async function streamOpenAI(prompt: string) {
+          const stream = await openai.chat.completions.create({
+            model: "gpt-4",
+            stream: true,
+            messages: [{ role: "system", content: prompt }],
+          });
+
+          for await (const chunk of stream) {
+            const content = chunk.choices?.[0]?.delta?.content;
+            if (content) {
+              controller.enqueue(encoder.encode(content));
+            }
+          }
+        }
+
+        // Parse score json
+        await streamOpenAI(getScoreParsePrompt({ scoreJson }));
+
+        // Optional separator between score json and detail feedback
+        controller.enqueue(encoder.encode("\n---\n"));
+
+        // Generate detail feedback
+        await streamOpenAI(detailFeedbackPrompt);
+
+        // Optional separator between detail feedback and model essay
+        controller.enqueue(encoder.encode("\n---\n"));
+
+        // Generate model essay
+        await streamOpenAI(modelEssayPrompt);
+
+        controller.close();
+      },
+    });
+
+    return new Response(readable, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Transfer-Encoding": "chunked",
+      },
+    });
   } catch (error: any) {
-    return NextResponse.json(
-      new AppError({ message: error.message || "Failed to create submission", code: error.code || 500 }),
-      { status: error.code || 500 },
-    );
+    logger.error("POST /submissions: " + error);
+    return handleError(error);
   }
 }
 
 export async function GET(req: NextRequest) {
   try {
     // Authenticate user
-    await authMiddleware(req);
+    const authResponse = await authMiddleware(req);
+    if (authResponse instanceof NextResponse) {
+      return authResponse; // Return the error response from auth middleware
+    }
+
     // @ts-expect-error: user is attached to req by authMiddleware but not typed
     const user = req.user;
     if (!user?.uid) throw new AppError({ message: "Unauthorized", code: 401 });
@@ -186,9 +207,7 @@ export async function GET(req: NextRequest) {
       }),
     );
   } catch (error: any) {
-    return NextResponse.json(
-      new AppError({ message: error.message || "Failed to get submissions", code: error.code || 500 }),
-      { status: error.code || 500 },
-    );
+    logger.error("GET /submissions: " + error);
+    return handleError(error);
   }
 }
