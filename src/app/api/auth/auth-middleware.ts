@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
 import { verifyAccessToken } from "@/lib/jwt";
