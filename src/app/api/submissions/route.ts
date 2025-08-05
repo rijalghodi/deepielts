@@ -27,10 +27,7 @@ const getSubmissionsQuerySchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Authenticate user
-    const authResponse = await authMiddleware(req);
-    if (authResponse instanceof NextResponse) {
-      return authResponse; // Return the error response from auth middleware
-    }
+    await authMiddleware(req);
 
     // @ts-expect-error: user is attached to req by authMiddleware but not typed
     const user = req.user;
@@ -126,10 +123,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     // Authenticate user
-    const authResponse = await authMiddleware(req);
-    if (authResponse instanceof NextResponse) {
-      return authResponse; // Return the error response from auth middleware
-    }
+    await authMiddleware(req);
 
     // @ts-expect-error: user is attached to req by authMiddleware but not typed
     const user = req.user;

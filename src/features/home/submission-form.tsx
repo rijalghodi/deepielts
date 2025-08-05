@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Sparkles } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,20 +29,77 @@ type Props = {
   onSuccess?: (data: any) => void;
 };
 
+const FORM_STORAGE_KEY = "ielts_submission_form_data";
+
 export function SubmissionForm({ onSuccess }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setAnalysis, appendAnalysis, clearAnalysis, setGenerating, setError, generating } = useAIAnalysisStore();
+  const { appendAnalysis, clearAnalysis, setGenerating, setError, generating } = useAIAnalysisStore();
   const { setOpen } = useAside();
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Get stored form data on first render
+  const getStoredFormData = (): z.infer<typeof schema> | null => {
+    if (typeof window === "undefined") return null;
+
+    try {
+      const stored = localStorage.getItem(FORM_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        console.log("parsed", parsed);
+        // Validate that the stored data matches our schema
+        const result = schema.safeParse(parsed);
+        if (result.success) {
+          return result.data;
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing stored form data:", error);
+    }
+    return null;
+  };
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
+    defaultValues: getStoredFormData() || {
       question: "",
       answer: "",
       questionType: QuestionType.Task1General,
       attachment: undefined,
     },
   });
+
+  // Debounced function to save form data to localStorage
+  const saveFormData = (data: z.infer<typeof schema>) => {
+    if (typeof window === "undefined") return;
+
+    try {
+      localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error("Error saving form data to localStorage:", error);
+    }
+  };
+
+  // Watch form values and debounce save
+  const watchedValues = form.watch();
+
+  useEffect(() => {
+    // Clear existing timeout
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    // Set new timeout to save after 3 seconds
+    debounceTimeoutRef.current = setTimeout(() => {
+      saveFormData(watchedValues);
+    }, 1000);
+
+    // Cleanup timeout on unmount
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, [watchedValues]);
 
   const handleSubmit = async (values: z.infer<typeof schema>) => {
     let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
@@ -82,7 +139,6 @@ export function SubmissionForm({ onSuccess }: Props) {
 
       setGenerating(false);
       onSuccess?.({ success: true });
-      form.reset();
     } catch (error: any) {
       console.error("Submission error:", error);
       setError(error?.message || "Failed to submit");

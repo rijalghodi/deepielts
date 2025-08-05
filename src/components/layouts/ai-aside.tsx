@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Download, FileText, XIcon } from "lucide-react";
+import { AlertCircle, Download, FileText, Loader2, XIcon } from "lucide-react";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -46,7 +46,7 @@ function ErrorState({ error }: { error: string }) {
 function LoadingState() {
   return (
     <div className="flex flex-col items-center justify-center flex-1 gap-2 py-8">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
       <p className="text-sm text-muted-foreground text-center mt-2">Generating analysis...</p>
       <p className="text-sm text-muted-foreground text-center">This may take a few moments</p>
     </div>
