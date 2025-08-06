@@ -1,15 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-import { createUserWithEmail, getUserByEmail } from "@/server/services/user.service";
-import { generateCode, storeCode } from "@/server/services/verify-code.service";
-
-const sendCodeSchema = z.object({
-  email: z.email(),
-});
-
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { z } from "zod";
 
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
 import { env } from "@/lib/env";
@@ -20,6 +12,8 @@ import { VerifyCodeEmail } from "@/components/emails/verify-code.email";
 
 import { handleError } from "@/server/services";
 import { isCodeValid, removeCode } from "@/server/services";
+import { createUserWithEmail, getUserByEmail } from "@/server/services/user.service";
+import { generateCode, storeCode } from "@/server/services/verify-code.service";
 
 import { AppError, AppResponse } from "@/types";
 
@@ -27,7 +21,7 @@ const resend = new Resend(env.RESEND_API_KEY);
 
 export async function GET(req: NextRequest) {
   try {
-    const email = z.email().parse(req.nextUrl.searchParams.get("email"));
+    const email = z.string().email().parse(req.nextUrl.searchParams.get("email"));
 
     // Generate a 6-digit code
     const code = generateCode();
@@ -55,7 +49,7 @@ export async function GET(req: NextRequest) {
 }
 
 const verifyCodeSchema = z.object({
-  email: z.email(),
+  email: z.string().email(),
   code: z.string().length(6),
 });
 
@@ -116,6 +110,11 @@ export async function POST(req: NextRequest) {
       maxAge: env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN,
       path: "/",
     });
+
+    userData.accessToken = jwtToken;
+    userData.accessTokenExpiresAt = new Date(Date.now() + (env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN || 0) * 1000);
+    userData.refreshToken = refreshToken;
+    userData.refreshTokenExpiresAt = new Date(Date.now() + (env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN || 0) * 1000);
 
     return NextResponse.json(new AppResponse({ data: userData, message: "Code verified" }));
   } catch (error: any) {

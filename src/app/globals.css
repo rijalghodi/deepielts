@@ -193,6 +193,8 @@
   --aside-accent-foreground: var(--contrast-0);
   --aside-border: var(--surface-3);
   --aside-ring: var(--primary-0);
+
+  --animation-shine: shine 1s ease-in-out forwards;
 }
 
 @layer base {
@@ -242,6 +244,19 @@
     100% {
       transform: translateX(0);
     }
+  }
+
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%) rotate(45deg);
+    }
+    100% {
+      transform: translateX(200%) rotate(45deg);
+    }
+  }
+
+  .animate-shine {
+    animation: var(--animation-shine);
   }
 
   .animate-marquee {

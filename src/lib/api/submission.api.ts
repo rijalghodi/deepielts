@@ -1,3 +1,7 @@
+import Cookies from "js-cookie";
+
+import { ACCESS_TOKEN_KEY } from "@/lib/constants";
+
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
 import { QuestionType, Submission } from "@/server/models/submission";
 
@@ -10,6 +14,35 @@ export const submissionCreate = async (req: CreateSubmissionBody): Promise<ApiRe
     endpoint: `/submissions`,
     data: req,
   });
+};
+
+// New streaming submission function
+export const submissionCreateStream = async (req: CreateSubmissionBody): Promise<ReadableStream<Uint8Array> | null> => {
+  try {
+    const token = Cookies.get(ACCESS_TOKEN_KEY);
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch("/api/submissions", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(req),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.body;
+  } catch (error) {
+    console.error("Error creating streaming submission:", error);
+    throw error;
+  }
 };
 
 export const submissionGet = async (submissionId: string): Promise<ApiResponse<GetSubmissionResult> | undefined> => {

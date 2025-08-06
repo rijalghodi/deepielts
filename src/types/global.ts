@@ -63,3 +63,8 @@ export type PaginatedRequest = {
   limit?: number;
   search?: string;
 };
+
+export type StringifyTimestamp<T> = Omit<T, "createdAt" | "updatedAt"> & {
+  createdAt?: string;
+  updatedAt?: string;
+};

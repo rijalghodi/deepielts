@@ -9,7 +9,7 @@ import { HTTP_CODE } from "@/lib/constants";
 import { db } from "@/lib/firebase/firebase-admin";
 
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
-import { Submission } from "@/server/models/submission";
+import { QuestionType, Submission } from "@/server/models/submission";
 
 import { AppError } from "@/types/global";
 
@@ -22,6 +22,7 @@ export async function createSubmission(data: CreateSubmissionBody, userId: strin
 
     const newSubmission: Submission = {
       ...data,
+      questionType: data.questionType as QuestionType,
       id: submissionRef.id,
       userId,
       createdAt: Timestamp.now(),
