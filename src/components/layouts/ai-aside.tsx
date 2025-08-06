@@ -67,7 +67,7 @@ function AIAnalysis() {
   }
 
   return (
-    <div className="flex flex-col gap-5 relative">
+    <div className="relative ai-analysis">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{analysis}</ReactMarkdown>
     </div>
   );

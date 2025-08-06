@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./analysis.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -193,7 +194,6 @@
   --aside-accent-foreground: var(--contrast-0);
   --aside-border: var(--surface-3);
   --aside-ring: var(--primary-0);
-
   --animation-shine: shine 1s ease-in-out forwards;
 }
 
@@ -208,23 +208,6 @@
   button {
     cursor: pointer;
   }
-
-  /* .writing-mode-horizontal-tb {
-    writing-mode: horizontal-tb;
-  }
-  .writing-mode-unset {
-    writing-mode: unset;
-  }
-  .writing-mode-sideways-rl {
-    writing-mode: sideways-rl;
-  }
-  .writing-mode-vertical-rl {
-    writing-mode: vertical-rl;
-  }
-
-  .writing-mode-vertical-lr {
-    writing-mode: vertical-lr;
-  } */
 }
 
 @layer utilities {
