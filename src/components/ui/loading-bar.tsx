@@ -11,7 +11,7 @@ export function LoadingBar({ isVisible }: LoadingBarProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full h-2 overflow-hidden z-50 bg-primary/10">
+    <div className="fixed bottom-0 left-0 w-full h-1.5 overflow-hidden z-50 bg-primary/20">
       <motion.div
         className="h-full w-full bg-primary/70"
         animate={{ x: ["-100%", "100%"] }}

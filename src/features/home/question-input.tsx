@@ -1,5 +1,7 @@
+"use client";
+
 import { WandSparkles } from "lucide-react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
@@ -31,10 +33,6 @@ export function QuestionInput({ taskType }: Props) {
     setValue("question", question.question, { shouldDirty: true });
   };
 
-  useEffect(() => {
-    setValue("question", "");
-  }, [taskType]);
-
   return (
     <FormItem>
       <FormLabel>Question</FormLabel>
@@ -42,7 +40,7 @@ export function QuestionInput({ taskType }: Props) {
         {/* IMAGE INPUT */}
         {taskType === QuestionType.Task1Academic && (
           <FormField
-            name="attachments"
+            name="attachment"
             control={control}
             render={({ field }) => (
               <FormItem className="">

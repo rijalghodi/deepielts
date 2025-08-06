@@ -103,42 +103,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // const readable = new ReadableStream({
-    //   async start(controller) {
-    //     async function streamOpenAI(prompt: string) {
-    //       const stream = await openai.chat.completions.create({
-    //         model: "gpt-4",
-    //         stream: true,
-    //         messages: [{ role: "system", content: prompt }],
-    //       });
-
-    //       for await (const chunk of stream) {
-    //         const content = chunk.choices?.[0]?.delta?.content;
-    //         if (content) {
-    //           controller.enqueue(encoder.encode(content));
-    //         }
-    //       }
-    //     }
-
-    //     // Parse score json
-    //     await streamOpenAI(getScoreParsePrompt({ scoreJson }));
-
-    //     // Optional separator between score json and detail feedback
-    //     controller.enqueue(encoder.encode("\n---\n"));
-
-    //     // Generate detail feedback
-    //     await streamOpenAI(detailFeedbackPrompt);
-
-    //     // Optional separator between detail feedback and model essay
-    //     controller.enqueue(encoder.encode("\n---\n"));
-
-    //     // Generate model essay
-    //     await streamOpenAI(modelEssayPrompt);
-
-    //     controller.close();
-    //   },
-    // });
-
     return new Response(readable, {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",

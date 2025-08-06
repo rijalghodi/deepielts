@@ -57,12 +57,6 @@ function LoadingState() {
 function AIAnalysis() {
   const { analysis, generating, error } = useAIAnalysisStore();
 
-  // Show loading state while generating
-  if (generating) {
-    return <LoadingState />;
-  }
-
-  // Show error state if there's an error
   if (error) {
     return <ErrorState error={error} />;
   }
@@ -73,7 +67,7 @@ function AIAnalysis() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 relative">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{analysis}</ReactMarkdown>
     </div>
   );
