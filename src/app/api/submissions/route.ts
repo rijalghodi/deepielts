@@ -16,6 +16,7 @@ import {
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 import { handleError } from "@/server/services/interceptor";
+import * as Sentry from "@sentry/nextjs";
 
 import { authMiddleware } from "../auth/auth-middleware";
 
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
 
     if (questionType === QuestionType.TASK_1_ACADEMIC) {
       // Check if request is cancelled before processing
-      if (req.signal?.aborted) {
+      if ((req as any).signal?.aborted) {
         throw new Error("Request cancelled");
       }
 
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if request is cancelled before generating score
-    if (req.signal?.aborted) {
+    if ((req as any).signal?.aborted) {
       throw new Error("Request cancelled");
     }
 
@@ -108,7 +109,7 @@ export async function POST(req: NextRequest) {
 
     // Generate score json
     const generatedScore = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-mini",
       stream: false,
       messages: [{ role: "user", content: scorePrompt }],
     });
@@ -127,7 +128,7 @@ export async function POST(req: NextRequest) {
       async start(controller) {
         const streamOpenAI = async (prompt: string) => {
           // Check if request is cancelled before each stream
-          if (req.signal?.aborted) {
+          if ((req as any).signal?.aborted) {
             throw new Error("Request cancelled");
           }
 
@@ -142,7 +143,7 @@ export async function POST(req: NextRequest) {
 
           for await (const chunk of stream) {
             // Check if request is cancelled during streaming
-            if (req.signal?.aborted) {
+            if ((req as any).signal?.aborted) {
               throw new Error("Request cancelled");
             }
 
@@ -194,6 +195,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     logger.error("POST /submissions: " + error);
+    Sentry.captureException(error);
 
     // Check if the error is due to cancellation
     if (error instanceof Error && error.message === "Request cancelled") {
@@ -286,6 +288,7 @@ export async function GET(req: NextRequest) {
     );
   } catch (error: any) {
     logger.error("GET /submissions: " + error);
+    Sentry.captureException(error);
     return handleError(error);
   }
 }

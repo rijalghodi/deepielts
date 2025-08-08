@@ -39,3 +39,16 @@ NEXT_PUBLIC_DIFY_WORKFLOW_URL=
 # Open AI
 # -----------------------------------------------------------
 OPENAI_API_KEY=
+
+# -----------------------------------------------------------
+# Sentry
+# -----------------------------------------------------------
+SENTRY_DSN=
+NEXT_PUBLIC_SENTRY_DSN=
+SENTRY_ENVIRONMENT=local
+SENTRY_ORG=
+SENTRY_PROJECT=
+# The SENTRY_AUTH_TOKEN variable is picked up by the Sentry Build Plugin.
+# It's used for authentication when uploading source maps.
+# You can also set this env variable in your own `.env` files and remove this file.
+SENTRY_AUTH_TOKEN=
