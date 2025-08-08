@@ -6,12 +6,13 @@ type Store = {
   setAnalysis: (analysis: string) => void;
   appendAnalysis: (chunk: string) => void;
   clearAnalysis: () => void;
-  loading: boolean;
-  setLoading: (loading: boolean) => void;
   generating: boolean;
   setGenerating: (generating: boolean) => void;
   error: string | null;
   setError: (error: string | null) => void;
+  abortController: AbortController | null;
+  setAbortController: (controller: AbortController | null) => void;
+  stopGeneration: () => void;
 };
 
 export const useAIAnalysisStore = create<Store>()(
@@ -24,18 +25,27 @@ export const useAIAnalysisStore = create<Store>()(
         set({ analysis: currentAnalysis + chunk });
       },
       clearAnalysis: () => set({ analysis: null, error: null }),
-      loading: false,
-      setLoading: (loading) => set({ loading }),
       generating: false,
       setGenerating: (generating) => set({ generating }),
       error: null,
       setError: (error) => set({ error }),
+      abortController: null,
+      setAbortController: (controller) => set({ abortController: controller }),
+      stopGeneration: () => {
+        const { abortController, setGenerating, setError, setAbortController } = get();
+        setGenerating(false);
+        setError(null);
+        if (abortController) {
+          abortController.abort();
+          setAbortController(null);
+        }
+      },
     }),
     {
       name: "ai-analysis-store",
       partialize: (state) => ({
         analysis: state.analysis,
-        // Only persist analysis; do not persist loading, generating, or error states
+        // Only persist analysis; do not persist generating, or error states
       }),
     },
   ),

@@ -25,7 +25,7 @@ const AsideTriggerButton = () => {
           variant="contrast"
           size="lg"
           className={cn(
-            "rounded-none rounded-l-full w-36 transition-all duration-200",
+            "rounded-none rounded-l-full w-36 transition-all duration-200 shadow-xl",
             isOpen && !isMobile && "w-12",
             isMobile && "-rotate-90 origin-right mr-5 rounded-none rounded-t-lg",
           )}
@@ -45,15 +45,16 @@ const AsideTriggerButton = () => {
 
 const SidebarMobileTriggerButton = () => {
   const { isMobile } = useSidebar();
+  const { user } = useAuth();
 
-  if (!isMobile) {
+  if (!isMobile || !user) {
     return null;
   }
 
   return (
     <div className="fixed top-20 left-0 z-[5]">
       <SidebarTrigger asChild>
-        <Button variant="outline" size="lg" className="rounded-none rounded-r-full">
+        <Button variant="outline" size="lg" className="rounded-none rounded-r-full shadow-xl">
           <Menu />
         </Button>
       </SidebarTrigger>

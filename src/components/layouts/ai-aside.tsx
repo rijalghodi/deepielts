@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Download, FileText, XIcon } from "lucide-react";
+import { AlertCircle, Bot, Download, FileText, Loader, XIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -11,7 +11,6 @@ import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
 import { Button } from "../ui/button";
-import { ShimmeringBackground } from "../ui/shimering-bg";
 
 // Download Button (currently unused)
 function DownloadButton() {
@@ -72,12 +71,25 @@ function NoAnalysis() {
   );
 }
 
+function ThinkingState() {
+  return (
+    <div className="flex flex-col items-center justify-center flex-1 gap-6 py-12">
+      <Bot className="w-8 h-8 text-primary" />
+      <div className="flex flex-col items-center justify-center gap-2">
+        <p className="text-base font-semibold text-center">AI is Thinking...</p>
+        <p className="text-base text-muted-foreground text-center">This may take a while, please wait a moment</p>
+      </div>
+      <Loader className="w-5 h-5 text-primary animate-spin" />
+    </div>
+  );
+}
+
 function ErrorState({ error }: { error: string }) {
   return (
     <div className="flex flex-col items-center justify-center flex-1 gap-2 py-8">
       <AlertCircle className="w-5 h-5 text-destructive" />
-      <p className="text-sm text-destructive text-center mt-2">Error occurred</p>
-      <p className="text-sm text-muted-foreground text-center">{error}</p>
+      <p className="text-base font-semibold text-destructive text-center mt-2">Error occurred</p>
+      <p className="text-base text-muted-foreground text-center">{error}</p>
     </div>
   );
 }
@@ -88,9 +100,10 @@ function AIOutput() {
   if (error) return <ErrorState error={error} />;
 
   if (!analysis) {
+    if (generating) return <ThinkingState />;
+
     return (
       <div className="relative ai-output">
-        <ShimmeringBackground />
         <NoAnalysis />
       </div>
     );
@@ -98,7 +111,6 @@ function AIOutput() {
 
   return (
     <div className="relative ai-output">
-      {generating && <ShimmeringBackground />}
       <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
         {analysis}
       </ReactMarkdown>
@@ -127,8 +139,9 @@ export function AIAside() {
 
     const handleScroll = () => {
       const currentScrollTop = container.scrollTop;
-      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 32;
-      setAutoScroll(atBottom || currentScrollTop < lastScrollTop);
+      console.log("scroll!!!", currentScrollTop, lastScrollTop);
+      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
+      setAutoScroll(atBottom);
       lastScrollTop = currentScrollTop;
     };
 
@@ -149,9 +162,8 @@ export function AIAside() {
         </div>
       </AsideHeader>
       <AsideContent ref={contentRef}>
-        {generating && <ShimmeringBackground />}
         <AIOutput />
-        <div ref={messagesEndRef} />
+        <div className="flex-none h-20 w-full" ref={messagesEndRef} />
       </AsideContent>
       {analysis && !generating && !error && <AsideFooter>{/* <DownloadButton /> */}</AsideFooter>}
     </Aside>

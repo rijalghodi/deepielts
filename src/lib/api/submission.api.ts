@@ -17,7 +17,10 @@ export const submissionCreate = async (req: CreateSubmissionBody): Promise<ApiRe
 };
 
 // New streaming submission function
-export const submissionCreateStream = async (req: CreateSubmissionBody): Promise<ReadableStream<Uint8Array> | null> => {
+export const submissionCreateStream = async (
+  req: CreateSubmissionBody,
+  signal?: AbortSignal,
+): Promise<ReadableStream<Uint8Array> | null> => {
   try {
     const token = Cookies.get(ACCESS_TOKEN_KEY);
     const headers: Record<string, string> = {
@@ -32,6 +35,7 @@ export const submissionCreateStream = async (req: CreateSubmissionBody): Promise
       method: "POST",
       headers,
       body: JSON.stringify(req),
+      signal, // Pass the AbortSignal to the fetch request
     });
 
     if (!response.ok) {

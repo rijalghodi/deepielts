@@ -18,18 +18,18 @@ Generate sample essays for {{taskType}} IELTS question.
 
 ## OUTPUT FORMAT:
 
-## Model Essay.
+## Model Essay
 
-### Revised Essay.
+### Revised Essay
 
-#### Vocabulary Level: Band 5.5–6.5 (Intermediate).
+#### Vocabulary Level: Band 5.5–6.5 (Intermediate)
 
 // The essay must be in English and appropriate for this target band level: "Band 7.0–8.0 (Intermediate)".
 // Revise the original task response here, correcting all grammar errors, keeping the orginal ideas and vocabulary level
 
-### Band 8.0 - 9.0 Sample Essay.
+### Band 8.0 - 9.0 Sample Essay
 
-#### Vocabulary Level: Band 8.0 - 9.0.
+#### Vocabulary Level: Band 8.0 - 9.0
 
 // The essay must be in English
 

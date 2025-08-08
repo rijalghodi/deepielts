@@ -32,8 +32,9 @@ type Props = {
 const FORM_STORAGE_KEY = "ielts_submission_form_data";
 
 export function SubmissionForm({ onSuccess }: Props) {
-  const { appendAnalysis, clearAnalysis, setGenerating, setError, generating } = useAIAnalysisStore();
-  const { setOpen } = useAside();
+  const { appendAnalysis, clearAnalysis, setGenerating, setError, generating, setAbortController, stopGeneration } =
+    useAIAnalysisStore();
+  const { setOpen, setOpenMobile } = useAside();
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Get stored form data on first render
@@ -107,8 +108,13 @@ export function SubmissionForm({ onSuccess }: Props) {
       clearAnalysis();
       setGenerating(true);
       setOpen(true);
+      setOpenMobile(true);
 
-      const stream = await submissionCreateStream(values);
+      // Create AbortController for this request
+      const abortController = new AbortController();
+      setAbortController(abortController);
+
+      const stream = await submissionCreateStream(values, abortController.signal);
 
       if (!stream) {
         throw new Error("Failed to get response stream");
@@ -135,11 +141,20 @@ export function SubmissionForm({ onSuccess }: Props) {
       }
 
       setGenerating(false);
+      setAbortController(null);
       onSuccess?.({ success: true });
     } catch (error: any) {
       console.error("Submission error:", error);
-      setError(error?.message || "Failed to submit");
+
+      // Check if the error is due to abort
+      if (error.name === "AbortError") {
+        setError(null);
+      } else {
+        setError(error?.message || "Failed to submit");
+      }
+
       setGenerating(false);
+      setAbortController(null);
     } finally {
       if (reader) {
         try {
@@ -150,8 +165,6 @@ export function SubmissionForm({ onSuccess }: Props) {
       }
     }
   };
-
-  console.log(form.formState.errors);
 
   return (
     <motion.div
@@ -194,23 +207,23 @@ export function SubmissionForm({ onSuccess }: Props) {
 
           <AnswerInput />
 
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-2">
             <Button
               variant="default"
-              className="w-full"
+              className="flex-1"
               type="submit"
               size="xl"
               loading={generating}
               disabled={generating}
             >
-              <Sparkles strokeWidth={1.5} />
+              <Sparkles />
               {generating ? "Generating Analysis..." : "Check Score"}
             </Button>
           </div>
         </Form>
       </form>
       {/* Loading Bar */}
-      <LoadingBar isVisible={generating} />
+      <LoadingBar isVisible={generating} onStop={stopGeneration} />
     </motion.div>
   );
 }

@@ -336,7 +336,7 @@ const AsideContent = React.forwardRef<HTMLDivElement, React.PropsWithChildren<ob
   ref,
 ) {
   return (
-    <div ref={ref} className="flex-1 flex min-h-0 flex-col gap-2 overflow-auto px-4">
+    <div ref={ref} className="flex-1 flex flex-col gap-2 overflow-auto px-4 relative">
       {children}
     </div>
   );

@@ -48,6 +48,11 @@ export async function POST(req: NextRequest) {
     let chartData = "None";
 
     if (questionType === QuestionType.TASK_1_ACADEMIC) {
+      // Check if request is cancelled before processing
+      if (req.signal?.aborted) {
+        throw new Error("Request cancelled");
+      }
+
       const chartDataPrompt = getChartDataPrompt();
 
       const generatedChartData = await openai.chat.completions.create({
@@ -75,6 +80,11 @@ export async function POST(req: NextRequest) {
       chartData = generatedChartData.choices[0].message.content || "None";
     }
 
+    // Check if request is cancelled before generating score
+    if (req.signal?.aborted) {
+      throw new Error("Request cancelled");
+    }
+
     const scorePrompt = getScorePrompt({
       taskType: questionType,
       question,
@@ -98,12 +108,14 @@ export async function POST(req: NextRequest) {
 
     // Generate score json
     const generatedScore = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
       stream: false,
       messages: [{ role: "user", content: scorePrompt }],
     });
 
     const scoreJson = generatedScore.choices[0].message.content;
+
+    console.log(scoreJson);
 
     if (!scoreJson) throw new AppError({ message: "Failed to generate score", code: 500 });
 
@@ -114,6 +126,11 @@ export async function POST(req: NextRequest) {
     const readable = new ReadableStream({
       async start(controller) {
         const streamOpenAI = async (prompt: string) => {
+          // Check if request is cancelled before each stream
+          if (req.signal?.aborted) {
+            throw new Error("Request cancelled");
+          }
+
           const stream = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             stream: true,
@@ -124,6 +141,11 @@ export async function POST(req: NextRequest) {
           let chunkCount = 0;
 
           for await (const chunk of stream) {
+            // Check if request is cancelled during streaming
+            if (req.signal?.aborted) {
+              throw new Error("Request cancelled");
+            }
+
             const content = chunk.choices?.[0]?.delta?.content;
             if (content) {
               buffer += content;
@@ -151,7 +173,13 @@ export async function POST(req: NextRequest) {
           await streamOpenAI(modelEssayPrompt);
         } catch (error) {
           logger.error("POST /submissions: " + error);
-          controller.enqueue(encoder.encode("\n[Error occurred during streaming]\n"));
+
+          // Check if the error is due to cancellation
+          if (error instanceof Error && error.message === "Request cancelled") {
+            controller.enqueue(encoder.encode("\n[Generation stopped by user]\n"));
+          } else {
+            controller.enqueue(encoder.encode("\n[Error occurred during streaming]\n"));
+          }
         } finally {
           controller.close();
         }
@@ -166,6 +194,12 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     logger.error("POST /submissions: " + error);
+
+    // Check if the error is due to cancellation
+    if (error instanceof Error && error.message === "Request cancelled") {
+      return new Response("Generation stopped by user", { status: 499 }); // 499 is "Client Closed Request"
+    }
+
     return handleError(error);
   }
 }

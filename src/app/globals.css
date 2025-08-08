@@ -9,8 +9,8 @@
   --shadow-glowing-sm: 0 0 10px hsl(var(--primary) / 0.5);
   --shadow-glowing-lg: 0 0 30px hsl(var(--primary) / 0.5);
 
-  --shadow-lg: 0 0 16px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 0 32px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 0 16px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 0 32px rgba(0, 0, 0, 0.3);
 }
 
 @theme inline {
@@ -79,7 +79,7 @@
   --surface-0: 0 0% 100%;
   --surface-1: 0 0% 96%;
   --surface-2: 0 0% 93%;
-  --surface-3: 0 0% 90%;
+  --surface-3: 0 0% 87%;
   --surface-4: 0 0% 87%;
 
   /** Contrast colors */
