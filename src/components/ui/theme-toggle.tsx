@@ -14,13 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ThemeToggle({
-  variant = "dropdown",
-  size = "icon-sm",
-}: {
-  variant?: "dropdown" | "horizontal";
-  size?: "icon-sm" | "icon-md";
-}) {
+export function ThemeToggle({ variant = "dropdown" }: { variant?: "dropdown" | "horizontal" }) {
   const [mounted, setMounted] = useState(false);
   const { setTheme, theme } = useTheme();
 

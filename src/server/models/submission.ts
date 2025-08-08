@@ -17,9 +17,9 @@ export interface Submission {
 }
 
 export enum QuestionType {
-  Task1Academic = "task-1-academic",
-  Task1General = "task-1-general",
-  Task2 = "task-2",
+  TASK_1_ACADEMIC = "task-1-academic",
+  TASK_1_GENERAL = "task-1-general",
+  TASK_2 = "task-2",
 }
 
 export type IELTSAnalysis = {

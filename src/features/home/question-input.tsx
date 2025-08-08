@@ -27,7 +27,7 @@ export function QuestionInput({ taskType }: Props) {
 
   const handleGenerateQuestion = () => {
     const question =
-      taskType === QuestionType.Task1General
+      taskType === QuestionType.TASK_1_GENERAL
         ? TASK_1_GENERAL_QUESTIONS[Math.floor(Math.random() * TASK_1_GENERAL_QUESTIONS.length)]
         : TASK_2_QUESTIONS[Math.floor(Math.random() * TASK_2_QUESTIONS.length)];
     setValue("question", question.question, { shouldDirty: true });
@@ -38,7 +38,7 @@ export function QuestionInput({ taskType }: Props) {
       <FormLabel>Question</FormLabel>
       <div className="flex flex-col md:flex-row gap-2 w-full">
         {/* IMAGE INPUT */}
-        {taskType === QuestionType.Task1Academic && (
+        {taskType === QuestionType.TASK_1_ACADEMIC && (
           <FormField
             name="attachment"
             control={control}
@@ -80,7 +80,7 @@ export function QuestionInput({ taskType }: Props) {
                   />
                   {/* TOOL */}
                   <div className="flex flex-wrap items-center justify-center w-full gap-2">
-                    {taskType !== QuestionType.Task1Academic && (
+                    {taskType !== QuestionType.TASK_1_ACADEMIC && (
                       <Button variant="outline" size="sm" onClick={handleGenerateQuestion}>
                         <WandSparkles /> Generate Question
                       </Button>

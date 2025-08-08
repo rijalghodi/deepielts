@@ -111,7 +111,7 @@ export function AIAside() {
   const [autoScroll, setAutoScroll] = useState(true);
 
   useEffect(() => {
-    if (autoScroll) {
+    if (autoScroll && generating) {
       if (messagesEndRef.current) {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
       }

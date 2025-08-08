@@ -5,7 +5,13 @@ import { z } from "zod";
 import { db } from "@/lib/firebase/firebase-admin";
 import logger from "@/lib/logger";
 import { openai } from "@/lib/openai/openai";
-import { getDetailFeedbackPrompt, getModelEssayPrompt, getScoreParsePrompt, getScorePrompt } from "@/lib/prompts/utils";
+import {
+  getChartDataPrompt,
+  getDetailFeedbackPrompt,
+  getModelEssayPrompt,
+  getScoreParsePrompt,
+  getScorePrompt,
+} from "@/lib/prompts/utils";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
@@ -39,32 +45,64 @@ export async function POST(req: NextRequest) {
 
     const { question, answer, attachment, questionType } = data;
 
+    let chartData = "None";
+
+    if (questionType === QuestionType.TASK_1_ACADEMIC) {
+      const chartDataPrompt = getChartDataPrompt();
+
+      const generatedChartData = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        stream: false,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: chartDataPrompt,
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: attachment || "",
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      chartData = generatedChartData.choices[0].message.content || "None";
+
+      console.log(chartData);
+    }
+
     const scorePrompt = getScorePrompt({
       taskType: questionType,
       question,
       answer,
-      attachment,
+      attachment: chartData,
     });
 
     const detailFeedbackPrompt = getDetailFeedbackPrompt({
       taskType: questionType,
       question,
       answer,
-      attachment,
+      attachment: chartData,
     });
 
     const modelEssayPrompt = getModelEssayPrompt({
       taskType: questionType,
       question,
       answer,
-      attachment,
+      attachment: chartData,
     });
 
     // Generate score json
     const generatedScore = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       stream: false,
-      messages: [{ role: "system", content: scorePrompt }],
+      messages: [{ role: "user", content: scorePrompt }],
     });
 
     const scoreJson = generatedScore.choices[0].message.content;
@@ -111,7 +149,8 @@ export async function POST(req: NextRequest) {
           await streamOpenAI(detailFeedbackPrompt);
           controller.enqueue(encoder.encode("\n\n\n"));
           await streamOpenAI(modelEssayPrompt);
-        } catch (err) {
+        } catch (error) {
+          logger.error("POST /submissions: " + error);
           controller.enqueue(encoder.encode("\n[Error occurred during streaming]\n"));
         } finally {
           controller.close();

@@ -30,7 +30,7 @@ const signupSchema = z
 type SignupFormData = z.infer<typeof signupSchema>;
 
 export function SignupForm() {
-  const { signUp, isLoaded, setActive } = useSignUp();
+  const { signUp, setActive } = useSignUp();
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const form = useForm<SignupFormData>({
@@ -88,7 +88,7 @@ export function SignupForm() {
     try {
       // TODO: Implement Google OAuth
       console.log("Google signup");
-    } catch (err) {
+    } catch (_) {
       setError("Google signup failed");
     }
   };

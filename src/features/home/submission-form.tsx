@@ -61,7 +61,7 @@ export function SubmissionForm({ onSuccess }: Props) {
     defaultValues: getStoredFormData() || {
       question: "",
       answer: "",
-      questionType: QuestionType.Task1General,
+      questionType: QuestionType.TASK_1_GENERAL,
       attachment: undefined,
     },
   });
@@ -151,6 +151,8 @@ export function SubmissionForm({ onSuccess }: Props) {
     }
   };
 
+  console.log(form.formState.errors);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -174,9 +176,9 @@ export function SubmissionForm({ onSuccess }: Props) {
                   <SelectInput
                     className="sm:max-w-[300px] w-full"
                     options={[
-                      { label: "Task 1 General", value: QuestionType.Task1General },
-                      { label: "Task 1 Academic", value: QuestionType.Task1Academic },
-                      { label: "Task 2", value: QuestionType.Task2 },
+                      { label: "Task 1 General", value: QuestionType.TASK_1_GENERAL },
+                      { label: "Task 1 Academic", value: QuestionType.TASK_1_ACADEMIC },
+                      { label: "Task 2", value: QuestionType.TASK_2 },
                     ]}
                     placeholder="Select Question Type"
                     focusStyle="none"
@@ -188,9 +190,7 @@ export function SubmissionForm({ onSuccess }: Props) {
             )}
           />
 
-          <div>
-            <QuestionInput taskType={form.watch("questionType") as QuestionType} />
-          </div>
+          <QuestionInput taskType={form.watch("questionType") as QuestionType} />
 
           <AnswerInput />
 

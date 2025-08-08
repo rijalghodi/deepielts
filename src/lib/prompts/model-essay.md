@@ -1,8 +1,8 @@
-## Task
+## TASK:
 
 Generate sample essays for {{taskType}} IELTS question.
 
-## Inputs
+## INPUTS:
 
 **IELTS Question:**
 
@@ -14,16 +14,11 @@ Generate sample essays for {{taskType}} IELTS question.
 
 **Data from Attachment**
 
-"{{attachment}}".
-(If the image data is available, use it to correct information; If the data includes line charts, approximate values are acceptable. Minor discrepancies can be ignored.).
+{{attachment}}
 
-## Output Format
+## OUTPUT FORMAT:
 
-Use following Markdown & HTML format:
-
-<output-format>
-
-## (Translate this heading "Model Essays" to english-uk).
+## Model Essay.
 
 ### Revised Essay.
 
@@ -36,13 +31,10 @@ Use following Markdown & HTML format:
 
 #### Vocabulary Level: Band 8.0 - 9.0.
 
-// The essay must be in English.
-..."
+// The essay must be in English
 
-<output-format>
-
-## Rule
+## RULES:
 
 - Provide only the output without any welcome message, conclusion, or additional text.
 - Remove all "//" content as they are admin comments.
-- Do not highlight in codeblock, let it be rendered normally:
+- Do not highlight in codeblock, let it be rendered normally.

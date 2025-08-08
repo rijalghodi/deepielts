@@ -1,22 +1,22 @@
-## Task
+## TASK:
 
 Extract **relevant values** from JSON (number or text) and insert them into the markdown template
 
 - Fill in the placeholders marked by square brackets ([[LIKE_THIS]]).
 - **Ignore** the fields: `PC-1`, `PC-2`, `PC-3`.
 
-## Input JSON
+## INPUT JSON:
 
 {{scoreJson}}
 
-## Rules
+## RULES:
 
 - Output only markdown following the output format below exactly.
 - Do **not** include any welcome message, conclusion, or extra explanation.
 - Remove all lines starting with `//` as it is only guiding comment
 - **No** blockcode
 
-## Output Format
+## OUTPUT FORMAT:
 
 <blockquote data-section="overall-score">
 

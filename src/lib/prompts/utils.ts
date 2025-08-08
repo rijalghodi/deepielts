@@ -2,7 +2,7 @@ import fs from "fs";
 import Mustache from "mustache";
 import path from "path";
 
-export function getPrompt(templateName: string, props: Record<string, any>) {
+export function getPrompt(templateName: string, props?: Record<string, any>) {
   const filePath = path.join(process.cwd(), "src", "lib", "prompts", `${templateName}.md`);
   const template = fs.readFileSync(filePath, "utf-8");
   return Mustache.render(template, props);
@@ -32,4 +32,8 @@ export function getModelEssayPrompt(props: {
   attachment?: string;
 }) {
   return getPrompt("model-essay", props);
+}
+
+export function getChartDataPrompt() {
+  return getPrompt("chart-data");
 }

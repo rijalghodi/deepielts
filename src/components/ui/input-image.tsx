@@ -129,6 +129,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
           disabled && "opacity-50",
           (disabled || readOnly) && "cursor-default",
         )}
+        ref={ref as React.Ref<HTMLLabelElement>}
       >
         <input
           {...props}

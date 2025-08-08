@@ -1,4 +1,4 @@
-## Task
+## TASK:
 
 Generate detail feedback for my {{taskType}} IELTS Writing response.
 
@@ -12,7 +12,7 @@ Examples:
 - The noun is not specific, so you should not use "the" here.
 - This word is misspelled — please check it again.
 
-## Inputs
+## INPUTS:
 
 **IELTS Question:**
 
@@ -24,17 +24,16 @@ Examples:
 
 **Data from Attachment**
 
-"{{attachment}}".
-(If the image data is available, use it to correct information; If the data includes line charts, approximate values are acceptable. Minor discrepancies can be ignored.).
+{{attachment}}
 
-## Rules
+## RULES:
 
 - Output only markdown following the output format below exactly
 - Do **not** include any welcome message, conclusion, or extra explanation
 - Remove all lines starting with `//`
 - Use popular terms in english-uk
 
-## Output Format
+## OUTPUT FORMAT:
 
 ## Detailed Feedback
 

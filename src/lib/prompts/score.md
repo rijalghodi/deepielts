@@ -1,8 +1,8 @@
-## Task
+## TASK:
 
 Evaluate my {{taskType}} IELTS answer using the latest **IELTS Writing Band Descriptors**. Assign band scores.
 
-## Inputs
+## INPUTS:
 
 **IELTS Question**
 
@@ -14,10 +14,9 @@ Evaluate my {{taskType}} IELTS answer using the latest **IELTS Writing Band Desc
 
 **Data from Attachments**
 
-"{{attachment}}"  
-(Use the image to verify or correct information. If it contains line charts, approximate values are acceptable. Minor discrepancies can be ignored.)
+{{attachment}}
 
-## Output Format
+## OUTPUT FORMAT:
 
 ```json
 {
@@ -68,7 +67,7 @@ Evaluate my {{taskType}} IELTS answer using the latest **IELTS Writing Band Desc
 }
 ```
 
-## Rule
+## RULES:
 
 - Return only valid JSON
 - No comments or extra text

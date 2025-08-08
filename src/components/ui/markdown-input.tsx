@@ -45,7 +45,7 @@ function MarkdownInput({
 }: MarkdownInputProps) {
   console.log(value);
   return (
-    <div className="space-y-1">
+    <div className="space-y-1" style={{ maxHeight: maxHeight }}>
       {/* Label */}
       {label && <Label htmlFor={name}>{label}</Label>}
       <div className={cn("border border-input rounded-md overflow-clip", inputVariants({ error: !!error }))}>
