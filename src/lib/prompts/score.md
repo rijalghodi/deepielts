@@ -1,6 +1,6 @@
 ## Task
 
-Evaluate this {taskType} response using the latest IELTS Writing Band Descriptors. Return band scores for each criterion listed below.
+Evaluate my {{taskType}} IELTS answer using the latest **IELTS Writing Band Descriptors**. Assign band scores.
 
 ## Inputs
 
@@ -19,48 +19,57 @@ Evaluate this {taskType} response using the latest IELTS Writing Band Descriptor
 
 ## Output Format
 
-// Start of output.
-// Precheck:
-PC-1: Check if the essay directly & properly responds to the prompt, return “on-topic” or “off-topic”.
-// If PC-1="off-topic", forcefully rate all scores of all criteria below at band 1.
-PC-2: Currently "=0.000"
-PC-3: If PC-2 > 0.1, turn on very hard mode, return "very hard mode" or "normal mode".
-// If PC-3 = "very hard mode", be very strict, tough, and difficult when rating, frequently reduce scores for small mistakes, ready to give scores lower than 5.
-// Criterion: Task Response (TR).
-TR-1: Rate the relevance of the provided prompt and the extent to which the essay addresses it on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-TR-2: Rate the clarity of the position taken by the writer in response to the prompt on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-TR-3: Rate the depth of ideas presented in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-TR-4: Rate the appropriateness of the essay's format in addressing the prompt on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-TR-5: Rate the relevance and specificity of the examples provided in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-TR-6: current_word/required_word = 195/250, so rate 7 rounded to the nearest whole number.
-TR-0: Short, concise, & reasonable feedback for TR criterion in english-uk, with clear proof & examples. Refer to each of its sub-criterion (but avoid explicilty mention the names of sub-criterion like TR-1, TR-2,...).
-TR: Calculate the average of all TR sub-criteria scores above, then round it up to the nearest whole number.
-// Criterion: Coherence & Cohesion (CC).
-CC-1: Rate the logical organization of ideas in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-CC-2: Rate the apperance and effectiveness of the introduction and conclusion in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-CC-3: Rate the support provided for the main points in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-CC-4: Rate the usage of cohesive devices & sequencers in connecting ideas throughout the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-CC-5: Rate the effectiveness of paragraphing in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-CC-0: Short, concise, & reasonable feedback for CC criterion in english-uk, with clear proof & examples. Refer to each of its sub-criterion.
-CC: Calculate the average of all CC sub-criteria scores above, then round it up to the nearest whole number.
-// Criterion: Grammatical Range & Accuracy (GRA).
-GRA-1: Rate the variety of sentence structures used in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-GRA-2: Rate the accuracy of grammar and syntax in the essay on a scale of 9, default value "9" (Since the word count is low, forcefully rate it below 7).
-GRA-3: Rate the usage of punctuation in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-GRA-0: Short, concise, & reasonable feedback for GRA criterion in english-uk, with clear proof & examples. Refer to each of its sub-criterion.
-GRA: Calculate the average of all GRA sub-criteria scores above, then round it up to the nearest whole number.
-// Criterion: Lexical Resource (LR).
-LR-1: Rate the range of vocabulary used in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-LR-2: Rate the accuracy of word choice and usage in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-LR-3: Rate the spelling and word formation accuracy in the essay on a scale of 9 (Since the word count is low, forcefully rate it below 7).
-LR-0: Short, concise, & reasonable feedback for LR criterion in english-uk, with clear proof & examples. Refer to each of its sub-criterion.
-LR: Calculate the average of all LR sub-criteria scores above, then round it up to the nearest whole number.
-// Overall Band Score.
-OVR: Calculate the average of TR, CC, LR, and GRA, with one decimal digit, rounded up to the nearest half-band 0.5 or whole-band score (e.g., 6.0 or 6.5, avoid 6.3 or 6.8).
-// End of output
+```json
+{
+  // Precheck: Determines if the essay addresses the prompt.
+  "PC-1": "on-topic", // "on-topic" or "off-topic". If "off-topic", all scores must be band 1.
+
+  // Internal metric (e.g., coherence confidence), currently fixed at 0.
+  "PC-2": "0.000",
+
+  // Adjusts strictness of scoring based on PC-2 value.
+  "PC-3": "normal mode", // "normal mode" or "very hard mode"
+
+  // TASK RESPONSE
+  "TR-1": 6, // How fully the task is addressed (coverage of all parts of prompt).
+  "TR-2": 6, // Clarity and consistency of the writer’s position.
+  "TR-3": 6, // Depth, relevance, and development of ideas.
+  "TR-4": 6, // Whether the format suits the task (e.g., essay format).
+  "TR-5": 6, // Specificity and appropriateness of supporting examples.
+  "TR-6": 7, // Score based on actual word count (195/250 = 7).
+  "TR-0": "Your ideas are clear but underdeveloped. The essay touches on all prompt points, but lacks detail and strong examples.", // Concise feedback for TR.
+  "TR": 6, // Final TR band: average of TR-1 to TR-6 (rounded up).
+
+  // COHERENCE & COHESION
+  "CC-1": 6, // Logical organization of ideas and flow of arguments.
+  "CC-2": 6, // Quality of introduction and conclusion.
+  "CC-3": 6, // How well main points are supported and linked.
+  "CC-4": 6, // Use of cohesive devices (e.g., linkers, transitions).
+  "CC-5": 6, // Effectiveness of paragraphing.
+  "CC-0": "The structure is logical but transitions could be smoother. Paragraphs are clear but slightly uneven in development.", // Concise feedback for CC.
+  "CC": 6, // Final CC band: average of CC-1 to CC-5 (rounded up).
+
+  // GRAMMATICAL RANGE & ACCURACY
+  "GRA-1": 6, // Range of sentence structures.
+  "GRA-2": 6, // Grammar accuracy (tense, agreement, etc.).
+  "GRA-3": 6, // Use of punctuation and sentence control.
+  "GRA-0": "Sentence structures are varied but errors appear in complex forms. Punctuation is mostly correct but occasionally inconsistent.", // Concise feedback for GRA.
+  "GRA": 6, // Final GRA band: average of GRA-1 to GRA-3 (rounded up).
+
+  // LEXICAL RESOURCE
+  "LR-1": 6, // Range of vocabulary used.
+  "LR-2": 6, // Appropriateness and precision of word choice.
+  "LR-3": 6, // Spelling and word formation.
+  "LR-0": "Vocabulary is appropriate but lacks variety. Word choice is sometimes repetitive and could be more precise.", // Concise feedback for LR.
+  "LR": 6, // Final LR band: average of LR-1 to LR-3 (rounded up).
+
+  // OVERALL BAND SCORE
+  "OVR": 6.0 // Final average score: mean of TR, CC, GRA, and LR, rounded up to nearest 0.5.
+}
+```
 
 ## Rule
 
-- Return valid JSON.
-- Use flat, top-level keys only.
-- No comments or extra text.
+- Return only valid JSON
+- No comments or extra text
+- No codeblocks

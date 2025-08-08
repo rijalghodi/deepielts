@@ -1,6 +1,6 @@
 ## Task
 
-Generate detail feedback of {{taskType}} IELTS.
+Generate detail feedback for my {{taskType}} IELTS Writing response.
 
 Detect my tone and style based on the instructions and samples below. Clone or apply them to some explanations to match my style. For the rest, be creative and flexible—use a variety of tones, styles, sentence structures, and correction methods:
 
@@ -27,34 +27,36 @@ Examples:
 "{{attachment}}".
 (If the image data is available, use it to correct information; If the data includes line charts, approximate values are acceptable. Minor discrepancies can be ignored.).
 
+## Rules
+
+- Output only markdown following the output format below exactly
+- Do **not** include any welcome message, conclusion, or extra explanation
+- Remove all lines starting with `//`
+- Use popular terms in english-uk
+
 ## Output Format
 
-Use the following Markdown format:
+---
 
-// Start Output
-// Prefer using popular terms in english-uk, and widely used in IELTS.
-// Use markdown syntax for headings, such as ##, ###, ####, #####.
-// main_lang = "english-uk".
+## Detailed Feedback
 
-## (Translate this heading "Detailed Assessment" to main_lang).
-
-### (Translate this heading "Improve Each Paragraph" to main_lang).
+### Improve Each Paragraphs
 
 // Provide feedback & suggestions for each paragraph in the task response.
 
-#### (NAME THE PARAGRAPH PURPOSE (UPPERCASE) SUCH AS: "SALUTATION", "INTRODUCTION", "OVERVIEW", "OPENING STATEMENT", "BODY PARAGRAPH 1", "CONCLUSION", "CLOSING STATEMENT", "SIGN-OFF", ETC.).
+#### //NAME THE PARAGRAPH PURPOSE (UPPERCASE) SUCH AS: "SALUTATION", "INTRODUCTION", "OVERVIEW", "OPENING STATEMENT", "BODY PARAGRAPH 1", "BODY PARAGRAPH 2" "CONCLUSION", "CLOSING STATEMENT", "SIGN-OFF", ETC.
 
 // Use markdown italic format:
 _"Quote the mentioned paragraph here"_.
 
-##### Comments.
+##### Comments
 
 - **Task Response/Task Achievement:** Provide comprehensive & in-depth feedback/analysis in english-uk with 3 - 4 clear proof & examples, pointing out errors & weak areas, suggests specific & detailed improvements with clear examples to enhance these sub-criteria: "Relevance to Prompt", "Clarity of Position", "Depth of Ideas", "Appropriateness of Format" & "Relevant & Specific Examples", do not provide grammar suggestions in this part.
 - **Coherence & Cohesion:** Provide comprehensive & in-depth feedback/analysis in english-uk with 3 - 4 clear proof & examples, pointing out errors & weak areas, suggests specific & detailed improvements with clear examples to enhance these sub-criteria: "Logical Organization", "Effective Introduction & Conclusion", "Supported Main Points" & "Cohesive Devices Usage", do not provide grammar suggestions in this part.
 - **Grammatical Range & Accuracy:** Provide brief feedback/analysis in english-uk with 3 - 4 proof & examples, pointing out errors & weak areas, suggests specific & detailed improvements with clear examples to enhance these sub-criteria: "Sentence Structure Variety", and "Grammar Accuracy", provide detailed grammar suggestions in this part.
 - **Lexical Resource:** Provide brief feedback/analysis in english-uk with 3 - 4 proof & examples, pointing out errors & weak areas, suggests specific & detailed improvements with clear examples to enhance these sub-criteria: "Vocabulary Range", "Lexical Accuracy" & "Spelling and Word Formation", provide very detailed & specific vocabulary suggestions in this part (such as vocabulary corrections, vocabulary replacements, etc.).
 
-##### How to rewrite.
+##### Revised Version
 
 // Use markdown italic format:
 _"Rewrite the mentioned paragraph here with improvements based on the feedback and suggestions"_
@@ -65,23 +67,22 @@ _"Rewrite the mentioned paragraph here with improvements based on the feedback a
 
 // Continue with the next paragraph, and to the last paragraph, using the same format & structure.
 
-### (Translate this heading "Improve Structure & Argument" to main_lang).
+### Improve Structure & Argument
 
-#### TASK TYPE.
+#### TASK TYPE
 
 // Name the task type based on the task prompt, such as "Opinion: Agree or Disagree", "Formal Letter: Requesting Information or Action", "Report: Bar Chart", "Report: Line Graph", etc.
 
-#### KEY TIPS.
+#### KEY TIPS
 
 // Create an one-level bulleted list of 3 most useful & popular key tips in english-uk, tailored to the mentioned task prompt & task type.
-<br><br>
 
-#### RECOMMENDED ESSAY OUTLINE/STRUCTURE.
+#### RECOMMENDED ESSAY OUTLINE/STRUCTURE
 
 // Use one-level bulleted list to create an in-depth outline, specifically tailored to this task, using english-uk.
 // Integrate the mentioned tips above, aiming for a band 9.0. Include samples of topic sentences in English, tips & examples for each paragraph.
 
-### (Translate this heading "Relevant Vocabulary" to main_lang).
+### Relevant Vocabulary
 
 // Suggest 10 most related English vocabulary for this topic that are not currently used in the original task response, using a table in markdown syntax with 4 columns: New Word | Word Type | Definition.
 // New words are in English, and can be Nouns, Adjectives, Verbs, and Adverbs.
@@ -91,7 +92,7 @@ _"Rewrite the mentioned paragraph here with improvements based on the feedback a
 | -------- | --------- | ---------- |
 | ...      | ...       | ...        |
 
-### (Translate this heading "Diversify Sentence Structures" to main_lang).
+### Diversify Sentence Structures
 
 // Suggest 5 better & advanced grammar structures as replacements for the original sentences cited from the task response using a table in markdown syntax with 4 columns: Grammar Structure | Original Sentence | Rephrased Sentence.
 // Content in the "Grammar Structure" column must be concise, include the structure name, along with the structure itself. For example: "**Conditional Sentence (Type 1):** If + present simple, will + verb" or "**Passive Voice:** be + past participle", etc.
@@ -101,7 +102,7 @@ _"Rewrite the mentioned paragraph here with improvements based on the feedback a
 | ----------------- | ----------------- | ------------------ |
 | ...               | ...               | ...                |
 
-### (Translate this heading "Improve Cohesion" to main_lang).
+### Improve Cohesion
 
 // For the original task response, provide 5 more effective, and advanced uses of linking words & cohesive devices, using a markdown table with 2 columns: Original Text | Improved Text | Explanation.
 // Do not include suggestions about grammar or vocabulary.
@@ -113,6 +114,4 @@ _"Rewrite the mentioned paragraph here with improvements based on the feedback a
 | ------------- | ------------- | ----------- |
 | ...           | ...           | ...         |
 
-// End of Output
-
-Provide only the output without any welcome message, conclusion, or additional text. Remove all "//" content as they are admin comments. Do not use codeblock, let the Markdown content rendered normally:
+---

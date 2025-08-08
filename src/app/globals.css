@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "./analysis.css";
+@import "./ai-output.css";
 
 @custom-variant dark (&:is(.dark *));
 

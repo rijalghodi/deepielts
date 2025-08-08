@@ -1,23 +1,34 @@
-## JSON Data
+## Task
+
+Extract **relevant values** from JSON (number or text) and insert them into the markdown template
+
+- Fill in the placeholders marked by square brackets ([[LIKE_THIS]]).
+- **Ignore** the fields: `PC-1`, `PC-2`, `PC-3`.
+
+## Input JSON
 
 {{scoreJson}}
 
-## Instruction
+## Rules
 
-- Extract the **relevant values** (numbers or text) from the JSON.
-- Insert them into the **placeholders marked by square brackets** (`[like this]`) in the Markdown template.
-- Do **not** wrap the output in a code block — let the Markdown render normally.
-- **Ignore** the fields: `PC-1`, `PC-2`, and `PC-3`.
+- Output only markdown following the output format below exactly.
+- Do **not** include any welcome message, conclusion, or extra explanation.
+- Remove all lines starting with `//` as it is only guiding comment
+- **No** blockcode
 
 ## Output Format
 
-// Start of output.
+<blockquote data-section="overall-score">
 
-> Est. Overall Band Score
->
-> [[OVR]]
->
-> (+/- 0.5)
+Est. Overall Band Score
+
+[[OVR]]
+
+(+/- 0.5)
+
+</blockquote>
+
+<blockquote data-section="criteria-score">
 
 | TR     | CC     |
 | ------ | ------ |
@@ -27,52 +38,74 @@
 | ------ | ------- |
 | [[LR]] | [[GRA]] |
 
-> Task Response (TR): [[TR]]
->
-> [[TR-0]]
->
-> - **[[TR-1]]** Relevance to Prompt
-> - **[[TR-2]]** Clarity of Position
-> - **[[TR-3]]** Depth of Ideas
-> - **[[TR-4]]** Appropriateness of Format
-> - **[[TR-5]]** Relevant & Specific Examples
-> - **[[TR-6]]** Appropriate Word Count
+</blockquote>
 
-> Coherence & Cohesion (CC): [[CC]]
->
-> [[CC-0]]
->
-> - **[[CC-1]]** Logical Organization
-> - **[[CC-2]]** Effective Introduction & Conclusion
-> - **[[CC-3]]** Supported Main Points
-> - **[[CC-4]]** Cohesive Devices Usage
-> - **[[CC-5]]** Paragraphing
+<blockquote data-section="criteria-detail">
 
-> Grammatical Range & Accuracy (GRA): [[GRA]]
->
-> [[GRA-0]]
->
-> - **[[GRA-1]]** Sentence Structure Variety
-> - **[[GRA-2]]** Grammar Accuracy
-> - **[[GRA-3]]** Punctuation Usage
+Task Response (TR): [[TR]]
 
-> Lexical Resource (LR): [[LR]]
->
-> [[LR-0]]
->
-> - **[[LR-1]]** Vocabulary Range
-> - **[[LR-2]]** Lexical Accuracy
-> - **[[LR-3]]** Spelling and Word Formation
+[[TR-0]]
 
-// End of output.
+- <strong data-score="[[TR-1]]">[[TR-1]]</strong> Relevance to Prompt
+- <strong data-score="[[TR-2]]">[[TR-2]]</strong> Clarity of Position
+- <strong data-score="[[TR-3]]">[[TR-3]]</strong> Depth of Ideas
+- <strong data-score="[[TR-4]]">[[TR-4]]</strong> Appropriateness of Format
+- <strong data-score="[[TR-5]]">[[TR-5]]</strong> Relevant & Specific Examples
+- <strong data-score="[[TR-6]]">[[TR-6]]</strong> Appropriate Word Count
 
-## Example of output:
+</blockquote>
 
-> Est. Overall Band Score
->
-> 5.0
->
-> (+/- 0.5)
+<blockquote data-section="criteria-detail">
+
+Coherence & Cohesion (CC): [[CC]]
+
+[[CC-0]]
+
+- <strong data-score="[[CC-1]]">[[CC-1]]</strong> Logical Organization
+- <strong data-score="[[CC-2]]">[[CC-2]]</strong> Effective Introduction & Conclusion
+- <strong data-score="[[CC-3]]">[[CC-3]]</strong> Supported Main Points
+- <strong data-score="[[CC-4]]">[[CC-4]]</strong> Cohesive Devices Usage
+- <strong data-score="[[CC-5]]">[[CC-5]]</strong> Paragraphing
+
+</blockquote>
+
+<blockquote data-section="criteria-detail">
+
+Grammatical Range & Accuracy (GRA): [[GRA]]
+
+[[GRA-0]]
+
+- <strong data-score="[[GRA-1]]">[[GRA-1]]</strong> Sentence Structure Variety
+- <strong data-score="[[GRA-2]]">[[GRA-2]]</strong> Grammar Accuracy
+- <strong data-score="[[GRA-3]]">[[GRA-3]]</strong> Punctuation Usage
+
+</blockquote>
+
+<blockquote data-section="criteria-detail">
+
+Lexical Resource (LR): [[LR]]
+
+[[LR-0]]
+
+- <strong data-score="[[LR-1]]">[[LR-1]]</strong> Vocabulary Range
+- <strong data-score="[[LR-2]]">[[LR-2]]</strong> Lexical Accuracy
+- <strong data-score="[[LR-3]]">[[LR-3]]</strong> Spelling and Word Formation
+
+</blockquote>
+
+## Example Output
+
+<blockquote data-section="overall-score">
+
+## Est. Overall Band Score
+
+5.0
+
+(+/- 0.5)
+
+</blockquote>
+
+<blockquote data-section="criteria-score">
 
 | TR  | CC  |
 | --- | --- |
@@ -82,19 +115,21 @@
 | --- | --- |
 | 5   | 5   |
 
-> Task Response (TR): 6
->
-> The essay addresses the prompt by discussing unethical advertising methods...
->
-> - **6** Relevance to Prompt
-> - **6** Clarity of Position
-> - **5** Depth of Ideas
-> - **6** Appropriateness of Format
-> - **5** Relevant & Specific Examples
-> - **9** Appropriate Word Count
->   ...
+</blockquote>
 
-## Output Rules
+<blockquote data-section="tr-detail">
 
-- Only return the completed Markdown with replaced values.
-- Do **not** include explanations, extra messages, or formatting outside the specified section.
+## Task Response (TR): 6
+
+The essay addresses the prompt by discussing unethical advertising methods...
+
+- <strong data="6">6</strong> Relevance to Prompt
+- <strong data="6">6</strong> Clarity of Position
+- <strong data="5">5</strong> Depth of Ideas
+- <strong data="6">6</strong> Appropriateness of Format
+- <strong data="5">5</strong> Relevant & Specific Examples
+- <strong data="9">9</strong> Appropriate Word Count
+
+</blockquote>
+
+// ... Continue

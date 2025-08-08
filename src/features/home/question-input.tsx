@@ -63,11 +63,12 @@ export function QuestionInput({ taskType }: Props) {
                   {/* QUESTION */}
                   <Textarea
                     placeholder={
-                      taskType === QuestionType.Task1Academic
-                        ? "Enter a Task 1 Academic question or topic..."
-                        : taskType === QuestionType.Task1General
-                          ? "Enter a Task 1 General question or topic..."
-                          : "Enter a Task 2 question or topic..."
+                      "Enter a question or topic..."
+                      // taskType === QuestionType.Task1Academic
+                      //   ? "Enter a Task 1 Academic question or topic..."
+                      //   : taskType === QuestionType.Task1General
+                      //     ? "Enter a Task 1 General question or topic..."
+                      //     : "Enter a Task 2 question or topic..."
                     }
                     minRows={3}
                     maxRows={5}

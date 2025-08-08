@@ -12,8 +12,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 
 const ASIDE_COOKIE_NAME = "aside_state";
 const ASIDE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-export const ASIDE_WIDTH = "480px";
-export const ASIDE_WIDTH_MOBILE = "480px";
+export const ASIDE_WIDTH = "540px";
+export const ASIDE_WIDTH_MOBILE = "540px";
 const ASIDE_KEYBOARD_SHORTCUT = "b";
 
 type AsideContextProps = {

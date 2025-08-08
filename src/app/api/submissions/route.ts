@@ -69,6 +69,8 @@ export async function POST(req: NextRequest) {
 
     const scoreJson = generatedScore.choices[0].message.content;
 
+    console.log(detailFeedbackPrompt);
+
     if (!scoreJson) throw new AppError({ message: "Failed to generate score", code: 500 });
 
     const encoder = new TextEncoder();
@@ -91,9 +93,9 @@ export async function POST(req: NextRequest) {
         };
         try {
           await streamOpenAI(getScoreParsePrompt({ scoreJson }));
-          controller.enqueue(encoder.encode("\n---\n"));
+          controller.enqueue(encoder.encode("\n\n\n"));
           await streamOpenAI(detailFeedbackPrompt);
-          controller.enqueue(encoder.encode("\n---\n"));
+          controller.enqueue(encoder.encode("\n\n\n"));
           await streamOpenAI(modelEssayPrompt);
         } catch (err) {
           controller.enqueue(encoder.encode("\n[Error occurred during streaming]\n"));

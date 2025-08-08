@@ -10,6 +10,7 @@ import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
 import { Button } from "../ui/button";
+import rehypeRaw from "rehype-raw";
 
 // Download Button Component
 function DownloadButton() {
@@ -54,7 +55,7 @@ function LoadingState() {
 }
 
 // Main AI Analysis Component
-function AIAnalysis() {
+function AIOutput() {
   const { analysis, generating, error } = useAIAnalysisStore();
 
   if (error) {
@@ -66,9 +67,13 @@ function AIAnalysis() {
     return <NoAnalysis />;
   }
 
+  console.log(analysis);
+
   return (
-    <div className="relative ai-analysis">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{analysis}</ReactMarkdown>
+    <div className="relative ai-output">
+      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+        {analysis}
+      </ReactMarkdown>
     </div>
   );
 }
@@ -92,7 +97,7 @@ export function AIAside() {
         </div>
       </AsideHeader>
       <AsideContent>
-        <AIAnalysis />
+        <AIOutput />
       </AsideContent>
       {analysis && !generating && !error && (
         <AsideFooter>
