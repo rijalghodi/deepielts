@@ -62,14 +62,12 @@ export async function POST(req: NextRequest) {
 
     // Generate score json
     const generatedScore = await openai.chat.completions.create({
-      model: "gpt-4.1-nano",
+      model: "gpt-4o-mini",
       stream: false,
       messages: [{ role: "system", content: scorePrompt }],
     });
 
     const scoreJson = generatedScore.choices[0].message.content;
-
-    console.log(detailFeedbackPrompt);
 
     if (!scoreJson) throw new AppError({ message: "Failed to generate score", code: 500 });
 
@@ -79,18 +77,34 @@ export async function POST(req: NextRequest) {
       async start(controller) {
         const streamOpenAI = async (prompt: string) => {
           const stream = await openai.chat.completions.create({
-            model: "gpt-4.1-nano",
+            model: "gpt-4o-mini",
             stream: true,
             messages: [{ role: "system", content: prompt }],
           });
 
+          let buffer = "";
+          let chunkCount = 0;
+
           for await (const chunk of stream) {
             const content = chunk.choices?.[0]?.delta?.content;
             if (content) {
-              controller.enqueue(encoder.encode(content));
+              buffer += content;
+              chunkCount++;
+
+              if (chunkCount >= 10) {
+                controller.enqueue(encoder.encode(buffer));
+                buffer = "";
+                chunkCount = 0;
+              }
             }
           }
+
+          // Flush remaining buffer
+          if (buffer) {
+            controller.enqueue(encoder.encode(buffer));
+          }
         };
+
         try {
           await streamOpenAI(getScoreParsePrompt({ scoreJson }));
           controller.enqueue(encoder.encode("\n\n\n"));

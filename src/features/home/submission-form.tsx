@@ -44,7 +44,6 @@ export function SubmissionForm({ onSuccess }: Props) {
       const stored = localStorage.getItem(FORM_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        console.log("parsed", parsed);
         // Validate that the stored data matches our schema
         const result = schema.safeParse(parsed);
         if (result.success) {

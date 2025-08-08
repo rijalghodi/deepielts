@@ -218,7 +218,7 @@ function Aside({
           data-aside="aside"
           data-slot="aside-inner"
           className={cn(
-            "group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-xl group-data-[variant=floating]:border group-data-[variant=floating]:shadow-lg",
+            "relative group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-xl group-data-[variant=floating]:border group-data-[variant=floating]:shadow-lg",
             className,
           )}
         >
@@ -331,8 +331,15 @@ function AsideInset({ className, ...props }: React.ComponentProps<"main">) {
   );
 }
 
-function AsideContent({ children }: { children: React.ReactNode }) {
-  return <div className="flex-1 flex min-h-0 flex-col gap-2 overflow-auto px-4">{children}</div>;
-}
+const AsideContent = React.forwardRef<HTMLDivElement, React.PropsWithChildren<object>>(function AsideContent(
+  { children },
+  ref,
+) {
+  return (
+    <div ref={ref} className="flex-1 flex min-h-0 flex-col gap-2 overflow-auto px-4">
+      {children}
+    </div>
+  );
+});
 
 export { Aside, AsideContent, AsideFooter, AsideHeader, AsideInset, AsideProvider, AsideRail, AsideTrigger, useAside };

@@ -36,15 +36,13 @@ Examples:
 
 ## Output Format
 
----
-
 ## Detailed Feedback
 
 ### Improve Each Paragraphs
 
 // Provide feedback & suggestions for each paragraph in the task response.
 
-#### //NAME THE PARAGRAPH PURPOSE (UPPERCASE) SUCH AS: "SALUTATION", "INTRODUCTION", "OVERVIEW", "OPENING STATEMENT", "BODY PARAGRAPH 1", "BODY PARAGRAPH 2" "CONCLUSION", "CLOSING STATEMENT", "SIGN-OFF", ETC.
+#### NAME THE PARAGRAPH (IN UPPERCASE) SUCH AS: "SALUTATION", "INTRODUCTION", "OVERVIEW", "OPENING STATEMENT", "BODY PARAGRAPH 1", "BODY PARAGRAPH 2" "CONCLUSION", "CLOSING STATEMENT", "SIGN-OFF", ETC.
 
 // Use markdown italic format:
 _"Quote the mentioned paragraph here"_.
@@ -60,10 +58,11 @@ _"Quote the mentioned paragraph here"_.
 
 // Use markdown italic format:
 _"Rewrite the mentioned paragraph here with improvements based on the feedback and suggestions"_
-// Write in English.
 // Keep as much of the original content as possible, but improve it based on the feedback and suggestions.
 // Use vocabulary level and grammar appropriate for this target band level: "Band 5.5–6.5 (Intermediate)".
 // Skip if there is no issue or no room for improvements.
+
+<hr></hr>
 
 // Continue with the next paragraph, and to the last paragraph, using the same format & structure.
 
@@ -113,5 +112,3 @@ _"Rewrite the mentioned paragraph here with improvements based on the feedback a
 | Original Text | Improved Text | Explanation |
 | ------------- | ------------- | ----------- |
 | ...           | ...           | ...         |
-
----

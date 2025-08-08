@@ -1,8 +1,9 @@
 "use client";
 
-import { AlertCircle, Download, FileText, Loader2, XIcon } from "lucide-react";
-import React from "react";
+import { AlertCircle, Download, FileText, XIcon } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
@@ -10,7 +11,7 @@ import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
 import { Button } from "../ui/button";
-import rehypeRaw from "rehype-raw";
+import { ShimmeringBackground } from "../ui/shimering-bg";
 
 // Download Button Component
 function DownloadButton() {
@@ -26,10 +27,47 @@ function DownloadButton() {
 
 function NoAnalysis() {
   return (
-    <div className="flex flex-col items-center justify-center flex-1 gap-2 py-8">
-      <FileText className="w-5 h-5 text-muted-foreground" />
-      <p className="text-sm text-muted-foreground text-center mt-2">No analysis data available</p>
-      <p className="text-sm text-muted-foreground text-center">Please insert your essay to get started</p>
+    <div className="ai-output">
+      <blockquote data-section="overall-score">
+        <p>Est. Overall Band Score</p>
+        <p>0</p>
+        <p>(+/- 0.5)</p>
+      </blockquote>
+      <blockquote data-section="criteria-score">
+        <table>
+          <thead>
+            <tr>
+              <th>TR</th>
+              <th>CC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>LR</th>
+              <th>GRA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+      </blockquote>
+      <div className="text-sm text-muted-foreground text-center py-12">
+        <FileText className="w-5 h-5 text-muted-foreground mx-auto" />
+        <p>No analysis data available</p>
+        <p>Please insert your essay to get started</p>
+      </div>
     </div>
   );
 }
@@ -44,19 +82,9 @@ function ErrorState({ error }: { error: string }) {
   );
 }
 
-function LoadingState() {
-  return (
-    <div className="flex flex-col items-center justify-center flex-1 gap-2 py-8">
-      <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-      <p className="text-sm text-muted-foreground text-center mt-2">Generating analysis...</p>
-      <p className="text-sm text-muted-foreground text-center">This may take a few moments</p>
-    </div>
-  );
-}
-
 // Main AI Analysis Component
 function AIOutput() {
-  const { analysis, generating, error } = useAIAnalysisStore();
+  const { analysis, error } = useAIAnalysisStore();
 
   if (error) {
     return <ErrorState error={error} />;
@@ -67,10 +95,8 @@ function AIOutput() {
     return <NoAnalysis />;
   }
 
-  console.log(analysis);
-
   return (
-    <div className="relative ai-output">
+    <div className="ai-output">
       <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
         {analysis}
       </ReactMarkdown>
@@ -80,15 +106,42 @@ function AIOutput() {
 
 export function AIAside() {
   const { analysis, generating, error } = useAIAnalysisStore();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true);
+
+  useEffect(() => {
+    if (autoScroll) {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }
+  }, [analysis]);
+
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container) return;
+    let lastScrollTop = container.scrollTop;
+
+    const handleScroll = () => {
+      const currentScrollTop = container.scrollTop;
+
+      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 32;
+
+      setAutoScroll(atBottom || currentScrollTop < lastScrollTop);
+
+      lastScrollTop = currentScrollTop;
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <Aside variant="floating" className="shadow-lg">
       <AsideHeader>
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">
-            AI Analysis
-            {generating && <span className="ml-2 text-sm text-muted-foreground">(Generating...)</span>}
-          </h2>
+          <h2 className="text-lg font-semibold">AI Analysis</h2>
           <AsideTrigger asChild>
             <Button variant="ghost" size="icon-sm">
               <XIcon className="w-4 h-4" />
@@ -96,14 +149,12 @@ export function AIAside() {
           </AsideTrigger>
         </div>
       </AsideHeader>
-      <AsideContent>
+      <AsideContent ref={contentRef}>
+        {generating && <ShimmeringBackground />}
         <AIOutput />
+        <div ref={messagesEndRef} />
       </AsideContent>
-      {analysis && !generating && !error && (
-        <AsideFooter>
-          <DownloadButton />
-        </AsideFooter>
-      )}
+      {analysis && !generating && !error && <AsideFooter>{/* <DownloadButton /> */}</AsideFooter>}
     </Aside>
   );
 }
