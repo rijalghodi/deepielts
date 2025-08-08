@@ -71,7 +71,7 @@ function SheetContent({
       >
         <div
           className={cn(
-            "relative flex flex-col h-full w-full shadow-lg bg-background",
+            "relative flex flex-col h-full w-full shadow-lg bg-background overflow-hidden",
             side === "right" && "border-l",
             side === "left" && "border-r",
             side === "top" && "border-b",

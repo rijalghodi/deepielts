@@ -13,7 +13,7 @@ import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/c
 import { Button } from "../ui/button";
 import { ShimmeringBackground } from "../ui/shimering-bg";
 
-// Download Button Component
+// Download Button (currently unused)
 function DownloadButton() {
   return (
     <div className="flex items-center justify-center">
@@ -82,21 +82,23 @@ function ErrorState({ error }: { error: string }) {
   );
 }
 
-// Main AI Analysis Component
 function AIOutput() {
-  const { analysis, error } = useAIAnalysisStore();
+  const { analysis, generating, error } = useAIAnalysisStore();
 
-  if (error) {
-    return <ErrorState error={error} />;
-  }
+  if (error) return <ErrorState error={error} />;
 
-  // If no analysis data, show empty state
   if (!analysis) {
-    return <NoAnalysis />;
+    return (
+      <div className="relative ai-output">
+        <ShimmeringBackground />
+        <NoAnalysis />
+      </div>
+    );
   }
 
   return (
-    <div className="ai-output">
+    <div className="relative ai-output">
+      {generating && <ShimmeringBackground />}
       <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
         {analysis}
       </ReactMarkdown>
@@ -110,14 +112,14 @@ export function AIAside() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [autoScroll, setAutoScroll] = useState(true);
 
+  // Auto-scroll to bottom when generating and new analysis arrives
   useEffect(() => {
-    if (autoScroll && generating) {
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
+    if (autoScroll && generating && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
-  }, [analysis]);
+  }, [analysis, autoScroll, generating]);
 
+  // Track scroll position to enable/disable auto-scroll
   useEffect(() => {
     const container = contentRef.current;
     if (!container) return;
@@ -125,11 +127,8 @@ export function AIAside() {
 
     const handleScroll = () => {
       const currentScrollTop = container.scrollTop;
-
       const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 32;
-
       setAutoScroll(atBottom || currentScrollTop < lastScrollTop);
-
       lastScrollTop = currentScrollTop;
     };
 
