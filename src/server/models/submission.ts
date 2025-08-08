@@ -7,9 +7,9 @@ export interface Submission {
   userId?: string;
   answer?: string;
   question?: string;
-  attachments?: string;
+  attachment?: string;
   questionType?: QuestionType;
-  analysis?: IELTSAnalysis;
+  score?: IELTSScore;
   readonly createdAt?: Timestamp;
   readonly updatedAt?: Timestamp;
   readonly deletedAt?: Timestamp;
@@ -22,32 +22,60 @@ export enum QuestionType {
   TASK_2 = "task-2",
 }
 
-export type IELTSAnalysis = {
-  score: {
-    totalScore: number;
-    detail: {
-      tr: CriteriaScore;
-      cc: CriteriaScore;
-      lr: CriteriaScore;
-      gra: CriteriaScore;
-    };
-  };
-  feedback: FeedbackEntry[];
+export type IELTSScore = {
+  "PC-1": number;
+  "PC-2": number;
+  "PC-3": number;
+  TR: number;
+  "TR-0": number;
+  "TR-1": number;
+  "TR-2": number;
+  "TR-3": number;
+  CC: number;
+  "CC-0": number;
+  "CC-1": number;
+  "CC-2": number;
+  "CC-3": number;
+  "CC-4": number;
+  "CC-5": number;
+  LR: number;
+  "LR-0": number;
+  "LR-1": number;
+  "LR-2": number;
+  "LR-3": number;
+  GRA: number;
+  "GRA-0": number;
+  "GRA-1": number;
+  "GRA-2": number;
+  "GRA-3": number;
 };
 
-type CriteriaScore = {
-  score: number;
-  comment: string;
-  criteria: Record<string, number>;
-};
+// export type IELTSAnalysis = {
+//   score: {
+//     totalScore: number;
+//     detail: {
+//       tr: CriteriaScore;
+//       cc: CriteriaScore;
+//       lr: CriteriaScore;
+//       gra: CriteriaScore;
+//     };
+//   };
+//   feedback: FeedbackEntry[];
+// };
 
-type FeedbackEntry = {
-  comments: {
-    tr: string;
-    cc: string;
-    lr: string;
-    gra: string;
-  };
-  rewrite: string;
-  original: string;
-};
+// type CriteriaScore = {
+//   score: number;
+//   comment: string;
+//   criteria: Record<string, number>;
+// };
+
+// type FeedbackEntry = {
+//   comments: {
+//     tr: string;
+//     cc: string;
+//     lr: string;
+//     gra: string;
+//   };
+//   rewrite: string;
+//   original: string;
+// };

@@ -73,8 +73,6 @@ export async function POST(req: NextRequest) {
       });
 
       chartData = generatedChartData.choices[0].message.content || "None";
-
-      console.log(chartData);
     }
 
     const scorePrompt = getScorePrompt({
@@ -108,6 +106,8 @@ export async function POST(req: NextRequest) {
     const scoreJson = generatedScore.choices[0].message.content;
 
     if (!scoreJson) throw new AppError({ message: "Failed to generate score", code: 500 });
+
+    // TODO: Insert scoreJson into database
 
     const encoder = new TextEncoder();
 
