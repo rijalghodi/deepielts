@@ -1,38 +1,24 @@
 import * as Sentry from "@sentry/nextjs";
-import { Query } from "firebase-admin/firestore";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
-import { db } from "@/lib/firebase/firebase-admin";
 import logger from "@/lib/logger";
-import { openai } from "@/lib/openai/openai";
-import {
-  getChartDataPrompt,
-  getDetailFeedbackPrompt,
-  getModelEssayPrompt,
-  getScoreParsePrompt,
-  getScorePrompt,
-} from "@/lib/prompts/utils";
 
-import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
+import { createSubmissionBodySchema, listSubmissionsQuerySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 import { handleError } from "@/server/services/interceptor";
 import { checkDailyLimit, updateDailyAttempt } from "@/server/services/rate-limiter";
-import { createSubmission } from "@/server/services/submission.service";
+import { createSubmission, listUserSubmissions } from "@/server/services/submission.repo";
+import {
+  createFeedbackReadableStream,
+  generateChartDataIfNeeded,
+  generateScore,
+  parseScoreJson,
+} from "@/server/services/submission.service";
 
 import { authGetUser, authMiddleware } from "../auth/auth-middleware";
 
 import { AppError, AppPaginatedResponse } from "@/types/global";
 export const runtime = "nodejs";
-
-// Query parameter schema for filtering and sorting
-const getSubmissionsQuerySchema = z.object({
-  page: z.coerce.number().min(1).default(1),
-  limit: z.coerce.number().min(1).max(100).default(10),
-  questionType: z.enum(Object.values(QuestionType) as [string, ...string[]]).optional(),
-  sortBy: z.enum(["createdAt", "analysis.score"]).default("createdAt"),
-  sortDir: z.enum(["asc", "desc"]).default("desc"),
-});
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,8 +34,8 @@ export async function POST(req: NextRequest) {
     if (!allowed) {
       throw new AppError({
         message: isAuthenticated
-          ? "You have reached the daily limit. You can only submit 3 submissions per day"
-          : "You have reached the daily limit. Unauthorized users can only submit 1 submission per day",
+          ? "Daily limit reached. You can submit up to 3 times per day."
+          : "Daily limit reached. Guests can submit only once per day. Sign in to get 3 submissions daily.",
         code: 429,
       });
     }
@@ -59,176 +45,54 @@ export async function POST(req: NextRequest) {
 
     const { question, answer, attachment, questionType } = data;
 
-    let chartData = "None";
-
-    // Accumulate full feedback from all streams
-    let fullFeedback = "";
-
-    if (questionType === QuestionType.TASK_1_ACADEMIC) {
-      // Check if request is cancelled before processing
-      if ((req as any).signal?.aborted) {
-        throw new Error("Request cancelled");
-      }
-
-      const chartDataPrompt = getChartDataPrompt();
-
-      const generatedChartData = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        stream: false,
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: chartDataPrompt,
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: attachment || "",
-                },
-              },
-            ],
-          },
-        ],
-      });
-
-      chartData = generatedChartData.choices[0].message.content || "None";
-    }
+    const attachmentInsight = await generateChartDataIfNeeded({
+      questionType: questionType as QuestionType,
+      attachment,
+      signal: (req as any).signal,
+    });
 
     // Check if request is cancelled before generating score
     if ((req as any).signal?.aborted) {
       throw new Error("Request cancelled");
     }
 
-    const scorePrompt = getScorePrompt({
-      taskType: questionType,
+    const score = await generateScore({
+      questionType: questionType as QuestionType,
       question,
       answer,
-      attachment: chartData,
+      attachmentInsight,
+      signal: (req as any).signal,
     });
 
-    const detailFeedbackPrompt = getDetailFeedbackPrompt({
-      taskType: questionType,
+    const readable = createFeedbackReadableStream({
+      signal: (req as any).signal,
+      scoreText: score,
+      questionType: questionType as QuestionType,
       question,
       answer,
-      attachment: chartData,
-    });
+      attachmentInsight,
+      onComplete: async (fullFeedback: string) => {
+        if (!(req as any).signal?.aborted && user?.uid) {
+          const parsedScore = parseScoreJson(score);
 
-    const modelEssayPrompt = getModelEssayPrompt({
-      taskType: questionType,
-      question,
-      answer,
-      attachment: chartData,
-    });
-
-    // Generate score json
-    const generatedScore = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      stream: false,
-      messages: [{ role: "user", content: scorePrompt }],
-    });
-
-    const score = generatedScore.choices[0].message.content;
-
-    if (!score) throw new AppError({ message: "Failed to generate score", code: 500 });
-    const encoder = new TextEncoder();
-
-    const readable = new ReadableStream({
-      async start(controller) {
-        const streamOpenAI = async (prompt: string) => {
-          // Check if request is cancelled before each stream
-          if ((req as any).signal?.aborted) {
-            throw new Error("Request cancelled");
-          }
-
-          const stream = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            stream: true,
-            messages: [{ role: "system", content: prompt }],
+          const submission = await createSubmission({
+            userId: user.uid,
+            question,
+            answer,
+            attachment,
+            questionType: questionType as QuestionType,
+            score: parsedScore,
+            feedback: fullFeedback,
           });
 
-          let buffer = "";
-          let chunkCount = 0;
-
-          for await (const chunk of stream) {
-            // Check if request is cancelled during streaming
-            if ((req as any).signal?.aborted) {
-              throw new Error("Request cancelled");
-            }
-
-            const content = chunk.choices?.[0]?.delta?.content;
-            if (content) {
-              buffer += content;
-              fullFeedback += content;
-              chunkCount++;
-
-              if (chunkCount >= 10) {
-                controller.enqueue(encoder.encode(buffer));
-                buffer = "";
-                chunkCount = 0;
-              }
-            }
+          if (!submission) {
+            throw new AppError({ message: "Failed to persist submission", code: 500 });
           }
 
-          // Flush remaining buffer
-          if (buffer) {
-            controller.enqueue(encoder.encode(buffer));
-          }
-        };
-
-        try {
-          await streamOpenAI(getScoreParsePrompt({ score }));
-          controller.enqueue(encoder.encode("\n\n\n"));
-          fullFeedback += "\n\n\n";
-          await streamOpenAI(detailFeedbackPrompt);
-          controller.enqueue(encoder.encode("\n\n\n"));
-          fullFeedback += "\n\n\n";
-          await streamOpenAI(modelEssayPrompt);
-        } catch (error) {
-          logger.error("POST /submissions: " + error);
-
-          // Check if the error is due to cancellation
-          if (error instanceof Error && error.message === "Request cancelled") {
-            controller.enqueue(encoder.encode("\n[Generation stopped by user]\n"));
-          } else {
-            controller.enqueue(encoder.encode("\n[Error occurred during streaming]\n"));
-          }
-        } finally {
-          // Persist submission only if not cancelled
-          if (!(req as any).signal?.aborted && user?.uid) {
-            try {
-              // Parse score JSON
-              let parsedScore: any = undefined;
-              try {
-                parsedScore = JSON.parse(score);
-              } catch (_e) {
-                parsedScore = undefined;
-              }
-
-              await createSubmission({
-                userId: user.uid,
-                question,
-                answer,
-                attachment,
-                questionType: questionType as QuestionType,
-                score: parsedScore,
-                feedback: fullFeedback,
-              });
-            } catch (persistErr) {
-              logger.error("Failed to persist submission: " + persistErr);
-            }
-          }
-
-          // Update daily attempt count
           await updateDailyAttempt(dailyAttemptId);
-          controller.close();
         }
       },
     });
-
-    // Insert happens in the stream's finally block after streaming completes
 
     return new Response(readable, {
       headers: {
@@ -237,7 +101,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error: any) {
-    logger.error("POST /submissions: " + error);
+    logger.error(error, "POST /submissions");
     Sentry.captureException(error);
 
     // Check if the error is due to cancellation
@@ -254,66 +118,25 @@ export async function GET(req: NextRequest) {
     // Authenticate user
     await authMiddleware(req);
 
-    // @ts-expect-error: user is attached to req by authMiddleware but not typed
-    const user = req.user;
-    if (!user?.uid) throw new AppError({ message: "Unauthorized", code: 401 });
+    const user = (req as any).user;
 
     // Parse and validate query parameters
     const url = new URL(req.url);
     const queryParams = Object.fromEntries(url.searchParams.entries());
-    const validatedParams = getSubmissionsQuerySchema.parse(queryParams);
+    const validatedParams = listSubmissionsQuerySchema.parse(queryParams);
 
     const { page, limit, questionType, sortBy, sortDir } = validatedParams;
 
-    // Calculate offset for pagination
-    const offset = (page - 1) * limit;
-
-    // Build the query
-    const submissionsRef = db.collection("users").doc(user.uid).collection("submissions");
-    let query: Query = submissionsRef;
-
-    // Apply questionType filter if provided
-    if (questionType) {
-      query = query.where("questionType", "==", questionType);
-    }
-
-    // Apply sorting
-    if (sortBy === "analysis.score") {
-      // For analysis.score, we need to sort by the nested field
-      query = query.orderBy("analysis.score.totalScore", sortDir);
-    } else {
-      // Default sorting by createdAt
-      query = query.orderBy("createdAt", sortDir);
-    }
-
-    // Apply pagination
-    query = query.offset(offset).limit(limit);
-
-    // Execute the query
-    const submissionsSnapshot = await query.get();
-
-    // Get total count for pagination metadata
-    let totalCount = 0;
-    if (page === 1) {
-      // Only count total if we're on the first page (for performance)
-      const countQuery = db.collection("users").doc(user.uid).collection("submissions");
-      const countSnapshot = questionType
-        ? await countQuery.where("questionType", "==", questionType).get()
-        : await countQuery.get();
-      totalCount = countSnapshot.size;
-    }
-
-    // Convert Firestore documents to plain objects
-    const submissions = submissionsSnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt,
-        updatedAt: data.updatedAt?.toDate?.()?.toISOString() || data.updatedAt,
-      };
+    const { submissions, totalCount } = await listUserSubmissions({
+      userId: user.uid,
+      page,
+      limit,
+      questionType: questionType as QuestionType | undefined,
+      sortBy,
+      sortDir,
+      withCount: page === 1,
     });
 
-    // Calculate pagination metadata
     const totalPages = Math.ceil(totalCount / limit);
 
     return NextResponse.json(
@@ -330,7 +153,7 @@ export async function GET(req: NextRequest) {
       }),
     );
   } catch (error: any) {
-    logger.error("GET /submissions: " + error);
+    logger.error(error, "GET /submissions");
     Sentry.captureException(error);
     return handleError(error);
   }

@@ -14,7 +14,7 @@ Evaluate my {{taskType}} IELTS answer using the latest **IELTS Writing Band Desc
 
 **Data from Attachments**
 
-{{attachment}}
+{{attachmentInsight}}
 
 ## OUTPUT FORMAT:
 

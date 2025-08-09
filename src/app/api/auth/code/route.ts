@@ -37,13 +37,12 @@ export async function GET(req: NextRequest) {
     });
 
     if (error) {
-      logger.error("GET /auth/code: " + error);
-      throw new AppError({ message: error.message });
+      throw new AppError({ message: error.message, code: 500 });
     }
 
     return NextResponse.json(new AppResponse({ data: null, message: "Code sent" }));
   } catch (error: any) {
-    logger.error("GET /auth/code: " + error);
+    logger.error(error, "GET /auth/code");
     return handleError(error);
   }
 }
@@ -61,7 +60,6 @@ export async function POST(req: NextRequest) {
     // Check if code is valid
     const isValid = await isCodeValid(email, code);
     if (!isValid) {
-      logger.error("POST /auth/code: Invalid or expired code");
       throw new AppError({ message: "Invalid or expired code", code: 400 });
     }
 
@@ -118,7 +116,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(new AppResponse({ data: userData, message: "Code verified" }));
   } catch (error: any) {
-    logger.error("POST /auth/code: " + error);
+    logger.error(error, "POST /auth/code");
     return handleError(error);
   }
 }

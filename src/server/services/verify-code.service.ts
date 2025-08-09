@@ -14,7 +14,7 @@ export const storeCode = async (email: string, code: string, expiresInMinutes: n
       expiredAt: expiresAt,
     });
   } catch (error) {
-    logger.error("storeCode", error);
+    logger.error(error, "storeCode");
     throw error;
   }
 };
@@ -25,7 +25,7 @@ export const getCode = async (email: string) => {
     if (!doc.exists) return null;
     return doc.data();
   } catch (error) {
-    logger.error("getCode", error);
+    logger.error(error, "getCode");
     throw error;
   }
 };
@@ -34,7 +34,7 @@ export const removeCode = async (email: string) => {
   try {
     await db.collection("verifyCodes").doc(email).delete();
   } catch (error) {
-    logger.error("removeCode", error);
+    logger.error(error, "removeCode");
     throw error;
   }
 };
@@ -53,7 +53,7 @@ export const isCodeValid = async (email: string, code: string): Promise<boolean>
 
     return data.code === code;
   } catch (error) {
-    logger.error("isCodeValid", error);
+    logger.error(error, "isCodeValid");
     throw error;
   }
 };

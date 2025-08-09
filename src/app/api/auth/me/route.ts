@@ -23,7 +23,7 @@ export async function GET(req: NextRequest & { user: JwtDecode }) {
       }),
     );
   } catch (error: any) {
-    logger.error("GET /auth/me: " + error);
+    logger.error(error, "GET /auth/me");
     return handleError(error);
   }
 }

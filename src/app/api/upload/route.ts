@@ -49,7 +49,7 @@ export async function POST(req: Request) {
       }),
     );
   } catch (error) {
-    logger.error("POST /upload: " + error);
+    logger.error(error, "POST /upload");
     return handleError(error);
   }
 }

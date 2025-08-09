@@ -24,7 +24,7 @@ Examples:
 
 **Data from Attachment**
 
-{{attachment}}
+{{attachmentInsight}}
 
 ## RULES:
 

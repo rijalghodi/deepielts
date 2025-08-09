@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(new AppResponse({ data: true }));
   } catch (error: any) {
-    logger.error("POST /session", error);
+    logger.error(error, "POST /auth/google");
     return handleError(error);
   }
 }

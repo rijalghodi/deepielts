@@ -4,7 +4,6 @@ import { User } from "./user";
 
 export interface Submission {
   id: string;
-  userId?: string;
   answer?: string;
   question?: string;
   attachment?: string;

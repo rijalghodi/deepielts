@@ -152,26 +152,6 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
       </label>
     );
 
-    // Render empty file input
-    if (isUploading) {
-      return renderUploadLabel(
-        <div className="flex flex-col items-center justify-center gap-3 p-4">
-          <Loader className="text-primary/90 h-7 w-7 animate-spin" />
-          <span className="text-muted-foreground text-center">{`Uploading... ${uploadProgress}%`}</span>
-        </div>,
-      );
-    }
-
-    // Render empty file input
-    if (!value) {
-      return renderUploadLabel(
-        <div className="flex flex-col items-center justify-center gap-3 p-4">
-          <ImageUp className="text-primary/90 h-7 w-7" strokeWidth={1.5} />
-          <span className="text-muted-foreground text-center">{placeholder}</span>
-        </div>,
-      );
-    }
-
     // Render preview
     const renderPreview = (url: string) => (
       <div className="relative group w-full h-full">
@@ -198,6 +178,26 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
         )}
       </div>
     );
+
+    // Render empty file input
+    if (isUploading) {
+      return renderUploadLabel(
+        <div className="flex flex-col items-center justify-center gap-3 p-4">
+          <Loader className="text-primary/90 h-7 w-7 animate-spin" />
+          <span className="text-muted-foreground text-center">{`Uploading... ${uploadProgress}%`}</span>
+        </div>,
+      );
+    }
+
+    // Render empty file input
+    if (!value) {
+      return renderUploadLabel(
+        <div className="flex flex-col items-center justify-center gap-3 p-4">
+          <ImageUp className="text-primary/90 h-7 w-7" strokeWidth={1.5} />
+          <span className="text-muted-foreground text-center">{placeholder}</span>
+        </div>,
+      );
+    }
 
     // Render single file input with preview
     return renderUploadLabel(renderPreview(value!));

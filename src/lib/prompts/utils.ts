@@ -8,7 +8,12 @@ export function getPrompt(templateName: string, props?: Record<string, any>) {
   return Mustache.render(template, props);
 }
 
-export function getScorePrompt(props: { taskType: string; question: string; answer: string; attachment?: string }) {
+export function getScorePrompt(props: {
+  taskType: string;
+  question: string;
+  answer: string;
+  attachmentInsight?: string;
+}) {
   return getPrompt("score", props);
 }
 
@@ -20,7 +25,7 @@ export function getDetailFeedbackPrompt(props: {
   taskType: string;
   question: string;
   answer: string;
-  attachment?: string;
+  attachmentInsight?: string;
 }) {
   return getPrompt("detail-feedback", props);
 }
@@ -29,7 +34,7 @@ export function getModelEssayPrompt(props: {
   taskType: string;
   question: string;
   answer: string;
-  attachment?: string;
+  attachmentInsight?: string;
 }) {
   return getPrompt("model-essay", props);
 }

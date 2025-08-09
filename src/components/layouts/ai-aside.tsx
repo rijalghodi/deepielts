@@ -123,14 +123,10 @@ export function AIAside() {
   useEffect(() => {
     const container = contentRef.current;
     if (!container) return;
-    let lastScrollTop = container.scrollTop;
 
     const handleScroll = () => {
-      const currentScrollTop = container.scrollTop;
-      console.log("scroll!!!", currentScrollTop, lastScrollTop);
-      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
+      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 40;
       setAutoScroll(atBottom);
-      lastScrollTop = currentScrollTop;
     };
 
     container.addEventListener("scroll", handleScroll);

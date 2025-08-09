@@ -39,7 +39,8 @@ export const submissionCreateStream = async (
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      throw data;
     }
 
     return response.body;

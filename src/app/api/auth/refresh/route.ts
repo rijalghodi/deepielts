@@ -40,7 +40,7 @@ export async function POST(_: Request) {
     });
     return NextResponse.json(new AppResponse({ data: payload, message: "Token refreshed" }));
   } catch (error: any) {
-    logger.error("POST /auth/refresh: " + error);
+    logger.error(error, "POST /auth/refresh");
     return handleError(error);
   }
 }

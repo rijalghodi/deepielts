@@ -1,119 +1,190 @@
-// using example from other file
-// create a submission functionailtiy below:
+import { openai } from "@/lib/openai/openai";
+import {
+  getChartDataPrompt,
+  getDetailFeedbackPrompt,
+  getModelEssayPrompt,
+  getScoreParsePrompt,
+  getScorePrompt,
+} from "@/lib/prompts/utils";
 
-// TODO: Create submission
-
-import { Timestamp } from "firebase-admin/firestore";
-
-import { HTTP_CODE } from "@/lib/constants";
-import { db } from "@/lib/firebase/firebase-admin";
-
-import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
-import { QuestionType, Submission } from "@/server/models/submission";
+import { QuestionType } from "@/server/models/submission";
 
 import { AppError } from "@/types/global";
 
-/**
- * Create a new submission under user subcollection: users/{userId}/submissions/{submissionId}
- */
-export async function createSubmission(
-  params: Omit<CreateSubmissionBody, "questionType"> & {
-    questionType: QuestionType;
-    userId: string;
-    score?: Submission["score"];
-    feedback?: string;
-  },
-): Promise<Submission> {
+export async function generateChartDataIfNeeded(params: {
+  questionType: QuestionType;
+  attachment?: string | null;
+  signal?: AbortSignal;
+}): Promise<string> {
+  const { questionType, attachment, signal } = params;
+
+  if (questionType !== QuestionType.TASK_1_ACADEMIC) {
+    return "None";
+  }
+
+  if (signal?.aborted) {
+    throw new Error("Request cancelled");
+  }
+
+  const chartDataPrompt = getChartDataPrompt();
+
+  const generatedChartData = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    stream: false,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: chartDataPrompt,
+          },
+          {
+            type: "image_url",
+            image_url: {
+              url: attachment || "",
+            },
+          },
+        ],
+      },
+    ],
+  });
+
+  return generatedChartData.choices[0].message.content || "None";
+}
+
+export async function generateScore(params: {
+  questionType: QuestionType;
+  question: string;
+  answer: string;
+  attachmentInsight: string;
+  signal?: AbortSignal;
+}): Promise<string> {
+  const { questionType, question, answer, attachmentInsight, signal } = params;
+
+  const scorePrompt = getScorePrompt({
+    taskType: questionType,
+    question,
+    answer,
+    attachmentInsight,
+  });
+
+  if (signal?.aborted) {
+    throw new Error("Request cancelled");
+  }
+
+  const generatedScore = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    stream: false,
+    messages: [{ role: "user", content: scorePrompt }],
+  });
+
+  const score = generatedScore.choices[0].message.content;
+  if (!score) throw new AppError({ message: "Failed to generate score", code: 500 });
+  return score;
+}
+
+export function parseScoreJson(scoreText: string): any | undefined {
   try {
-    const { userId, question, answer, attachment, questionType, score, feedback } = params;
-
-    const submissionRef = db.collection("users").doc(userId).collection("submissions").doc();
-
-    const newSubmission: Submission = {
-      id: submissionRef.id,
-      userId,
-      question,
-      answer,
-      attachment,
-      questionType,
-      score,
-      feedback,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
-
-    await submissionRef.set(newSubmission);
-    return newSubmission;
-  } catch (error) {
-    throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
+    return JSON.parse(scoreText);
+  } catch (_e) {
+    return undefined;
   }
 }
 
-/**
- * Get submission by submission ID and user ID.
- */
-export async function getSubmission(userId: string, submissionId: string): Promise<GetSubmissionResult | null> {
-  try {
-    const snapshot = await db.collection("users").doc(userId).collection("submissions").doc(submissionId).get();
+export function createFeedbackReadableStream(params: {
+  signal?: AbortSignal;
+  scoreText: string;
+  questionType: QuestionType;
+  question: string;
+  answer: string;
+  attachmentInsight: string;
+  onComplete?: (fullFeedback: string) => Promise<void> | void;
+}): ReadableStream<Uint8Array> {
+  const { signal, scoreText, questionType, question, answer, attachmentInsight, onComplete } = params;
 
-    if (!snapshot.exists) {
-      throw new AppError({ message: "Submission not found", code: HTTP_CODE.NOT_FOUND });
-    }
+  const detailFeedbackPrompt = getDetailFeedbackPrompt({
+    taskType: questionType,
+    question,
+    answer,
+    attachmentInsight,
+  });
 
-    const doc = snapshot.data() as Submission;
+  const modelEssayPrompt = getModelEssayPrompt({
+    taskType: questionType,
+    question,
+    answer,
+    attachmentInsight,
+  });
 
-    return {
-      ...doc,
-      createdAt: doc.createdAt?.toDate().toISOString(),
-      updatedAt: doc.updatedAt?.toDate().toISOString(),
-    };
-  } catch (error) {
-    throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
-  }
-}
+  const encoder = new TextEncoder();
+  let fullFeedback = "";
 
-/**
- * List submissions for a user, with optional filtering by start date, end date, limit, and page.
- * If userId is provided, fetches from user's submissions subcollection.
- * Otherwise, fetches from the top-level "submissions" collection.
- */
-type ListSubmissionsOptions = {
-  userId: string;
-  startDate?: Date;
-  endDate?: Date;
-  limit?: number;
-  page?: number;
-};
+  return new ReadableStream<Uint8Array>({
+    async start(controller) {
+      const enqueue = (text: string) => controller.enqueue(encoder.encode(text));
 
-export async function listSubmissions(options: ListSubmissionsOptions): Promise<GetSubmissionResult[]> {
-  try {
-    const { userId, startDate, endDate, limit = 10, page = 1 } = options;
+      const streamOpenAI = async (prompt: string) => {
+        if (signal?.aborted) {
+          throw new Error("Request cancelled");
+        }
 
-    let query: any = db.collection("users").doc(userId).collection("submissions");
+        const stream = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          stream: true,
+          messages: [{ role: "system", content: prompt }],
+        });
 
-    if (startDate) {
-      query = query.where("createdAt", ">=", Timestamp.fromDate(startDate));
-    }
-    if (endDate) {
-      query = query.where("createdAt", "<=", Timestamp.fromDate(endDate));
-    }
+        let buffer = "";
+        let chunkCount = 0;
 
-    // Pagination: Firestore paginates with cursors, but for simple offset-based pagination:
-    const offset = (page - 1) * limit;
-    query = query.orderBy("createdAt", "desc").offset(offset).limit(limit);
+        for await (const chunk of stream) {
+          if (signal?.aborted) {
+            throw new Error("Request cancelled");
+          }
 
-    const snapshot = await query.get();
+          const content = chunk.choices?.[0]?.delta?.content;
+          if (content) {
+            buffer += content;
+            fullFeedback += content;
+            chunkCount++;
 
-    return snapshot.docs.map((doc: any) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        ...data,
-        createdAt: data.createdAt?.toDate().toISOString(),
-        updatedAt: data.updatedAt?.toDate().toISOString(),
+            if (chunkCount >= 10) {
+              enqueue(buffer);
+              buffer = "";
+              chunkCount = 0;
+            }
+          }
+        }
+
+        if (buffer) {
+          enqueue(buffer);
+        }
       };
-    }) as GetSubmissionResult[];
-  } catch (error) {
-    throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
-  }
+
+      try {
+        await streamOpenAI(getScoreParsePrompt({ score: scoreText }));
+        enqueue("\n\n\n");
+        fullFeedback += "\n\n\n";
+        await streamOpenAI(detailFeedbackPrompt);
+        enqueue("\n\n\n");
+        fullFeedback += "\n\n\n";
+        await streamOpenAI(modelEssayPrompt);
+      } catch (error) {
+        if (error instanceof Error && error.message === "Request cancelled") {
+          enqueue("\n[Generation stopped by user]\n");
+        } else {
+          enqueue("\n[Error occurred during streaming]\n");
+        }
+      } finally {
+        try {
+          if (onComplete) {
+            await onComplete(fullFeedback);
+          }
+        } finally {
+          controller.close();
+        }
+      }
+    },
+  });
 }

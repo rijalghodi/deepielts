@@ -14,7 +14,7 @@ Generate sample essays for {{taskType}} IELTS question.
 
 **Data from Attachment**
 
-{{attachment}}
+{{attachmentInsight}}
 
 ## OUTPUT FORMAT:
 
