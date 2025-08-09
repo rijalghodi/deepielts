@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { Query } from "firebase-admin/firestore";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -16,7 +17,6 @@ import {
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 import { handleError } from "@/server/services/interceptor";
-import * as Sentry from "@sentry/nextjs";
 
 import { authMiddleware } from "../auth/auth-middleware";
 

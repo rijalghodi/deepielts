@@ -1,8 +1,8 @@
+import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { AppError } from "@/types";
-import * as Sentry from "@sentry/nextjs";
 
 export const handleError = (error: any): NextResponse => {
   // Capture all errors to Sentry
