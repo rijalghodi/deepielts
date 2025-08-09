@@ -23,6 +23,7 @@ export enum QuestionType {
 }
 
 export type IELTSScore = {
+  OVR: number;
   "PC-1": number;
   "PC-2": number;
   "PC-3": number;

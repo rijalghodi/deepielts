@@ -127,7 +127,7 @@ export function AppSidebar(props: AppSidebarProps) {
                       <div className="whitespace-nowrap truncate overflow-hidden flex-1">
                         {item.question?.slice(0, 30)}
                       </div>
-                      <span className="text-xs text-muted-foreground">{item.analysis?.score?.totalScore || 0}</span>
+                      <span className="text-xs text-muted-foreground">{item.score?.OVR || 0}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
