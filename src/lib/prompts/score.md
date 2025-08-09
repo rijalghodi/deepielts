@@ -4,15 +4,15 @@ Evaluate my {{taskType}} IELTS answer using the latest **IELTS Writing Band Desc
 
 ## INPUTS:
 
-**IELTS Question**
+**IELTS Question:**
 
 "{{question}}".
 
-**My Response**
+**My Response:**
 
 "{{answer}}"
 
-**Data from Attachments**
+**Data from Attachments:**
 
 {{attachmentInsight}}
 

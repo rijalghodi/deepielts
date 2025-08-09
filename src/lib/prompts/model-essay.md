@@ -8,11 +8,11 @@ Generate sample essays for {{taskType}} IELTS question.
 
 "{{question}}".
 
-**My Response**
+**My Response:**
 
 "{{answer}}".
 
-**Data from Attachment**
+**Data from Attachment:**
 
 {{attachmentInsight}}
 

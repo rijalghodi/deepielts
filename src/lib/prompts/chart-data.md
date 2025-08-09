@@ -1,6 +1,6 @@
 ## TASK:
 
-You are a data extraction agent analyzing an image from IELTS Academic Writing Task 1. The image may be a bar chart, line graph, pie chart, table, process diagram, or map. Your job is to extract all possible structured details from the image in a flattened, CSV-like format for AI processing.
+Analyze an IELTS Academic Writing Task 1 image (bar chart, line graph, pie chart, table, process diagram, or map) and extract all details in a flattened, CSV-like format for AI processing.
 
 ## RULES:
 

@@ -18,11 +18,11 @@ Examples:
 
 "{{question}}".
 
-**My Response**
+**My Response:**
 
 "{{answer}}".
 
-**Data from Attachment**
+**Data from Attachment:**
 
 {{attachmentInsight}}
 
