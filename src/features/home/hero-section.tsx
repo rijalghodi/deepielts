@@ -15,8 +15,8 @@ export function HeroSection() {
   return (
     <div className={cn("space-y-6 lg:space-y-8 items-center", user && "space-y-6")}>
       <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="flex justify-center"
@@ -28,10 +28,10 @@ export function HeroSection() {
       </motion.div>
 
       <motion.h1
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut", delay: 0.1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         className={cn(
           "text-[36px] md:text-[60px] lg:text-[64px] leading-tight tracking-normal font-semibold text-center",
           user && "text-[28px] md:text-[36px] lg:text-[40px] leading-snug",
@@ -41,10 +41,10 @@ export function HeroSection() {
       </motion.h1>
 
       <motion.p
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         className={cn("text-lg md:text-2xl text-center text-muted-foreground", user && "text-lg md:text-xl")}
       >
         Instant feedback. Band 9 insights. Improve fast.

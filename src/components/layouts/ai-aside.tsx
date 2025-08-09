@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Bot, Download, FileText, Loader, XIcon } from "lucide-react";
+import { AlertCircle, Bot, FileText, Loader, XIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -11,18 +11,6 @@ import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
 import { Button } from "../ui/button";
-
-// Download Button (currently unused)
-function DownloadButton() {
-  return (
-    <div className="flex items-center justify-center">
-      <Button variant="outline" size="sm">
-        <Download />
-        Download PDF
-      </Button>
-    </div>
-  );
-}
 
 function NoAnalysis() {
   return (
