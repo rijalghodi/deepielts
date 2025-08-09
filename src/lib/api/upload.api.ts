@@ -12,28 +12,28 @@ export type UploadFileRequest = {
   kind?: string;
   onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
   signal?: GenericAbortSignal;
-  is_convert?: boolean;
+  folder?: string;
 };
 
 export type UploadFileResponse = ApiResponse<{
+  url: string;
   name: string;
+  path: string;
+  folder: string;
 }>;
 
 export const uploadFile = async ({
   file,
   onUploadProgress,
   signal,
-  is_convert = false,
 }: UploadFileRequest): Promise<UploadFileResponse | undefined> => {
   const data = new FormData();
 
-  const isHeic = file.name.toLowerCase().endsWith(".heic");
+  const typedFile = new File([file], file.name, { type: file.type });
 
-  const mimeType = isHeic ? "image/heic" : file.type;
-  const typedFile = new File([file], file.name, { type: mimeType });
-
-  data.append("is_convert", is_convert ? "true" : "");
   data.append("file", typedFile);
+  data.append("folder", "commons");
+
   return apiPost<UploadFileResponse, UploadFileRequest>({
     endpoint: "/upload",
     data,

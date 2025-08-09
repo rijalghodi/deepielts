@@ -45,7 +45,12 @@ export function QuestionInput({ taskType }: Props) {
             render={({ field }) => (
               <FormItem className="">
                 <FormControl>
-                  <InputImage placeholder="Upload Task 1 Image" value={field.value} onChange={field.onChange} />
+                  <InputImage
+                    placeholder="Upload Task 1 Image"
+                    value={field.value}
+                    onChange={field.onChange}
+                    folder="task-1-academic"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

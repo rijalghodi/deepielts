@@ -37,7 +37,7 @@ const getSubmissionsQuerySchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Authenticate user
-    const user = await authGetUser(req);
+    const user = await authGetUser();
 
     const isAuthenticated = !!user?.uid;
     const dailyAttemptId = isAuthenticated ? `daily:${user.uid}` : `daily:${req.headers.get("x-forwarded-for")}`;

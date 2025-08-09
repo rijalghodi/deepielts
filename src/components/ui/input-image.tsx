@@ -1,4 +1,4 @@
-import { ImageUp, Upload, X } from "lucide-react";
+import { ImageUp, Loader, X } from "lucide-react";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -16,9 +16,10 @@ export type InputImageProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 
   onChange?: (fileUrl?: string) => void;
   disabled?: boolean;
   readOnly?: boolean;
+  folder?: string;
 };
 
-const ACCEPT_TYPES = "image/png,image/jpeg,image/jpg,image/heic,.heic,image/svg+xml,image/webp";
+const ACCEPT_TYPES = "image/png,image/jpeg,image/jpg,image/svg+xml,image/webp";
 const MAX_FILE_SIZE_MB = 10;
 
 export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
@@ -33,6 +34,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
       disabled,
       readOnly,
       placeholder = "Drag & drop image here, or click to select",
+      folder,
       ...props
     },
     ref,
@@ -74,11 +76,12 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
           onUploadProgress: (progress) => {
             setUploadProgress(Math.floor((progress.loaded / (progress.total || 1)) * 100));
           },
+          folder,
         });
 
-        const fileUrl = res?.data?.name;
-        if (fileUrl) {
-          onChange?.(fileUrl);
+        const url = res?.data?.url;
+        if (url) {
+          onChange?.(url);
         }
       } catch (err) {
         toast.error("Failed to upload image", { description: String((err as any)?.message) });
@@ -150,7 +153,17 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
     );
 
     // Render empty file input
-    if (!value && !isUploading) {
+    if (isUploading) {
+      return renderUploadLabel(
+        <div className="flex flex-col items-center justify-center gap-3 p-4">
+          <Loader className="text-primary/90 h-7 w-7 animate-spin" />
+          <span className="text-muted-foreground text-center">{`Uploading... ${uploadProgress}%`}</span>
+        </div>,
+      );
+    }
+
+    // Render empty file input
+    if (!value) {
       return renderUploadLabel(
         <div className="flex flex-col items-center justify-center gap-3 p-4">
           <ImageUp className="text-primary/90 h-7 w-7" strokeWidth={1.5} />
@@ -161,18 +174,14 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
 
     // Render preview
     const renderPreview = (url: string) => (
-      <div className="relative group">
-        <Image
-          src={url}
-          alt="Uploaded image"
-          width={180}
-          height={135}
-          className="rounded-md object-cover w-full h-full"
-        />
+      <div className="relative group w-full h-full">
+        <Image src={url} alt="Uploaded image" fill className="rounded-md object-cover" />
         {value && (
           <button
             onClick={handleRemove}
-            className="absolute top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+            type="button"
+            title="Remove image"
+            className="absolute z-[2] top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
           >
             <X className="h-4 w-4" />
           </button>
@@ -180,6 +189,8 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
         {value && (
           <button
             onClick={handleTriggerEdit}
+            type="button"
+            title="Change image"
             className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center"
           >
             <span className="text-white text-sm">Click to change</span>
@@ -187,19 +198,6 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
         )}
       </div>
     );
-
-    // Render uploading state
-    if (isUploading) {
-      return renderUploadLabel(
-        <div className="flex flex-col items-center justify-center gap-2 p-4">
-          <div className="relative">
-            <Upload className="text-primary h-5 w-5 animate-pulse" />
-            <div className="absolute inset-0 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-          </div>
-          <span className="text-muted-foreground text-center">Uploading... {uploadProgress}%</span>
-        </div>,
-      );
-    }
 
     // Render single file input with preview
     return renderUploadLabel(renderPreview(value!));
