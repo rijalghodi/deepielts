@@ -52,3 +52,10 @@ SENTRY_PROJECT=
 # It's used for authentication when uploading source maps.
 # You can also set this env variable in your own `.env` files and remove this file.
 SENTRY_AUTH_TOKEN=
+
+
+
+#-------------------------------------------------------------
+# Redis
+#-------------------------------------------------------------
+REDIS_URL=

@@ -7,7 +7,7 @@ Extract **relevant values** from JSON (number or text) and insert them into the 
 
 ## INPUT JSON:
 
-{{scoreJson}}
+{{score}}
 
 ## RULES:
 

@@ -10,6 +10,7 @@ export interface Submission {
   attachment?: string;
   questionType?: QuestionType;
   score?: IELTSScore;
+  feedback?: string;
   readonly createdAt?: Timestamp;
   readonly updatedAt?: Timestamp;
   readonly deletedAt?: Timestamp;
@@ -50,33 +51,3 @@ export type IELTSScore = {
   "GRA-2": number;
   "GRA-3": number;
 };
-
-// export type IELTSAnalysis = {
-//   score: {
-//     totalScore: number;
-//     detail: {
-//       tr: CriteriaScore;
-//       cc: CriteriaScore;
-//       lr: CriteriaScore;
-//       gra: CriteriaScore;
-//     };
-//   };
-//   feedback: FeedbackEntry[];
-// };
-
-// type CriteriaScore = {
-//   score: number;
-//   comment: string;
-//   criteria: Record<string, number>;
-// };
-
-// type FeedbackEntry = {
-//   comments: {
-//     tr: string;
-//     cc: string;
-//     lr: string;
-//     gra: string;
-//   };
-//   rewrite: string;
-//   original: string;
-// };

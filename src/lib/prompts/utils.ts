@@ -12,7 +12,7 @@ export function getScorePrompt(props: { taskType: string; question: string; answ
   return getPrompt("score", props);
 }
 
-export function getScoreParsePrompt(props: { scoreJson: string }) {
+export function getScoreParsePrompt(props: { score: string }) {
   return getPrompt("score-parse", props);
 }
 

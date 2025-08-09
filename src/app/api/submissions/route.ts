@@ -17,8 +17,10 @@ import {
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 import { handleError } from "@/server/services/interceptor";
+import { checkDailyLimit, updateDailyAttempt } from "@/server/services/rate-limiter";
+import { createSubmission } from "@/server/services/submission.service";
 
-import { authMiddleware } from "../auth/auth-middleware";
+import { authGetUser, authMiddleware } from "../auth/auth-middleware";
 
 import { AppError, AppPaginatedResponse } from "@/types/global";
 export const runtime = "nodejs";
@@ -35,11 +37,22 @@ const getSubmissionsQuerySchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Authenticate user
-    await authMiddleware(req);
+    const user = await authGetUser(req);
 
-    // @ts-expect-error: user is attached to req by authMiddleware but not typed
-    const user = req.user;
-    if (!user?.uid) throw new AppError({ message: "Unauthorized", code: 401 });
+    const isAuthenticated = !!user?.uid;
+    const dailyAttemptId = isAuthenticated ? `daily:${user.uid}` : `daily:${req.headers.get("x-forwarded-for")}`;
+
+    const limit = isAuthenticated ? 3 : 1;
+    const allowed = await checkDailyLimit(dailyAttemptId, limit);
+
+    if (!allowed) {
+      throw new AppError({
+        message: isAuthenticated
+          ? "You have reached the daily limit. You can only submit 3 submissions per day"
+          : "You have reached the daily limit. Unauthorized users can only submit 1 submission per day",
+        code: 429,
+      });
+    }
 
     const body = await req.json();
     const data = createSubmissionBodySchema.parse(body);
@@ -47,6 +60,9 @@ export async function POST(req: NextRequest) {
     const { question, answer, attachment, questionType } = data;
 
     let chartData = "None";
+
+    // Accumulate full feedback from all streams
+    let fullFeedback = "";
 
     if (questionType === QuestionType.TASK_1_ACADEMIC) {
       // Check if request is cancelled before processing
@@ -114,14 +130,9 @@ export async function POST(req: NextRequest) {
       messages: [{ role: "user", content: scorePrompt }],
     });
 
-    const scoreJson = generatedScore.choices[0].message.content;
+    const score = generatedScore.choices[0].message.content;
 
-    console.log(scoreJson);
-
-    if (!scoreJson) throw new AppError({ message: "Failed to generate score", code: 500 });
-
-    // TODO: Insert scoreJson into database
-
+    if (!score) throw new AppError({ message: "Failed to generate score", code: 500 });
     const encoder = new TextEncoder();
 
     const readable = new ReadableStream({
@@ -150,6 +161,7 @@ export async function POST(req: NextRequest) {
             const content = chunk.choices?.[0]?.delta?.content;
             if (content) {
               buffer += content;
+              fullFeedback += content;
               chunkCount++;
 
               if (chunkCount >= 10) {
@@ -167,10 +179,12 @@ export async function POST(req: NextRequest) {
         };
 
         try {
-          await streamOpenAI(getScoreParsePrompt({ scoreJson }));
+          await streamOpenAI(getScoreParsePrompt({ score }));
           controller.enqueue(encoder.encode("\n\n\n"));
+          fullFeedback += "\n\n\n";
           await streamOpenAI(detailFeedbackPrompt);
           controller.enqueue(encoder.encode("\n\n\n"));
+          fullFeedback += "\n\n\n";
           await streamOpenAI(modelEssayPrompt);
         } catch (error) {
           logger.error("POST /submissions: " + error);
@@ -182,10 +196,39 @@ export async function POST(req: NextRequest) {
             controller.enqueue(encoder.encode("\n[Error occurred during streaming]\n"));
           }
         } finally {
+          // Persist submission only if not cancelled
+          if (!(req as any).signal?.aborted && user?.uid) {
+            try {
+              // Parse score JSON
+              let parsedScore: any = undefined;
+              try {
+                parsedScore = JSON.parse(score);
+              } catch (_e) {
+                parsedScore = undefined;
+              }
+
+              await createSubmission({
+                userId: user.uid,
+                question,
+                answer,
+                attachment,
+                questionType: questionType as QuestionType,
+                score: parsedScore,
+                feedback: fullFeedback,
+              });
+            } catch (persistErr) {
+              logger.error("Failed to persist submission: " + persistErr);
+            }
+          }
+
+          // Update daily attempt count
+          await updateDailyAttempt(dailyAttemptId);
           controller.close();
         }
       },
     });
+
+    // Insert happens in the stream's finally block after streaming completes
 
     return new Response(readable, {
       headers: {
@@ -199,7 +242,7 @@ export async function POST(req: NextRequest) {
 
     // Check if the error is due to cancellation
     if (error instanceof Error && error.message === "Request cancelled") {
-      return new Response("Generation stopped by user", { status: 499 }); // 499 is "Client Closed Request"
+      throw new AppError({ message: "Generation stopped by user", code: 499 });
     }
 
     return handleError(error);
