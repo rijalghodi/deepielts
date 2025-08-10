@@ -28,7 +28,10 @@ export function middleware(request: NextRequest) {
     const decoded = verifyAccessToken(authToken.value);
 
     // Token is valid, continue to the protected route
-    return NextResponse.next();
+    if (decoded.uid) {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(new URL("/", request.url));
   } catch (error) {
     // Token is expired or invalid, redirect to home
     if (error instanceof jwt.TokenExpiredError) {

@@ -7,13 +7,14 @@ import { authMiddleware } from "@/app/api/auth/auth-middleware";
 import { handleError } from "@/server/services";
 import { getSubmission } from "@/server/services/submission.repo";
 
-export async function GET(req: NextRequest, { params }: { params: { submissionId: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ submissionId: string }> }) {
   try {
     // Authenticate user
     await authMiddleware(req);
 
     const user = (req as any).user;
-    const { submissionId } = params;
+    const params = await context.params;
+    const submissionId = params.submissionId;
 
     if (!submissionId) {
       return NextResponse.json({ error: "Submission ID is required" }, { status: 400 });
@@ -27,7 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: { submissionId
 
     return NextResponse.json({ data: submission });
   } catch (error: any) {
-    logger.error(error, `GET /submissions/${params.submissionId}`);
+    logger.error(error, `GET /submissions/:submissionId`);
     Sentry.captureException(error);
     return handleError(error);
   }

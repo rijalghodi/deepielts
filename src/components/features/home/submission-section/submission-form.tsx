@@ -209,8 +209,8 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
                   <SelectInput
                     className="sm:max-w-[300px] w-full"
                     options={[
-                      { label: "Task 1 General", value: QuestionType.TASK_1_GENERAL },
-                      { label: "Task 1 Academic", value: QuestionType.TASK_1_ACADEMIC },
+                      { label: "Task 1 (General)", value: QuestionType.TASK_1_GENERAL },
+                      { label: "Task 1 (Academic)", value: QuestionType.TASK_1_ACADEMIC },
                       { label: "Task 2", value: QuestionType.TASK_2 },
                     ]}
                     placeholder="Select Question Type"

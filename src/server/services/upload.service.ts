@@ -39,7 +39,6 @@ export async function compressImage(file: File, maxSizeMB: number = 1): Promise<
         .toBuffer();
     }
 
-    logger.info(`Image compressed from ${file.size} bytes to ${compressedBuffer.length} bytes`);
     return compressedBuffer;
   } catch (error) {
     logger.error(error, "Image compression failed");

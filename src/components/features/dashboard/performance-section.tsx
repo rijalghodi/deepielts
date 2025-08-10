@@ -222,11 +222,11 @@ export function PerformanceSectionContent({ questionType }: { questionType: stri
   }
 
   if (isError) {
-    return <div className="text-sm text-red-500">Failed to load performance</div>;
+    return <div className="text-sm text-destructive py-8 text-center">Failed to load performance</div>;
   }
 
   if (!perf) {
-    return <div className="text-sm text-red-500">No performance data</div>;
+    return <div className="text-sm text-muted-foreground py-8 text-center">No performance data</div>;
   }
 
   return (
