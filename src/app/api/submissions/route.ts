@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
     const isAuthenticated = !!user?.uid;
     const dailyAttemptId = isAuthenticated ? `daily:${user.uid}` : `daily:${req.headers.get("x-forwarded-for")}`;
 
-    const limit = isAuthenticated ? 3 : 1;
-    const allowed = await checkDailyLimit(dailyAttemptId, limit);
+    const maxAttempt = isAuthenticated ? 3 : 1;
+    const allowed = await checkDailyLimit(dailyAttemptId, maxAttempt);
 
     if (!allowed) {
       throw new AppError({

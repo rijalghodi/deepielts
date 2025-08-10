@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Switch } from "./switch";
 
 interface PricingFeature {
   name: string;
@@ -41,19 +42,13 @@ export const PricingCard = ({
   popular = false,
   highlighted = false,
   ctaText = "Get Started",
-  discount = 15,
 }: PricingCardProps) => {
-  const [billingCycle, setBillingCycle] = useState<"month" | "week" | "3-month">("week");
+  const [billingCycle, setBillingCycle] = useState<"month" | "3-month">("month");
   const [isHovered, setIsHovered] = useState(false);
 
-  const currentPrice = price
-    ? billingCycle === "month"
-      ? price.month
-      : billingCycle === "week"
-        ? price.week
-        : price["3-month"]
-    : 0;
+  const currentPrice = price ? (billingCycle === "month" ? price.month : price["3-month"]) : 0;
   const threeMonthSavings = price ? price.month * 3 - price["3-month"] : 0;
+  const discount = price ? ((threeMonthSavings / (price.month * 3)) * 100).toFixed(0) : 0;
 
   return (
     <Card
@@ -97,12 +92,17 @@ export const PricingCard = ({
             <div className="flex items-baseline gap-1.5">
               <span className="text-3xl font-bold">${currentPrice}</span>
               {price && (
-                <span className="text-muted-foreground">
-                  /{billingCycle === "month" ? "month" : billingCycle === "week" ? "week" : "3 month"}
-                </span>
+                <span className="text-muted-foreground">/{billingCycle === "month" ? "month" : "3 month"}</span>
               )}
             </div>
             {price && (
+              <div className="flex items-center gap-2">
+                {/* <span className="text-sm">1 Month</span> */}
+                <Switch onCheckedChange={(checked) => setBillingCycle(checked ? "3-month" : "month")} />
+                <span className="text-sm">3 Months</span>
+              </div>
+            )}
+            {/* {price && (
               <Select
                 value={billingCycle}
                 onValueChange={(currentValue) => {
@@ -123,7 +123,7 @@ export const PricingCard = ({
                   <SelectItem value="3-month">3 Month</SelectItem>
                 </SelectContent>
               </Select>
-            )}
+            )} */}
           </div>
 
           {billingCycle === "3-month" && (
