@@ -125,15 +125,24 @@ export async function GET(req: NextRequest) {
     const queryParams = Object.fromEntries(url.searchParams.entries());
     const validatedParams = listSubmissionsQuerySchema.parse(queryParams);
 
-    const { page, limit, questionType, sortBy, sortDir } = validatedParams;
+    const { page, limit, questionTypes } = validatedParams;
+
+    const arrayQuestionTypes = questionTypes ? (questionTypes.split(",") as QuestionType[]) : undefined;
+
+    // validate question types
+    if (arrayQuestionTypes) {
+      arrayQuestionTypes.forEach((type) => {
+        if (!Object.values(QuestionType).includes(type)) {
+          throw new AppError({ message: "Invalid question type", code: 400 });
+        }
+      });
+    }
 
     const { submissions, totalCount } = await listUserSubmissions({
       userId: user.uid,
       page,
       limit,
-      questionType: questionType as QuestionType | undefined,
-      sortBy,
-      sortDir,
+      questionTypes: arrayQuestionTypes,
       withCount: page === 1,
     });
 

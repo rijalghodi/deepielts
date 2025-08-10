@@ -63,11 +63,9 @@ export const submissionGetKey = (submissionId: string) => ["submission-get", sub
  */
 
 export const submissionList = async (q?: {
-  questionType?: QuestionType;
+  questionTypes?: QuestionType[];
   page?: number;
   limit?: number;
-  sortBy?: string;
-  sortDir?: string;
 }): Promise<PaginatedResponse<GetSubmissionResult[]> | undefined> => {
   return apiGet<PaginatedResponse<GetSubmissionResult[]> | undefined>({
     endpoint: "/submissions",

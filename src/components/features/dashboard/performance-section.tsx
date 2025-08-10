@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Line, LineChart } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import { performanceGet, performanceGetKey } from "@/lib/api/performance.api";
 import { cn } from "@/lib/utils";
@@ -25,7 +25,7 @@ type Props = {
 function StatBox({ label, value }: { label: string; value: number }) {
   return (
     <Card>
-      <CardHeader className="flex flex-row justify-between items-start">
+      <CardHeader>
         <CardDescription>{label}</CardDescription>
         <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl text-primary">
           {value}
@@ -55,7 +55,7 @@ function ScoresCard({
   const scoreItem = (abbr: string, value: number) => (
     <div className="flex items-center gap-1.5">
       <span className="text-sm font-light text-muted-foreground">{abbr}</span>
-      <span className="text-sm font-semibold tabular-nums">{value.toFixed(1)}</span>
+      <span className="text-sm font-semibold tabular-nums">{Number.isFinite(value) ? value.toFixed(1) : "0.0"}</span>
     </div>
   );
 
@@ -85,11 +85,19 @@ function ScoresCard({
 }
 
 const chartConfig: ChartConfig = {
-  OVR: { label: "Overall", color: "#2563eb" },
-  TR: { label: "TR", color: "#60a5fa" },
-  CC: { label: "CC", color: "#00FF00" },
-  LR: { label: "LR", color: "#FF0000" },
-  GRA: { label: "GRA", color: "#0000FF" },
+  OVR: { label: "Overall", color: "var(--color-chart-1)" },
+  TR: { label: "TR", color: "var(--color-chart-2)" },
+  CC: { label: "CC", color: "var(--color-chart-3)" },
+  LR: { label: "LR", color: "var(--color-chart-4)" },
+  GRA: { label: "GRA", color: "var(--color-chart-5)" },
+};
+
+const stateClasses: Record<string, string> = {
+  OVR: "data-[state=on]:bg-chart-1/5 data-[state=on]:text-chart-1 data-[state=on]:border-chart-1/50 data-[state=on]:hover:bg-chart-1/20",
+  TR: "data-[state=on]:bg-chart-2/5 data-[state=on]:text-chart-2 data-[state=on]:border-chart-2/50 data-[state=on]:hover:bg-chart-2/20",
+  CC: "data-[state=on]:bg-chart-3/5 data-[state=on]:text-chart-3 data-[state=on]:border-chart-3/50 data-[state=on]:hover:bg-chart-3/20",
+  LR: "data-[state=on]:bg-chart-4/5 data-[state=on]:text-chart-4 data-[state=on]:border-chart-4/50 data-[state=on]:hover:bg-chart-4/20",
+  GRA: "data-[state=on]:bg-chart-5/5 data-[state=on]:text-chart-5 data-[state=on]:border-chart-5/50 data-[state=on]:hover:bg-chart-5/20",
 };
 
 function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
@@ -129,13 +137,11 @@ function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
             size="sm"
             className="*:data-[slot=toggle-group-item]:!px-3"
           >
-            <ToggleGroupItem value="OVR" variant="pill">
-              Overall
-            </ToggleGroupItem>
-            <ToggleGroupItem value="TR">TR</ToggleGroupItem>
-            <ToggleGroupItem value="CC">CC</ToggleGroupItem>
-            <ToggleGroupItem value="LR">LR</ToggleGroupItem>
-            <ToggleGroupItem value="GRA">GRA</ToggleGroupItem>
+            {Object.entries(chartConfig).map(([key, value]) => (
+              <ToggleGroupItem key={key} value={key} className={stateClasses[key] || ""}>
+                {value.label || key}
+              </ToggleGroupItem>
+            ))}
           </ToggleGroup>
         </div>
       </CardHeader>
@@ -143,10 +149,50 @@ function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[250px] w-full">
           <LineChart data={data}>
-            {criteria.map((v) => (
-              <Line key={v} dataKey={v} stroke={chartConfig[v].color} />
-            ))}
-            <ChartTooltip content={<ChartTooltipContent />} />
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
+              }}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => {
+                    return new Date(value).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    });
+                  }}
+                  indicator="dot"
+                />
+              }
+            />
+            {criteria.includes("OVR") && (
+              <Line dataKey="OVR" type="monotone" stroke="var(--color-chart-1)" strokeWidth={1.5} dot={false} />
+            )}
+            {criteria.includes("TR") && (
+              <Line dataKey="TR" type="monotone" stroke="var(--color-chart-2)" strokeWidth={1.5} dot={false} />
+            )}
+            {criteria.includes("CC") && (
+              <Line dataKey="CC" type="monotone" stroke="var(--color-chart-3)" strokeWidth={1.5} dot={false} />
+            )}
+            {criteria.includes("LR") && (
+              <Line dataKey="LR" type="monotone" stroke="var(--color-chart-4)" strokeWidth={1.5} dot={false} />
+            )}
+            {criteria.includes("GRA") && (
+              <Line dataKey="GRA" type="monotone" stroke="var(--color-chart-5)" strokeWidth={1.5} dot={false} />
+            )}
           </LineChart>
         </ChartContainer>
       </CardContent>
@@ -199,7 +245,7 @@ export default function PerformanceSection({ className }: Props) {
   const [questionType, setQuestionType] = useState<string>(QuestionType.TASK_2);
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      <Tabs defaultValue={questionType} onValueChange={setQuestionType} className="hidden @[767px]/card:flex">
+      <Tabs defaultValue={questionType} onValueChange={setQuestionType}>
         <TabsList>
           <TabsTrigger value={QuestionType.TASK_2}>Task 2</TabsTrigger>
           <TabsTrigger value={QuestionType.TASK_1_ACADEMIC}>Task 1 (Academic)</TabsTrigger>

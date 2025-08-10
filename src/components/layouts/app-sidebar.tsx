@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Edit, LogOut, Palette, PieChart, Settings } from "lucide-react";
+import { Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
 
 import { logout } from "@/lib/api/auth.api";
@@ -11,13 +11,11 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -44,6 +42,11 @@ const QUICK_MENU = [
     title: "Progress",
     icon: () => <PieChart />,
     href: "/dashboard",
+  },
+  {
+    title: "History",
+    icon: () => <History />,
+    href: "/dashboard#history",
   },
 ];
 
@@ -119,27 +122,6 @@ export function AppSidebar(props: AppSidebarProps) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarSeparator />
-        {/* List */}
-        {open && (
-          <SidebarGroup>
-            <SidebarGroupLabel>History</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {submissions?.data?.items.map((item) => (
-                  <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton className="flex justify-between">
-                      <div className="whitespace-nowrap truncate overflow-hidden flex-1">
-                        {item.question?.slice(0, 30)}
-                      </div>
-                      <span className="text-xs text-muted-foreground">{item.score?.OVR || 0}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
       </SidebarContent>
       <SidebarFooter></SidebarFooter>
     </Sidebar>

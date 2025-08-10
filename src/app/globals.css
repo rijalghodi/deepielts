@@ -65,6 +65,13 @@
   --color-aside-accent-foreground: hsl(var(--aside-accent-foreground));
   --color-aside-border: hsl(var(--aside-border));
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Chart */
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
 }
 
 :root {
@@ -87,6 +94,13 @@
   --contrast-0: 0 0% 20%;
   --contrast-1: 0 0% 40%;
   --contrast-2: 0 0% 50%;
+
+  /* Chart */
+  --chart-1: 210 70% 45%;
+  --chart-2: 160 60% 40%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 55%;
+  --chart-5: 340 75% 60%;
 
   /** Theme colors */
   --background: var(--surface-0);
@@ -151,6 +165,13 @@
   --contrast-0: 0 0% 94%;
   --contrast-1: 0 0% 75%;
   --contrast-2: 0 0% 60%;
+
+  /* Chart */
+  --chart-1: 210 60% 55%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 55% 60%;
+  --chart-5: 340 65% 60%;
 
   /* Theme colors */
   --background: var(--surface-0);

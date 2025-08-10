@@ -31,7 +31,7 @@ export type GetSubmissionResult = Omit<Submission, "createdAt" | "updatedAt"> & 
 export const listSubmissionsQuerySchema = z.object({
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(10),
-  questionType: z.enum(Object.values(QuestionType) as [string, ...string[]]).optional(),
+  questionTypes: z.string().optional(),
   sortBy: z.enum(["createdAt", "analysis.score"]).default("createdAt"),
   sortDir: z.enum(["asc", "desc"]).default("desc"),
 });

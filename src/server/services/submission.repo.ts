@@ -73,13 +73,11 @@ export async function listUserSubmissions(params: {
   userId: string;
   page: number;
   limit: number;
-  questionType?: QuestionType;
-  sortBy: "createdAt" | "analysis.score";
-  sortDir: "asc" | "desc";
+  questionTypes?: QuestionType[];
   withCount?: boolean;
 }): Promise<{ submissions: GetSubmissionResult[]; totalCount: number }> {
   try {
-    const { userId, page, limit, questionType, sortBy, sortDir, withCount = true } = params;
+    const { userId, page, limit, questionTypes, withCount = true } = params;
 
     const offset = (page - 1) * limit;
 
@@ -87,19 +85,13 @@ export async function listUserSubmissions(params: {
     const submissionsRef = db.collection("users").doc(userId).collection("submissions");
     let query: Query = submissionsRef as unknown as Query;
 
-    if (questionType) {
-      query = (query as any).where("questionType", "==", questionType);
+    if (questionTypes) {
+      query = query.where("questionType", "in", questionTypes);
     }
 
-    if (sortBy === "analysis.score") {
-      query = (query as any).orderBy("analysis.score.totalScore", sortDir);
-    } else {
-      query = (query as any).orderBy("createdAt", sortDir);
-    }
+    query = query.orderBy("createdAt", "desc").offset(offset).limit(limit);
 
-    query = (query as any).offset(offset).limit(limit);
-
-    const submissionsSnapshot = await (query as any).get();
+    const submissionsSnapshot = await query.get();
 
     let totalCount = 0;
     if (withCount) {
@@ -108,8 +100,8 @@ export async function listUserSubmissions(params: {
         .doc(userId)
         .collection("submissions")
         .select("id", "question", "answer", "score", "questionType");
-      const countSnapshot = questionType
-        ? await countQuery.where("questionType", "==", questionType).get()
+      const countSnapshot = questionTypes
+        ? await countQuery.where("questionType", "in", questionTypes).get()
         : await countQuery.get();
       totalCount = countSnapshot.size;
     }
