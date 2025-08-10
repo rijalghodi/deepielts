@@ -26,13 +26,14 @@ export const uploadFile = async ({
   file,
   onUploadProgress,
   signal,
+  folder,
 }: UploadFileRequest): Promise<UploadFileResponse | undefined> => {
   const data = new FormData();
 
-  const typedFile = new File([file], file.name, { type: file.type });
-
-  data.append("file", typedFile);
-  data.append("folder", "commons");
+  data.append("file", file);
+  if (folder) {
+    data.append("folder", folder);
+  }
 
   return apiPost<UploadFileResponse, UploadFileRequest>({
     endpoint: "/upload",

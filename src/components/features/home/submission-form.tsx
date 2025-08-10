@@ -85,7 +85,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
         appendAnalysis(submissionData.feedback);
       }
     }
-  }, [submissionData, form, appendAnalysis, clearAnalysis]);
+  }, [submissionData]);
 
   // Debounced function to save form data to localStorage
   const saveFormData = (data: z.infer<typeof schema>) => {
