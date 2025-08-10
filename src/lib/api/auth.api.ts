@@ -49,4 +49,5 @@ export const refreshToken = async () => {
 export const logout = async () => {
   await apiPost({ endpoint: "/auth/logout" });
   localStorage.setItem(AUTH_CHANGED_KEY, Date.now().toString());
+  window.location.href = "/";
 };
