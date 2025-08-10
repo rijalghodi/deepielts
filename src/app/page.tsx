@@ -1,5 +1,3 @@
-"use client";
-
 import { Suspense } from "react";
 
 import { CtaSection } from "@/components/features/home/cta-section";
