@@ -34,7 +34,7 @@ export function GoogleButton(props: Props) {
       if (!idToken) return;
       await loadUser();
       localStorage.setItem(AUTH_CHANGED_KEY, Date.now().toString());
-      router.push("/");
+      router.refresh();
     },
   });
 

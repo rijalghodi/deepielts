@@ -1,7 +1,7 @@
 import { Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
 
-import { logout } from "@/lib/api/auth.api";
+import { useLogout } from "@/lib/api/auth.api";
 
 import {
   Sidebar,
@@ -52,6 +52,7 @@ type AppSidebarProps = {
 };
 
 export function AppSidebar(props: AppSidebarProps) {
+  const { logout } = useLogout();
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader className="">

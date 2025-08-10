@@ -1,3 +1,4 @@
+import ms, { StringValue } from "ms";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
       userData = newUser;
     }
 
-    const jwtToken = signAccessToken({
+    const jwtToken = await signAccessToken({
       uid,
       email: decodedToken.email as string,
       name: userData.name,
@@ -53,11 +54,11 @@ export async function POST(req: NextRequest) {
     (await cookies()).set(ACCESS_TOKEN_KEY, jwtToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN,
+      maxAge: ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "7d") / 1000,
       path: "/",
     });
 
-    const refreshToken = signRefreshToken({
+    const refreshToken = await signRefreshToken({
       uid,
       email: decodedToken.email as string,
       name: userData.name,
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
     (await cookies()).set(REFRESH_TOKEN_KEY, refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN,
+      maxAge: ms((env.JWT_REFRESH_EXPIRES_IN as StringValue) || "60d") / 1000,
       path: "/",
     });
 

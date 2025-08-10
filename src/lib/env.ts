@@ -12,8 +12,7 @@ export const clientEnv = createEnv({
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: z.string(),
     NEXT_PUBLIC_FIREBASE_APP_ID: z.string(),
     NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string().optional(),
-    NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN: z.number().optional(),
-    NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN: z.number().optional(),
+
     NEXT_PUBLIC_DIFY_WORKFLOW_URL: z.string(),
   },
   runtimeEnv: {
@@ -26,8 +25,6 @@ export const clientEnv = createEnv({
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-    NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN: process.env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN ?? 60 * 60 * 24,
-    NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN: process.env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN ?? 60 * 60 * 24 * 30,
     NEXT_PUBLIC_DIFY_WORKFLOW_URL: process.env.NEXT_PUBLIC_DIFY_WORKFLOW_URL,
   },
 });
@@ -38,18 +35,24 @@ export const serverEnv = createEnv({
     FIREBASE_ADMIN_PRIVATE_KEY: z.string(),
     JWT_ACCESS_SECRET: z.string(),
     JWT_REFRESH_SECRET: z.string(),
+    JWT_ACCESS_EXPIRES_IN: z.string().optional(),
+    JWT_REFRESH_EXPIRES_IN: z.string().optional(),
     RESEND_API_KEY: z.string(),
     DIFY_API_KEY: z.string(),
     OPENAI_API_KEY: z.string(),
+    REDIS_URL: z.string(),
   },
   runtimeEnv: {
     FIREBASE_ADMIN_CLIENT_EMAIL: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
     FIREBASE_ADMIN_PRIVATE_KEY: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
+    JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN ?? "7d",
+    JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN ?? "60d",
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     DIFY_API_KEY: process.env.DIFY_API_KEY,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    REDIS_URL: process.env.REDIS_URL,
   },
 });
 

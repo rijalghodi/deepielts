@@ -195,7 +195,12 @@ export default function HistorySection({ className }: Props) {
             {Math.min(currentPage * ITEMS_PER_PAGE, pagination.totalCount)} of {pagination.totalCount} submissions
           </div>
         )}
-        <Pagination currentPage={currentPage} totalPages={10} onPageChange={handlePageChange} isLoading={isLoading} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          isLoading={isLoading}
+        />
       </div>
 
       {/* Submission View Sheet */}

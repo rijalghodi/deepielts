@@ -1,9 +1,9 @@
-import jwt from "jsonwebtoken";
+import { jwtVerify, SignJWT } from "jose";
 
 import { env } from "./env";
 
-const ACCESS_SECRET = env.JWT_ACCESS_SECRET!;
-const REFRESH_SECRET = env.JWT_REFRESH_SECRET!;
+const ACCESS_SECRET = new TextEncoder().encode(env.JWT_ACCESS_SECRET!);
+const REFRESH_SECRET = new TextEncoder().encode(env.JWT_REFRESH_SECRET!);
 
 export type JwtPayload = {
   uid: string;
@@ -18,14 +18,32 @@ export type JwtDecode = JwtPayload & {
   iat: number;
 };
 
-export const signAccessToken = (payload: JwtPayload) =>
-  jwt.sign(payload, ACCESS_SECRET, { expiresIn: env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN as any, algorithm: "HS256" });
+export const signAccessToken = async (payload: JwtPayload) => {
+  return await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(env.JWT_ACCESS_EXPIRES_IN!) // e.g., "7d"
+    .sign(ACCESS_SECRET);
+};
 
-export const verifyAccessToken = (token: string) =>
-  jwt.verify(token, ACCESS_SECRET, { algorithms: ["HS256"] }) as JwtDecode;
+export const verifyAccessToken = async (token: string): Promise<JwtDecode> => {
+  const { payload } = await jwtVerify(token, ACCESS_SECRET, {
+    algorithms: ["HS256"],
+  });
+  return payload as JwtDecode;
+};
 
-export const signRefreshToken = (payload: JwtPayload) =>
-  jwt.sign(payload, REFRESH_SECRET, { expiresIn: env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN as any, algorithm: "HS256" });
+export const signRefreshToken = async (payload: JwtPayload) => {
+  return await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(env.JWT_REFRESH_EXPIRES_IN!) // e.g., "60d"
+    .sign(REFRESH_SECRET);
+};
 
-export const verifyRefreshToken = (token: string) =>
-  jwt.verify(token, REFRESH_SECRET, { algorithms: ["HS256"] }) as JwtDecode;
+export const verifyRefreshToken = async (token: string): Promise<JwtDecode> => {
+  const { payload } = await jwtVerify(token, REFRESH_SECRET, {
+    algorithms: ["HS256"],
+  });
+  return payload as JwtDecode;
+};

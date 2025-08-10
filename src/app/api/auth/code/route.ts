@@ -1,3 +1,4 @@
+import ms, { StringValue } from "ms";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
@@ -90,29 +91,29 @@ export async function POST(req: NextRequest) {
     };
 
     // Create JWT token
-    const jwtToken = signAccessToken(userPayload);
+    const jwtToken = await signAccessToken(userPayload);
 
     // Set JWT in HttpOnly cookie
     (await cookies()).set(ACCESS_TOKEN_KEY, jwtToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN,
+      maxAge: ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "7d") / 1000,
       path: "/",
     });
 
-    const refreshToken = signRefreshToken(userPayload);
+    const refreshToken = await signRefreshToken(userPayload);
 
     (await cookies()).set(REFRESH_TOKEN_KEY, refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN,
+      maxAge: ms((env.JWT_REFRESH_EXPIRES_IN as StringValue) || "60d") / 1000,
       path: "/",
     });
 
     userData.accessToken = jwtToken;
-    userData.accessTokenExpiresAt = new Date(Date.now() + (env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN || 0) * 1000);
+    userData.accessTokenExpiresAt = new Date(Date.now() + ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "7d"));
     userData.refreshToken = refreshToken;
-    userData.refreshTokenExpiresAt = new Date(Date.now() + (env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN || 0) * 1000);
+    userData.refreshTokenExpiresAt = new Date(Date.now() + ms((env.JWT_REFRESH_EXPIRES_IN as StringValue) || "60d"));
 
     return NextResponse.json(new AppResponse({ data: userData, message: "Code verified" }));
   } catch (error: any) {
