@@ -9,7 +9,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { AuthHeader } from "@/components/auth/auth-header";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { IconGoogle } from "@/components/ui/icon-google";
@@ -95,8 +94,6 @@ export function SignupForm() {
 
   return (
     <div className="flex flex-col gap-8 p-6 w-full max-w-[440px] border-0 shadow-none rounded-xl">
-      <AuthHeader title="Create an account" />
-
       <div className="flex flex-col gap-6">
         <Button variant="outline" size="lg" className="w-full" onClick={handleGoogleSignup}>
           <IconGoogle />
