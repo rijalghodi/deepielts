@@ -53,7 +53,7 @@ function SubmissionGrid({
     return (
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {[...Array(5)].map((_, i) => (
-          <Skeleton key={i} className="h-24 w-full" />
+          <Skeleton key={i} className="h-[150px] w-full rounded-lg" />
         ))}
       </div>
     );
@@ -68,10 +68,10 @@ function SubmissionGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 items-stretch">
       {submissions.map((submission) => (
         <button key={submission.id} onClick={() => onSubmissionClick(submission)} className="text-left">
-          <Card className="py-4 hover:bg-accent">
+          <Card className="py-4 hover:bg-accent h-full">
             <CardContent className="px-4 text-left">
               <p className="text-sm font-medium mb-2">
                 {QUESTION_TYPES.find((type) => type.value === submission.questionType)?.label}
@@ -100,7 +100,11 @@ function SubmissionGrid({
 }
 
 export default function HistorySection({ className }: Props) {
-  const [questionTypes, setQuestionTypes] = useState<string[]>([QuestionType.TASK_2]);
+  const [questionTypes, setQuestionTypes] = useState<string[]>([
+    QuestionType.TASK_2,
+    QuestionType.TASK_1_ACADEMIC,
+    QuestionType.TASK_1_GENERAL,
+  ]);
   const [selectedSubmission, setSelectedSubmission] = useState<GetSubmissionResult | null>(null);
 
   const { data, isLoading, isError } = useQuery({

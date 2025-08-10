@@ -1,13 +1,16 @@
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
-import { verifyAccessToken } from "@/lib/jwt";
+// import { verifyAccessToken } from "@/lib/jwt";
 
-export function middleware(request: NextRequest) {
+import logger from "./lib/logger";
+import { env } from "./lib/env";
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if the pathname is in the protected routes
   const protectedRoutes = ["/dashboard"];
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
 
@@ -15,25 +18,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Get the access token from cookies
   const authToken = request.cookies.get(ACCESS_TOKEN_KEY);
 
   if (!authToken) {
-    // No token found, redirect to home
     return NextResponse.redirect(new URL("/", request.url));
   }
 
   try {
-    // Verify the JWT token
-    const decoded = verifyAccessToken(authToken.value);
+    await jwtVerify(authToken.value, new TextEncoder().encode(env.JWT_ACCESS_SECRET!));
 
-    // Token is valid, continue to the protected route
-    if (decoded.uid) {
-      return NextResponse.next();
-    }
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.next();
   } catch (error) {
-    // Token is expired or invalid, redirect to home
+    logger.error(error, "Middleware Error");
+
     if (error instanceof jwt.TokenExpiredError) {
       return NextResponse.redirect(new URL("/", request.url));
     }

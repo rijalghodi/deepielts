@@ -19,11 +19,13 @@ export type JwtDecode = JwtPayload & {
 };
 
 export const signAccessToken = (payload: JwtPayload) =>
-  jwt.sign(payload, ACCESS_SECRET, { expiresIn: env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN as any });
+  jwt.sign(payload, ACCESS_SECRET, { expiresIn: env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN as any, algorithm: "HS256" });
 
-export const verifyAccessToken = (token: string) => jwt.verify(token, ACCESS_SECRET) as JwtDecode;
+export const verifyAccessToken = (token: string) =>
+  jwt.verify(token, ACCESS_SECRET, { algorithms: ["HS256"] }) as JwtDecode;
 
 export const signRefreshToken = (payload: JwtPayload) =>
-  jwt.sign(payload, REFRESH_SECRET, { expiresIn: env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN as any });
+  jwt.sign(payload, REFRESH_SECRET, { expiresIn: env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN as any, algorithm: "HS256" });
 
-export const verifyRefreshToken = (token: string) => jwt.verify(token, REFRESH_SECRET) as JwtDecode;
+export const verifyRefreshToken = (token: string) =>
+  jwt.verify(token, REFRESH_SECRET, { algorithms: ["HS256"] }) as JwtDecode;
