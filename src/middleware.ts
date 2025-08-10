@@ -1,12 +1,12 @@
+import { jwtVerify } from "jose";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
 
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
-// import { verifyAccessToken } from "@/lib/jwt";
 
-import logger from "./lib/logger";
 import { env } from "./lib/env";
+// import { verifyAccessToken } from "@/lib/jwt";
+import logger from "./lib/logger";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

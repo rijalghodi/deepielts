@@ -11,7 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Pagination } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
+import { State } from "@/components/ui/states";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 import { GetSubmissionResult } from "@/server/dto/submission.dto";
@@ -34,6 +36,8 @@ const QUESTION_TYPES = [
   },
 ];
 
+const ITEMS_PER_PAGE = 10;
+
 type Props = {
   className?: string;
 };
@@ -52,7 +56,7 @@ function SubmissionGrid({
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {[...Array(5)].map((_, i) => (
+        {[...Array(ITEMS_PER_PAGE)].map((_, i) => (
           <Skeleton key={i} className="h-[150px] w-full rounded-lg" />
         ))}
       </div>
@@ -60,11 +64,11 @@ function SubmissionGrid({
   }
 
   if (isError) {
-    return <div className="text-sm text-destructive py-8 text-center">Failed to load submission history</div>;
+    return <State title="Failed to load submission history" icon="error" />;
   }
 
   if (!submissions || submissions.length === 0) {
-    return <div className="text-sm text-center py-8 text-muted-foreground">No submissions found</div>;
+    return <State title="No submissions found" icon="empty" />;
   }
 
   return (
@@ -106,13 +110,30 @@ export default function HistorySection({ className }: Props) {
     QuestionType.TASK_1_GENERAL,
   ]);
   const [selectedSubmission, setSelectedSubmission] = useState<GetSubmissionResult | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["submission-list", questionTypes],
-    queryFn: () => submissionList({ questionTypes: questionTypes.join(",") }),
+    queryKey: ["submission-list", questionTypes, currentPage],
+    queryFn: () =>
+      submissionList({
+        questionTypes: questionTypes.join(","),
+        page: currentPage,
+        limit: ITEMS_PER_PAGE,
+      }),
   });
 
   const submissions = data?.data?.items || [];
+  const pagination = data?.data?.pagination;
+  const totalPages = pagination?.totalPages || 1;
+
+  // Reset to first page when question types change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [questionTypes]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className={cn("flex flex-col gap-5", className)}>
@@ -164,6 +185,18 @@ export default function HistorySection({ className }: Props) {
         isError={isError}
         onSubmissionClick={setSelectedSubmission}
       />
+
+      {/* Pagination */}
+      <div className="flex gap-2 justify-between">
+        {/* Results count */}
+        {pagination && (
+          <div className="text-xs text-muted-foreground">
+            Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
+            {Math.min(currentPage * ITEMS_PER_PAGE, pagination.totalCount)} of {pagination.totalCount} submissions
+          </div>
+        )}
+        <Pagination currentPage={currentPage} totalPages={10} onPageChange={handlePageChange} isLoading={isLoading} />
+      </div>
 
       {/* Submission View Sheet */}
       {selectedSubmission && (

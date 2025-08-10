@@ -11,6 +11,7 @@ import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle }
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { State } from "@/components/ui/states";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -222,11 +223,11 @@ export function PerformanceSectionContent({ questionType }: { questionType: stri
   }
 
   if (isError) {
-    return <div className="text-sm text-destructive py-8 text-center">Failed to load performance</div>;
+    return <State title="Failed to load your progress" icon="error" />;
   }
 
   if (!perf) {
-    return <div className="text-sm text-muted-foreground py-8 text-center">No performance data</div>;
+    return <State title="No progress data" icon="empty" />;
   }
 
   return (
