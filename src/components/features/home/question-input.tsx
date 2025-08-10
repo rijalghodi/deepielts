@@ -85,7 +85,7 @@ export function QuestionInput({ taskType }: Props) {
                   />
                   {/* TOOL */}
                   <div className="flex flex-wrap items-center justify-center w-full gap-2">
-                    {taskType !== QuestionType.TASK_1_ACADEMIC && (
+                    {taskType !== QuestionType.TASK_1_ACADEMIC && !field.value && (
                       <Button variant="outline" size="sm" onClick={handleGenerateQuestion}>
                         <WandSparkles /> Generate Question
                       </Button>

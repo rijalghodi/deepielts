@@ -17,6 +17,8 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { GetSubmissionResult } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models";
 
+import SubmissionView from "./submission-view";
+
 const QUESTION_TYPES = [
   {
     label: "Task 2",
@@ -121,10 +123,12 @@ function SubmissionGrid({
   submissions,
   isLoading,
   isError,
+  onSubmissionClick,
 }: {
   submissions: GetSubmissionResult[];
   isLoading?: boolean;
   isError?: boolean;
+  onSubmissionClick: (submission: GetSubmissionResult) => void;
 }) {
   if (isLoading) {
     return (
@@ -155,8 +159,8 @@ function SubmissionGrid({
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
       {submissions.map((submission) => (
-        <button key={submission.id}>
-          <Card key={submission.id} className="py-4 hover:bg-accent">
+        <button key={submission.id} onClick={() => onSubmissionClick(submission)} className="text-left">
+          <Card className="py-4 hover:bg-accent">
             <CardContent className="px-4 text-left">
               <p className="text-sm font-medium mb-2">
                 {QUESTION_TYPES.find((type) => type.value === submission.questionType)?.label}
@@ -186,10 +190,11 @@ function SubmissionGrid({
 
 export default function HistorySection({ className }: Props) {
   const [questionTypes, setQuestionTypes] = useState<string[]>([QuestionType.TASK_2]);
+  const [selectedSubmission, setSelectedSubmission] = useState<GetSubmissionResult | null>(null);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["submission-list", questionTypes],
-    queryFn: () => submissionList({ questionTypes: questionTypes as QuestionType[] }),
+    queryFn: () => submissionList({ questionTypes: questionTypes.join(",") }),
   });
 
   const submissions = data?.data?.items || [];
@@ -238,7 +243,33 @@ export default function HistorySection({ className }: Props) {
         </DropdownMenu>
       </div>
 
-      <SubmissionGrid submissions={submissions} isLoading={isLoading} isError={isError} />
+      <SubmissionGrid
+        submissions={submissions}
+        isLoading={isLoading}
+        isError={isError}
+        onSubmissionClick={setSelectedSubmission}
+      />
+
+      {/* Submission View Sheet */}
+      {selectedSubmission && (
+        <SubmissionView
+          isOpen={!!selectedSubmission}
+          onClose={() => setSelectedSubmission(null)}
+          question={selectedSubmission.question || ""}
+          answer={selectedSubmission.answer || ""}
+          date={
+            selectedSubmission.createdAt
+              ? new Date(selectedSubmission.createdAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "N/A"
+          }
+          feedback={selectedSubmission.feedback || ""}
+          id={selectedSubmission.id}
+        />
+      )}
     </div>
   );
 }

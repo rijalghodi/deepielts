@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
 
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
-import { QuestionType, Submission } from "@/server/models/submission";
+import { Submission } from "@/server/models/submission";
 
 import { apiGet, apiPost } from "./utils";
 
@@ -63,7 +63,7 @@ export const submissionGetKey = (submissionId: string) => ["submission-get", sub
  */
 
 export const submissionList = async (q?: {
-  questionTypes?: QuestionType[];
+  questionTypes?: string;
   page?: number;
   limit?: number;
 }): Promise<PaginatedResponse<GetSubmissionResult[]> | undefined> => {

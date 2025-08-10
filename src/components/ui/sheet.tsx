@@ -57,9 +57,9 @@ function SheetContent({
         className={cn(
           "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 transition ease-in-out duration-300",
           side === "right" &&
-            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 w-screen sm:w-2/3",
+            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 w-screen sm:w-1/2",
           side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-screen sm:w-2/3",
+            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-screen sm:w-1/2",
           side === "top" &&
             "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto",
           side === "bottom" &&
@@ -82,7 +82,7 @@ function SheetContent({
         >
           {children}
           {withClose && (
-            <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
+            <SheetPrimitive.Close className="data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none">
               <XIcon className="size-4" />
               <span className="sr-only">Close</span>
             </SheetPrimitive.Close>

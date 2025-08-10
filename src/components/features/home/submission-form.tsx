@@ -17,6 +17,7 @@ import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
 import { LoadingBar } from "@/components/ui/loading-bar";
 import { SelectInput } from "@/components/ui/select-input";
 
+import { GetSubmissionResult } from "@/server/dto/submission.dto";
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 
@@ -27,11 +28,12 @@ const schema = createSubmissionBodySchema;
 
 type Props = {
   onSuccess?: (data: any) => void;
+  submissionData?: GetSubmissionResult;
 };
 
 const FORM_STORAGE_KEY = "ielts_submission_form_data";
 
-export function SubmissionForm({ onSuccess }: Props) {
+export function SubmissionForm({ onSuccess, submissionData }: Props) {
   const { appendAnalysis, clearAnalysis, setGenerating, setError, generating, setAbortController, stopGeneration } =
     useAIAnalysisStore();
   const { setOpen, setOpenMobile } = useAside();
@@ -66,6 +68,24 @@ export function SubmissionForm({ onSuccess }: Props) {
       attachment: undefined,
     },
   });
+
+  // Populate form when submissionData is available
+  useEffect(() => {
+    if (submissionData) {
+      form.reset({
+        question: submissionData.question || "",
+        answer: submissionData.answer || "",
+        questionType: submissionData.questionType,
+        attachment: submissionData.attachment,
+      });
+
+      // Also populate the AI analysis store with existing feedback
+      if (submissionData.feedback) {
+        clearAnalysis();
+        appendAnalysis(submissionData.feedback);
+      }
+    }
+  }, [submissionData, form, appendAnalysis, clearAnalysis]);
 
   // Debounced function to save form data to localStorage
   const saveFormData = (data: z.infer<typeof schema>) => {
@@ -175,7 +195,7 @@ export function SubmissionForm({ onSuccess }: Props) {
     >
       <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-5 w-full relative">
         <div className="hidden sm:block absolute top-0 right-0 -rotate-10 text-foreground">
-          <div className="font-bold text-lg">Try this out</div>
+          <div className="font-bold text-lg">{submissionData ? "Retry this test" : "Try this out"}</div>
           <DoodleArrow width={90} height={80} />
         </div>
         <Form {...form}>

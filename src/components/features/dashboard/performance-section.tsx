@@ -54,7 +54,7 @@ function ScoresCard({
 }) {
   const scoreItem = (abbr: string, value: number) => (
     <div className="flex items-center gap-1.5">
-      <span className="text-sm font-light text-muted-foreground">{abbr}</span>
+      <span className="text-sm text-muted-foreground">{abbr}</span>
       <span className="text-sm font-semibold tabular-nums">{Number.isFinite(value) ? value.toFixed(1) : "0.0"}</span>
     </div>
   );

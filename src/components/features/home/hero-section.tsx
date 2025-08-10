@@ -13,42 +13,34 @@ import { Badge } from "@/components/ui/badge";
 export function HeroSection() {
   const { user } = useAuth();
   return (
-    <div className={cn("space-y-6 lg:space-y-8 items-center", user && "space-y-6")}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="flex justify-center"
-      >
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className={cn("space-y-6 lg:space-y-8 items-center")}
+    >
+      <div className="flex justify-center">
         <Badge variant="light" size="lg">
           <Sparkles className="w-4 h-4 text-primary" />
           <span>{APP_NAME}</span>
         </Badge>
-      </motion.div>
+      </div>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+      <h1
         className={cn(
           "text-[36px] md:text-[60px] lg:text-[64px] leading-tight tracking-normal font-semibold text-center",
           user && "text-[28px] md:text-[36px] lg:text-[40px] leading-snug",
         )}
       >
         IELTS Writing Checker <br /> <span className="text-primary">Powered by AI</span>
-      </motion.h1>
+      </h1>
 
-      <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className={cn("text-lg md:text-2xl text-center text-muted-foreground", user && "text-lg md:text-xl")}
-      >
-        Instant feedback. Band 9 insights. Improve fast.
-      </motion.p>
-    </div>
+      {!user && (
+        <p className={cn("text-lg md:text-2xl text-center text-muted-foreground")}>
+          Instant feedback. Band 9 insights. Improve fast.
+        </p>
+      )}
+    </motion.div>
   );
 }
