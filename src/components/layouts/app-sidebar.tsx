@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Edit, LogOut, Palette, PieChart, Settings } from "lucide-react";
+import Link from "next/link";
 
 import { logout } from "@/lib/api/auth.api";
 import { submissionList, submissionListKey } from "@/lib/api/submission.api";
@@ -37,10 +38,12 @@ const QUICK_MENU = [
   {
     title: "New Check",
     icon: () => <Edit />,
+    href: "/",
   },
   {
     title: "Progress",
     icon: () => <PieChart />,
+    href: "/dashboard",
   },
 ];
 
@@ -105,9 +108,11 @@ export function AppSidebar(props: AppSidebarProps) {
             <SidebarMenu>
               {QUICK_MENU.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton>
-                    <item.icon />
-                    <span>{item.title}</span>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.href}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

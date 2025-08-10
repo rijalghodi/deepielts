@@ -44,7 +44,7 @@ const plans: PricingCardProps[] = [
   },
 ];
 
-export default function PricingSection() {
+export function PricingSection() {
   return (
     <div className="w-full">
       {/* Title */}

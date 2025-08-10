@@ -8,7 +8,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
-import { AuthDialog } from "@/features/auth/login/auth-dialog";
+import { AuthDialog } from "@/components/features/auth/login/auth-dialog";
 
 import { ASIDE_WIDTH, useAside } from "../ui/aside";
 import { Button } from "../ui/button";

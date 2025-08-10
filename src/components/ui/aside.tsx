@@ -218,7 +218,7 @@ function Aside({
           data-aside="aside"
           data-slot="aside-inner"
           className={cn(
-            "relative group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-xl group-data-[variant=floating]:border group-data-[variant=floating]:shadow-lg",
+            "bg-aside relative group-data-[variant=floating]:border-aside-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-xl group-data-[variant=floating]:border group-data-[variant=floating]:shadow-lg",
             className,
           )}
         >

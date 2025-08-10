@@ -38,7 +38,7 @@ export const inputVariants = cva(
     variants: {
       focusStyle: {
         none: "focus-within:border-border focus-within:ring-0",
-        default: "focus-within:border-ring data-[state=open]:border-ring",
+        default: "focus-within:border-ring/50 data-[state=open]:border-ring/50",
       },
     },
     defaultVariants: {

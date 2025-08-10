@@ -43,7 +43,7 @@ const faqs = [
   },
 ];
 
-export default function FaqSection() {
+export function FaqSection() {
   return (
     <>
       <div className="w-full">

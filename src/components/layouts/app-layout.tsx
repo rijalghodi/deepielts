@@ -1,6 +1,8 @@
 "use client";
 
 import { Bot, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
@@ -64,11 +66,22 @@ const SidebarMobileTriggerButton = () => {
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+  const pathname = usePathname();
+
+  const { setOpen, setOpenMobile } = useAside();
+  const isDashboard = pathname === "/";
+
+  useEffect(() => {
+    if (!isDashboard) {
+      setOpen(false);
+      setOpenMobile(false);
+    }
+  }, [isDashboard]);
 
   return (
     <>
       {user && <AppSidebar userName={user.name} />}
-      <AsideTriggerButton />
+      {isDashboard && <AsideTriggerButton />}
       <SidebarMobileTriggerButton />
       <SidebarInset>
         <AsideInset>
@@ -105,48 +118,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </AsideInset>
       </SidebarInset>
-      <AIAside />
+      {isDashboard && <AIAside />}
     </>
   );
-
-  // return (
-  //   <div className="relative w-screen">
-  //     {user && <AppSidebar userName={user.name} />}
-
-  //     <SidebarInset>
-  //       <AppHeader />
-  // <div
-  //   className={cn("relative w-screen transition-[padding-left] duration-200 ease-linear overflow-hidden")}
-  //   style={{
-  //     paddingLeft: isMobile ? "0" : open && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0",
-  //     paddingTop: 60,
-  //   }}
-  // >
-  //   <FallingStarsBackground className="z-0" />
-  //   <div
-  //     style={{
-  //       background: "radial-gradient(at center, rgba(255, 255, 255, 0.03), transparent 50%)",
-  //       width: 1200,
-  //       height: 1200,
-  //       borderRadius: "100%",
-  //       transform: "translate(-50%, -50%)",
-  //     }}
-  //     className={`absolute top-0 left-0 z-0`}
-  //   />
-  //   <div
-  //     style={{
-  //       background: "radial-gradient(at center, rgba(255, 255, 255, 0.03), transparent 50%)",
-  //       width: 1200,
-  //       height: 1200,
-  //       borderRadius: "100%",
-  //       transform: "translate(50%, -50%)",
-  //     }}
-  //     className={`absolute top-0 right-0 z-0`}
-  //   />
-  //   {children}
-  //   <AppFooter />
-  // </div>
-  //     </SidebarInset>
-  //   </div>
-  // );
 }

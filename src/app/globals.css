@@ -64,6 +64,7 @@
   --color-aside-accent: hsl(var(--aside-accent));
   --color-aside-accent-foreground: hsl(var(--aside-accent-foreground));
   --color-aside-border: hsl(var(--aside-border));
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 :root {
@@ -106,7 +107,7 @@
   --destructive: var(--destructive-0);
   --destructive-foreground: var(--light);
   --border: var(--surface-4);
-  --input: var(--surface-1);
+  --input: var(--surface-4);
   --ring: var(--primary-0);
   --radius: 0.75rem;
   --success: var(--success-0);
