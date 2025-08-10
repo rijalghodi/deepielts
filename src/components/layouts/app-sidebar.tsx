@@ -1,9 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
 
 import { logout } from "@/lib/api/auth.api";
-import { submissionList, submissionListKey } from "@/lib/api/submission.api";
 
 import {
   Sidebar,
@@ -17,7 +15,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
@@ -55,12 +52,6 @@ type AppSidebarProps = {
 };
 
 export function AppSidebar(props: AppSidebarProps) {
-  const { open } = useSidebar();
-  const { data: submissions } = useQuery({
-    queryKey: submissionListKey(),
-    queryFn: () => submissionList({ page: 1, limit: 10 }),
-  });
-
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader className="">
