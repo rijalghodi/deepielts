@@ -159,8 +159,8 @@ function Aside({
           data-aside="aside"
           data-slot="aside"
           data-mobile="true"
-          className="text-aside-foreground [&>button]:hidden"
-          containerClassName="sm:w-(--aside-width)"
+          className="bg-aside text-aside-foreground w-(--aside-width) p-0 [&>button]:hidden"
+          // containerClassName="sm:w-(--aside-width)"
           style={
             {
               "--aside-width": ASIDE_WIDTH_MOBILE,
