@@ -21,7 +21,6 @@ export interface PricingCardProps {
   description?: string;
   price?: {
     month: number;
-    week: number;
     "3-month": number;
   };
   features?: PricingFeature[];

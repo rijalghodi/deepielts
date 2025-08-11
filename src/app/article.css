@@ -27,7 +27,7 @@
 }
 
 .article ul {
-  @apply list-disc list-inside mb-6 ml-4;
+  @apply list-disc mb-6 ml-4;
 }
 
 .article li {

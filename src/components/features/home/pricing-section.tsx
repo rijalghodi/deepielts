@@ -18,10 +18,9 @@ const plans: PricingCardProps[] = [
     description: "Try core features for free",
     features: [
       { name: "1000+ IELTS Practice Questions", included: true },
-      { name: "3 Basic IELTS Writing Scoring", included: true },
-      { name: "Wait time between two scoring: 3 minute", included: true },
-      { name: "Advanced & In-Depth Feedback", included: false },
-      { name: "Export result to word file", included: false },
+      { name: "3 IELTS Writing Scoring per day", included: true },
+      { name: "Advanced & In-Depth Feedback", included: true },
+      // { name: "Export result to PDF file", included: true },
     ],
   },
   {
@@ -30,16 +29,14 @@ const plans: PricingCardProps[] = [
     popular: true,
     highlighted: true,
     price: {
-      week: 2,
       month: 4,
       "3-month": 8,
     },
     features: [
       { name: "1000+ IELTS Practice Questions", included: true },
-      { name: "Unlimited Basic IELTS Writing Scoring", included: true },
-      { name: "Wait time between two scoring: 1 minute", included: true },
+      { name: "Unlimited IELTS Writing Scoring", included: true },
       { name: "Advanced & In-Depth Feedback", included: true },
-      { name: "Export result to word file", included: true },
+      // { name: "Export result to PDF file", included: true },
     ],
   },
 ];

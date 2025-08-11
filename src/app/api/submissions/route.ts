@@ -22,12 +22,9 @@ export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
-    // Authenticate user
     const user = await authGetUser();
-
     const isAuthenticated = !!user?.uid;
     const dailyAttemptId = isAuthenticated ? `daily:${user.uid}` : `daily:${req.headers.get("x-forwarded-for")}`;
-
     const maxAttempt = isAuthenticated ? 3 : 1;
     const allowed = await checkDailyLimit(dailyAttemptId, maxAttempt);
 
@@ -42,7 +39,6 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const data = createSubmissionBodySchema.parse(body);
-
     const { question, answer, attachment, questionType } = data;
 
     const attachmentInsight = await generateChartDataIfNeeded({
@@ -51,7 +47,6 @@ export async function POST(req: NextRequest) {
       signal: (req as any).signal,
     });
 
-    // Check if request is cancelled before generating score
     if ((req as any).signal?.aborted) {
       throw new Error("Request cancelled");
     }
@@ -64,6 +59,11 @@ export async function POST(req: NextRequest) {
       signal: (req as any).signal,
     });
 
+    let onCompleteResolve: () => void;
+    const onCompletePromise = new Promise<void>((resolve) => {
+      onCompleteResolve = resolve;
+    });
+
     const readable = createFeedbackReadableStream({
       signal: (req as any).signal,
       scoreText: score,
@@ -72,29 +72,42 @@ export async function POST(req: NextRequest) {
       answer,
       attachmentInsight,
       onComplete: async (fullFeedback: string) => {
-        if (!(req as any).signal?.aborted && user?.uid) {
-          const parsedScore = parseScoreJson(score);
+        try {
+          if (!(req as any).signal?.aborted && user?.uid) {
+            const parsedScore = parseScoreJson(score);
 
-          const submission = await createSubmission({
-            userId: user.uid,
-            question,
-            answer,
-            attachment,
-            questionType: questionType as QuestionType,
-            score: parsedScore,
-            feedback: fullFeedback,
-          });
+            const submission = await createSubmission({
+              userId: user.uid,
+              question,
+              answer,
+              attachment,
+              questionType: questionType as QuestionType,
+              score: parsedScore,
+              feedback: fullFeedback,
+            });
 
-          if (!submission) {
-            throw new AppError({ message: "Failed to persist submission", code: 500 });
+            if (!submission) {
+              throw new AppError({ message: "Failed to persist submission", code: 500 });
+            }
+
+            await updateDailyAttempt(dailyAttemptId);
           }
-
-          await updateDailyAttempt(dailyAttemptId);
+        } finally {
+          onCompleteResolve();
         }
       },
     });
 
-    return new Response(readable, {
+    // Pipe the readable into a TransformStream so we can wait before closing
+    const { readable: stream, writable } = new TransformStream();
+    readable.pipeTo(writable);
+
+    // Wait for onComplete before closing stream
+    onCompletePromise.then(() => {
+      // No-op here — the stream ends naturally when readable ends
+    });
+
+    return new Response(stream, {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
         "Transfer-Encoding": "chunked",
@@ -104,7 +117,6 @@ export async function POST(req: NextRequest) {
     logger.error(error, "POST /submissions");
     Sentry.captureException(error);
 
-    // Check if the error is due to cancellation
     if (error instanceof Error && error.message === "Request cancelled") {
       throw new AppError({ message: "Generation stopped by user", code: 499 });
     }
