@@ -104,7 +104,7 @@ const stateClasses: Record<string, string> = {
 function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
   const [criteria, setCriteria] = useState<string[]>(["OVR"]);
 
-  const [timeRange, setTimeRange] = useState("7d");
+  const [timeRange, setTimeRange] = useState("1h");
 
   return (
     <Card>
@@ -119,7 +119,7 @@ function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="7d" className="rounded-lg">
+              <SelectItem value="1h" className="rounded-lg">
                 Last 7 days
               </SelectItem>
               <SelectItem value="30d" className="rounded-lg">

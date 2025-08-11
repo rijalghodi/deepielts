@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
     (await cookies()).set(ACCESS_TOKEN_KEY, jwtToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "7d") / 1000,
+      maxAge: ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "1h") / 1000,
       path: "/",
     });
 
@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     });
 
     userData.accessToken = jwtToken;
-    userData.accessTokenExpiresAt = new Date(Date.now() + ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "7d"));
+    userData.accessTokenExpiresAt = new Date(Date.now() + ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "1h"));
     userData.refreshToken = refreshToken;
     userData.refreshTokenExpiresAt = new Date(Date.now() + ms((env.JWT_REFRESH_EXPIRES_IN as StringValue) || "60d"));
 

@@ -22,7 +22,7 @@ export const signAccessToken = async (payload: JwtPayload) => {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime(env.JWT_ACCESS_EXPIRES_IN!) // e.g., "7d"
+    .setExpirationTime(env.JWT_ACCESS_EXPIRES_IN!) // e.g., "1h"
     .sign(ACCESS_SECRET);
 };
 

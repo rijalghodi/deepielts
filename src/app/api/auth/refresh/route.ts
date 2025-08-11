@@ -1,9 +1,10 @@
+import ms, { StringValue } from "ms";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
 import { env } from "@/lib/env";
-import { JwtDecode, signAccessToken, signRefreshToken, verifyRefreshToken } from "@/lib/jwt";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "@/lib/jwt";
 import logger from "@/lib/logger";
 
 import { handleError } from "@/server/services";
@@ -15,27 +16,27 @@ export async function POST(_: Request) {
   if (!refreshToken) throw new AppError({ message: "Unauthorized", code: 401 });
 
   try {
-    const jwtDecode = verifyRefreshToken(refreshToken) as JwtDecode;
+    const jwtDecode = await verifyRefreshToken(refreshToken);
 
     if (!jwtDecode) throw new AppError({ message: "Invalid token" });
 
     const { exp, iat, ...payload } = jwtDecode;
 
     // Reissue a new token
-    const newAccessToken = signAccessToken(payload);
-    const newRefreshToken = signRefreshToken(payload);
+    const newAccessToken = await signAccessToken(payload);
+    const newRefreshToken = await signRefreshToken(payload);
 
     (await cookies()).set(ACCESS_TOKEN_KEY, newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: env.NEXT_PUBLIC_JWT_ACCESS_EXPIRES_IN,
+      maxAge: ms((env.JWT_ACCESS_EXPIRES_IN as StringValue) || "1h") / 1000,
       path: "/",
     });
 
     (await cookies()).set(REFRESH_TOKEN_KEY, newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: env.NEXT_PUBLIC_JWT_REFRESH_EXPIRES_IN,
+      maxAge: ms((env.JWT_REFRESH_EXPIRES_IN as StringValue) || "60d") / 1000,
       path: "/",
     });
     return NextResponse.json(new AppResponse({ data: payload, message: "Token refreshed" }));
