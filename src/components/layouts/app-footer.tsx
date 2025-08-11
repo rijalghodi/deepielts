@@ -15,10 +15,13 @@ export default function AppFooter() {
           <Link href="/" className="hover:underline text-sm">
             Home
           </Link>
-          <Link href="/privacy" className="hover:underline text-sm">
+          <Link href="/pricing" className="hover:underline text-sm">
+            Pricing
+          </Link>
+          <Link href="/privacy-policy" className="hover:underline text-sm">
             Privacy
           </Link>
-          <Link href="/terms" className="hover:underline text-sm">
+          <Link href="/terms-of-service" className="hover:underline text-sm">
             Terms
           </Link>
         </nav>
