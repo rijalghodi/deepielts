@@ -15,7 +15,6 @@ import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
 import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
-import { FallingStarsBackground } from "../ui/falling-stars-bg";
 
 const AsideTriggerButton = () => {
   const { isMobile, open, openMobile } = useAside();
@@ -86,36 +85,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <SidebarInset>
         <AsideInset>
           <AppHeader />
-          <div
+          <main
             className={cn("relative transition-[padding-left] duration-200 ease-linear overflow-hidden")}
             style={{
               paddingTop: 60,
             }}
           >
-            <FallingStarsBackground className="z-0" />
-            <div
-              style={{
-                background: "radial-gradient(at center, rgba(255, 255, 255, 0.03), transparent 50%)",
-                width: 1200,
-                height: 1200,
-                borderRadius: "100%",
-                transform: "translate(-50%, -50%)",
-              }}
-              className={`absolute top-0 left-0 z-0`}
-            />
-            <div
-              style={{
-                background: "radial-gradient(at center, rgba(255, 255, 255, 0.03), transparent 50%)",
-                width: 1200,
-                height: 1200,
-                borderRadius: "100%",
-                transform: "translate(50%, -50%)",
-              }}
-              className={`absolute top-0 right-0 z-0`}
-            />
             {children}
             <AppFooter />
-          </div>
+          </main>
         </AsideInset>
       </SidebarInset>
       {isDashboard && <AIAside />}

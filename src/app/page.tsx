@@ -8,20 +8,44 @@ import { PricingSection } from "@/components/features/home/pricing-section";
 import { SubmissionSection } from "@/components/features/home/submission-section";
 import { TestimonialSection } from "@/components/features/home/testimonial-section";
 import { VsTraditionalSection } from "@/components/features/home/vs-traditional-section";
+import { FallingStarsBackground } from "@/components/ui/falling-stars-bg";
 
 export default function Home() {
   return (
     <>
       <div className="flex flex-col gap-0 relative">
-        <section className="max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-16 sm:pt-8 pb-8">
-          <HeroSection />
-        </section>
+        <div className="relative w-full">
+          <FallingStarsBackground className="z-0" />
+          <div
+            style={{
+              background: "radial-gradient(at center, rgba(255, 255, 255, 0.03), transparent 50%)",
+              width: 1200,
+              height: 1200,
+              borderRadius: "100%",
+              transform: "translate(-50%, -50%)",
+            }}
+            className={`absolute top-0 left-0 z-0`}
+          />
+          <div
+            style={{
+              background: "radial-gradient(at center, rgba(255, 255, 255, 0.03), transparent 50%)",
+              width: 1200,
+              height: 1200,
+              borderRadius: "100%",
+              transform: "translate(50%, -50%)",
+            }}
+            className={`absolute top-0 right-0 z-0`}
+          />
+          <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-16 sm:pt-8 pb-8">
+            <HeroSection />
+          </section>
 
-        <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden">
-          <Suspense>
-            <SubmissionSection />
-          </Suspense>
-        </section>
+          <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden">
+            <Suspense>
+              <SubmissionSection />
+            </Suspense>
+          </section>
+        </div>
 
         <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-lg mx-auto">

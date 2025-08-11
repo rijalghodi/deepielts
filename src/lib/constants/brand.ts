@@ -25,6 +25,8 @@ export const APP_KEYWORDS = [
   "Deep IELTS",
 ];
 
+export const APP_EMAIL = "rijalghodi.dev@gmail.com";
+
 export const APP_SOCIAL_LINKS = {
   twitter: "https://rijalghodi.xyz/",
   youtube: "https://rijalghodi.xyz/",
@@ -40,6 +42,7 @@ export const BRAND_CONSTANTS = {
   APP_TAGLINE,
   APP_DESCRIPTION,
   APP_KEYWORDS,
+  APP_EMAIL,
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
 };
