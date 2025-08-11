@@ -159,7 +159,7 @@ function Aside({
           data-aside="aside"
           data-slot="aside"
           data-mobile="true"
-          className="bg-aside text-aside-foreground w-(--aside-width) p-0 [&>button]:hidden"
+          className="bg-aside text-aside-foreground w-full sm:w-(--aside-width) p-0 [&>button]:hidden"
           // containerClassName="sm:w-(--aside-width)"
           style={
             {

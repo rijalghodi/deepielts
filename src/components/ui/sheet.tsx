@@ -66,13 +66,13 @@ function SheetContent({
             "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto",
           variant === "floating" && "p-2.5",
           // containerClassName,
-          className,
+          // className,
         )}
         {...props}
       >
         <div
           className={cn(
-            "relative flex flex-col h-full w-full shadow-lg bg-background overflow-hidden",
+            "relative flex flex-col h-full shadow-lg bg-background overflow-hidden w-screen sm:w-full",
             side === "right" && "border-l",
             side === "left" && "border-r",
             side === "top" && "border-b",

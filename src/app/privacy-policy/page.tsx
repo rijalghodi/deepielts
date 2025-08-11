@@ -3,7 +3,7 @@ import { BRAND_CONSTANTS } from "@/lib/constants";
 export default function PrivacyPolicyPage() {
   return (
     <div className="bg-background relative w-full px-5 sm:px-6">
-      <div className="article mx-auto px-4 py-8 max-w-screen-lg">
+      <div className="article mx-auto max-w-screen-lg py-8">
         <h1 className="text-center">Privacy Policy</h1>
 
         <p>
