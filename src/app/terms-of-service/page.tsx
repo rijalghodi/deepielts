@@ -4,7 +4,7 @@ export default function TermsOfServicePage() {
   return (
     <div className="bg-background relative w-full px-5 sm:px-6">
       <div className="article mx-auto px-4 py-8 max-w-screen-lg">
-        <h1>Terms of Service</h1>
+        <h1 className="text-center">Terms of Service</h1>
 
         <p>
           Welcome to Deep IELTS. These Terms of Service govern your use of our IELTS writing assessment service. By
