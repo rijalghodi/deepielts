@@ -2,6 +2,7 @@ import { Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react
 import Link from "next/link";
 
 import { useLogout } from "@/lib/api/auth.api";
+import { useIsMobile } from "@/hooks";
 
 import {
   Sidebar,
@@ -29,7 +30,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useIsMobile } from "@/hooks";
 
 const QUICK_MENU = [
   {

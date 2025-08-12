@@ -1,16 +1,14 @@
 "use client";
 
-import { AlertCircle, Bot, FileText, Loader, XIcon } from "lucide-react";
+import { AlertCircle, Bot, DownloadIcon, FileText, Loader, XIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
 
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
 import { Button } from "../ui/button";
+import { MarkdownRenderer } from "../ui/markdown-renderer";
 
 function NoAnalysis() {
   return (
@@ -99,15 +97,13 @@ function AIOutput() {
 
   return (
     <div className="relative ai-output">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-        {analysis}
-      </ReactMarkdown>
+      <MarkdownRenderer markdownContent={analysis} />
     </div>
   );
 }
 
 export function AIAside() {
-  const { analysis, generating, error } = useAIAnalysisStore();
+  const { analysis, generating, error, pdfUrl } = useAIAnalysisStore();
   const contentRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [autoScroll, setAutoScroll] = useState(true);
@@ -125,7 +121,7 @@ export function AIAside() {
     if (!container) return;
 
     const handleScroll = () => {
-      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 40;
+      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 20;
       setAutoScroll(atBottom);
     };
 
@@ -147,9 +143,16 @@ export function AIAside() {
       </AsideHeader>
       <AsideContent ref={contentRef}>
         <AIOutput />
-        <div className="flex-none h-20 w-full" ref={messagesEndRef} />
+        <div className="flex-none h-12 w-full" ref={messagesEndRef} />
       </AsideContent>
-      {analysis && !generating && !error && <AsideFooter>{/* <DownloadButton /> */}</AsideFooter>}
+      {analysis && !generating && !error && pdfUrl && (
+        <AsideFooter className="flex flex-col items-center justify-center gap-2 w-full">
+          <Button variant="outline" size="sm" onClick={() => window.open(pdfUrl, "_blank")}>
+            <DownloadIcon className="w-4 h-4" />
+            Download PDF
+          </Button>
+        </AsideFooter>
+      )}
     </Aside>
   );
 }

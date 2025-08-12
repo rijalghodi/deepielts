@@ -6,6 +6,8 @@ type Store = {
   setAnalysis: (analysis: string) => void;
   appendAnalysis: (chunk: string) => void;
   clearAnalysis: () => void;
+  pdfUrl: string | null;
+  setPdfUrl: (pdfUrl: string | null) => void;
   generating: boolean;
   setGenerating: (generating: boolean) => void;
   error: string | null;
@@ -25,6 +27,8 @@ export const useAIAnalysisStore = create<Store>()(
         set({ analysis: currentAnalysis + chunk });
       },
       clearAnalysis: () => set({ analysis: null, error: null }),
+      pdfUrl: null,
+      setPdfUrl: (pdfUrl) => set({ pdfUrl }),
       generating: false,
       setGenerating: (generating) => set({ generating }),
       error: null,

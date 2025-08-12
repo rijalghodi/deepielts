@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 import { SettingsBoard } from "./settings-borad";
 

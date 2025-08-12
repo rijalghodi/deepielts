@@ -2,6 +2,10 @@
   @apply text-xs;
 }
 
+.ai-output *[data-visibility="hidden"] {
+  @apply hidden;
+}
+
 .ai-output p,
 .ai-output h1,
 .ai-output h2,

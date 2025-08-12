@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export type InputImageProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {
   name?: string;
   label?: string;
-  value?: string;
+  value?: string | null;
   error?: boolean;
   maxFileSizeMB?: number;
   onResetFile?: () => void;
@@ -17,6 +17,7 @@ export type InputImageProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 
   disabled?: boolean;
   readOnly?: boolean;
   folder?: string;
+  maxSizeMB?: number;
 };
 
 const ACCEPT_TYPES = "image/png,image/jpeg,image/jpg,image/svg+xml,image/webp";
@@ -35,6 +36,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
       readOnly,
       placeholder = "Drag & drop image here, or click to select",
       folder,
+      maxSizeMB,
       ...props
     },
     ref,
@@ -77,6 +79,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
             setUploadProgress(Math.floor((progress.loaded / (progress.total || 1)) * 100));
           },
           folder,
+          maxSizeMB,
         });
 
         const url = res?.data?.url;

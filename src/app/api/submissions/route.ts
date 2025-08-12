@@ -4,14 +4,15 @@ import { NextRequest, NextResponse } from "next/server";
 import logger from "@/lib/logger";
 
 import { createSubmissionBodySchema, listSubmissionsQuerySchema } from "@/server/dto/submission.dto";
-import { QuestionType } from "@/server/models/submission";
+import { QuestionType, Submission } from "@/server/models/submission";
 import { handleError } from "@/server/services/interceptor";
-import { checkDailyLimit, updateDailyAttempt } from "@/server/services/rate-limiter";
+import { incrementDailyUsage, isBelowDailyLimit } from "@/server/services/rate-limiter";
 import { createSubmission, listUserSubmissions } from "@/server/services/submission.repo";
 import {
   createFeedbackReadableStream,
   generateChartDataIfNeeded,
   generateScore,
+  insertFeedbackToSubmission,
   parseScoreJson,
 } from "@/server/services/submission.service";
 
@@ -24,14 +25,16 @@ export async function POST(req: NextRequest) {
   try {
     const user = await authGetUser();
     const isAuthenticated = !!user?.uid;
-    const dailyAttemptId = isAuthenticated ? `daily:${user.uid}` : `daily:${req.headers.get("x-forwarded-for")}`;
-    const maxAttempt = isAuthenticated ? 3 : 1;
-    const allowed = await checkDailyLimit(dailyAttemptId, maxAttempt);
+    const submitDailyId = isAuthenticated
+      ? `submit-daily:${user.uid}`
+      : `submit-daily:${req.headers.get("x-forwarded-for")}`;
+    const maxSubmissions = isAuthenticated ? 3 : 1;
+    const allowed = await isBelowDailyLimit(submitDailyId, maxSubmissions);
 
     if (!allowed) {
       throw new AppError({
         message: isAuthenticated
-          ? "Daily limit reached. You can submit up to 3 times per day."
+          ? "Daily limit reached. You can submit up to 3 times per day. Upgrade to get more submissions."
           : "Daily limit reached. Guests can submit only once per day. Sign in to get 3 submissions daily.",
         code: 429,
       });
@@ -59,6 +62,23 @@ export async function POST(req: NextRequest) {
       signal: (req as any).signal,
     });
 
+    let submission: Submission | null = null;
+    if (user?.uid) {
+      const parsedScore = parseScoreJson(score);
+      submission = await createSubmission({
+        userId: user.uid,
+        question,
+        answer,
+        attachment: attachment || undefined,
+        questionType: questionType as QuestionType,
+        score: parsedScore,
+      });
+
+      if (!submission) {
+        throw new AppError({ message: "Failed to persist submission", code: 500 });
+      }
+    }
+
     let onCompleteResolve: () => void;
     const onCompletePromise = new Promise<void>((resolve) => {
       onCompleteResolve = resolve;
@@ -71,41 +91,28 @@ export async function POST(req: NextRequest) {
       question,
       answer,
       attachmentInsight,
+      submissionId: submission?.id || "temp",
       onComplete: async (fullFeedback: string) => {
         try {
-          if (!(req as any).signal?.aborted && user?.uid) {
-            const parsedScore = parseScoreJson(score);
-
-            const submission = await createSubmission({
+          if (!(req as any).signal?.aborted && user?.uid && submission) {
+            // Insert the generated feedback to the submission
+            await insertFeedbackToSubmission({
               userId: user.uid,
-              question,
-              answer,
-              attachment,
-              questionType: questionType as QuestionType,
-              score: parsedScore,
+              submissionId: submission.id,
               feedback: fullFeedback,
             });
-
-            if (!submission) {
-              throw new AppError({ message: "Failed to persist submission", code: 500 });
-            }
-
-            await updateDailyAttempt(dailyAttemptId);
           }
         } finally {
           onCompleteResolve();
+          await incrementDailyUsage(submitDailyId);
         }
       },
     });
 
-    // Pipe the readable into a TransformStream so we can wait before closing
     const { readable: stream, writable } = new TransformStream();
-    readable.pipeTo(writable);
+    const pipePromise = readable.pipeTo(writable);
 
-    // Wait for onComplete before closing stream
-    onCompletePromise.then(() => {
-      // No-op here — the stream ends naturally when readable ends
-    });
+    onCompletePromise.finally(() => pipePromise.catch(() => {}));
 
     return new Response(stream, {
       headers: {

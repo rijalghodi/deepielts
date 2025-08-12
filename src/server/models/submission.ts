@@ -4,17 +4,17 @@ import { User } from "./user";
 
 export interface Submission {
   id: string;
-  answer?: string;
-  question?: string;
-  attachment?: string;
-  questionType?: QuestionType;
-  score?: IELTSScore;
-  feedback?: string;
-  pdfUrl?: string;
+  questionType: QuestionType;
+  question: string;
+  answer: string;
+  attachment: string | null;
+  score: IELTSScore | null;
+  feedback: string | null;
+  pdfUrl: string | null;
   readonly createdAt?: Timestamp;
   readonly updatedAt?: Timestamp;
   readonly deletedAt?: Timestamp;
-  user?: User;
+  user?: User | null;
 }
 
 export enum QuestionType {

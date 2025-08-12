@@ -4,6 +4,7 @@ import { ACCESS_TOKEN_KEY } from "@/lib/constants";
 
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
 import { Submission } from "@/server/models/submission";
+import { UploadedFile } from "@/server/models/upload";
 
 import { apiGet, apiPost } from "./utils";
 
@@ -80,20 +81,9 @@ export const submissionListKey = (practiceId?: string, userId?: string) => ["sub
 /**
  * Generate PDF from submission feedback
  */
-export const submissionGeneratePDF = async (
-  submissionId: string,
-  fileName?: string,
-): Promise<
-  | ApiResponse<{
-      pdfUrl: string;
-      submissionId: string;
-      fileName: string;
-      isExisting: boolean;
-    }>
-  | undefined
-> => {
+export const submissionGeneratePDF = async (submissionId: string): Promise<ApiResponse<UploadedFile> | undefined> => {
   return apiPost({
     endpoint: `/submissions/${submissionId}/pdf`,
-    data: { fileName },
+    pathParams: { submissionId },
   });
 };

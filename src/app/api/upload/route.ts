@@ -1,63 +1,65 @@
+import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
 
-import { storage } from "@/lib/firebase/firebase-admin";
 import logger from "@/lib/logger";
 
 import { handleError } from "@/server/services/interceptor";
-import { compressImage } from "@/server/services/upload.service";
+import { incrementDailyUsage, isBelowDailyLimit } from "@/server/services/rate-limiter";
+import { uploadFileToStorage } from "@/server/services/upload.service";
 
-import { AppResponse } from "@/types";
+import { authGetUser } from "../auth/auth-middleware";
+
+import { AppError, AppResponse } from "@/types";
+
+const MAX_FILE_SIZE = 1 * 1024 * 1024;
+const MAX_FILE_UPLOAD_PER_DAY = 1;
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    const folder = formData.get("folder") as string | null;
+    const folder = (formData.get("folder") as string) ?? "commons";
 
     if (!file) {
-      return NextResponse.json({ error: "Missing 'file' in form data" }, { status: 400 });
+      throw new AppError({ message: "Missing 'file' in form data", code: 400 });
     }
 
-    const bucket = storage.bucket("gs://deep-ielts-7f8fa.firebasestorage.app");
-
-    const originalName = (file as any).name || "file";
-    const extFromName = originalName.includes(".") ? originalName.split(".").pop() : undefined;
-    const extFromType = file.type ? file.type.split("/")[1] : undefined;
-    const extension = (extFromName || extFromType || "bin").replace(/^\./, "");
-    const baseName = originalName.replace(/\.[^/.]+$/, "");
-    const uniqueFileName = `${baseName || "file"}_${uuidv4()}.${extension}`;
-
-    // Compress image if it's an image file
-    let buffer: Buffer;
-    if (file.type.startsWith("image/")) {
-      buffer = await compressImage(file, 1); // Compress to max 1MB
-    } else {
-      const arrayBuffer = await file.arrayBuffer();
-      buffer = Buffer.from(arrayBuffer);
+    if (file.size > MAX_FILE_SIZE) {
+      throw new AppError({ message: `File size exceeds ${MAX_FILE_SIZE} bytes`, code: 400 });
     }
 
-    const path = folder ? `${folder}/${uniqueFileName}` : uniqueFileName;
-    const newFile = bucket.file(path);
+    // Check daily limit
+    const user = await authGetUser();
+    const isAuthenticated = !!user?.uid;
+    const dailyAttemptId = isAuthenticated
+      ? `file-upload:${user.uid}`
+      : `file-upload:${req.headers.get("x-forwarded-for")}`;
+    const allowed = await isBelowDailyLimit(dailyAttemptId, MAX_FILE_UPLOAD_PER_DAY);
 
-    await newFile.save(buffer, {
-      contentType: file.type || "application/octet-stream",
-      metadata: {
-        firebaseStorageDownloadTokens: uuidv4(),
-      },
+    if (!allowed) {
+      throw new AppError({
+        message: `Daily limit reached. Upload max ${MAX_FILE_UPLOAD_PER_DAY} files/day.`,
+        code: 429,
+      });
+    }
+
+    const uploadedFile = await uploadFileToStorage({
+      file: Buffer.from(await file.arrayBuffer()),
+      folder,
+      contentType: file.type,
+      fileName: file.name,
     });
 
-    const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(
-      newFile.name,
-    )}?alt=media`;
+    await incrementDailyUsage(dailyAttemptId);
 
     return NextResponse.json(
       new AppResponse({
-        data: { url: publicUrl, name: uniqueFileName, path: newFile.name, folder },
+        data: uploadedFile,
       }),
     );
   } catch (error) {
     logger.error(error, "POST /upload");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }

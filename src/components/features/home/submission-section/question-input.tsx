@@ -50,6 +50,7 @@ export function QuestionInput({ taskType }: Props) {
                     value={field.value}
                     onChange={field.onChange}
                     folder="task-1-academic"
+                    maxSizeMB={0.5}
                   />
                 </FormControl>
                 <FormMessage />

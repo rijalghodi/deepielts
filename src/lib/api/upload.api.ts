@@ -4,6 +4,8 @@ import { toast } from "sonner";
 
 import { apiGet, apiPost } from "@/lib/api";
 
+import { compressImage } from "../utils/compress-image";
+
 import { ApiResponse } from "@/types";
 
 export type UploadFileRequest = {
@@ -13,6 +15,7 @@ export type UploadFileRequest = {
   onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
   signal?: GenericAbortSignal;
   folder?: string;
+  maxSizeMB?: number;
 };
 
 export type UploadFileResponse = ApiResponse<{
@@ -27,10 +30,18 @@ export const uploadFile = async ({
   onUploadProgress,
   signal,
   folder,
+  maxSizeMB = 1,
 }: UploadFileRequest): Promise<UploadFileResponse | undefined> => {
   const data = new FormData();
 
-  data.append("file", file);
+  // Compress image if it's an image
+  if (file.type.startsWith("image/")) {
+    file = await compressImage(file, maxSizeMB);
+    data.append("file", file);
+  } else {
+    data.append("file", file);
+  }
+
   if (folder) {
     data.append("folder", folder);
   }

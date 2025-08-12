@@ -17,10 +17,20 @@ export async function createSubmission(
     userId: string;
     score?: Submission["score"];
     feedback?: string;
+    pdfUrl?: string;
   },
 ): Promise<Submission> {
   try {
-    const { userId, question, answer, attachment, questionType, score, feedback } = params;
+    const {
+      userId,
+      question,
+      answer,
+      attachment = null,
+      questionType,
+      score = null,
+      feedback = null,
+      pdfUrl = null,
+    } = params;
 
     const submissionRef = db.collection("users").doc(userId).collection("submissions").doc();
 
@@ -32,6 +42,7 @@ export async function createSubmission(
       questionType,
       score,
       feedback,
+      pdfUrl,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     };

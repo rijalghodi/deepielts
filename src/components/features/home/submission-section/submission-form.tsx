@@ -1,13 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import matter from "gray-matter";
 import { Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { submissionCreateStream } from "@/lib/api/submission.api";
+import { submissionCreateStream, submissionGeneratePDF } from "@/lib/api/submission.api";
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { useAside } from "@/components/ui/aside";
@@ -39,8 +40,17 @@ type Props = {
 const FORM_STORAGE_KEY = "ielts_submission_form_data";
 
 export function SubmissionForm({ onSuccess, submissionData }: Props) {
-  const { appendAnalysis, clearAnalysis, setGenerating, setError, generating, setAbortController, stopGeneration } =
-    useAIAnalysisStore();
+  const {
+    appendAnalysis,
+    clearAnalysis,
+    setGenerating,
+    setError,
+    generating,
+    setAbortController,
+    stopGeneration,
+    analysis,
+    setPdfUrl,
+  } = useAIAnalysisStore();
   const { setOpen, setOpenMobile } = useAside();
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -126,6 +136,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
   }, [watchedValues]);
 
   const handleSubmit = async (values: z.infer<typeof schema>) => {
+    let localAnalysis = "";
     let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
 
     try {
@@ -138,6 +149,10 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       // Create AbortController for this request
       const abortController = new AbortController();
       setAbortController(abortController);
+
+      if (values.questionType !== QuestionType.TASK_1_ACADEMIC) {
+        values.attachment = null;
+      }
 
       const stream = await submissionCreateStream(values, abortController.signal);
 
@@ -158,6 +173,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
 
           const chunk = decoder.decode(value, { stream: true });
           appendAnalysis(chunk);
+          localAnalysis += chunk;
         }
       } finally {
         if (reader) {
@@ -165,8 +181,17 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
         }
       }
 
+      const { data } = matter(localAnalysis || "");
+      const submissionId = data?.submissionId?.trim();
+
+      if (submissionId) {
+        const pdf = await submissionGeneratePDF(submissionId);
+        setPdfUrl(pdf?.data?.url || null);
+      }
+
       setGenerating(false);
       setAbortController(null);
+
       onSuccess?.({ success: true });
     } catch (error: any) {
       console.error("Submission error:", error);
