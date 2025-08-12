@@ -261,7 +261,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
 
           <div className="flex justify-center gap-2">
             <Button
-              variant="default"
+              variant="glow"
               className="flex-1"
               type="submit"
               size="xl"
