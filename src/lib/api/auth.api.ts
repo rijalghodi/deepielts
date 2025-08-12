@@ -7,6 +7,8 @@ import { AUTH_CHANGED_KEY } from "../constants/brand";
 
 import { ApiResponse } from "@/types";
 
+export const AUTH_ME_QUERY_KEY = ["auth-me"] as const;
+
 // Send email code
 export const requestEmailCode = async (email: string) => {
   return apiGet({

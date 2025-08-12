@@ -6,21 +6,19 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { updateUser } from "@/lib/api/auth.api";
+import { AUTH_ME_QUERY_KEY, updateUser } from "@/lib/api/auth.api";
 import { useAuth } from "@/lib/contexts/auth-context";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const USER_QUERY_KEY = ["user"] as const;
-
 interface AccountFormData {
   name: string;
 }
 
 export function ChangeUserForm() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const queryClient = useQueryClient();
 
   const {
@@ -41,42 +39,31 @@ export function ChangeUserForm() {
     }
   }, [user?.name, reset]);
 
-  const updateNameMutation = useMutation({
-    mutationFn: async (newName: string) => {
-      await updateUser({ name: newName });
-      return newName;
+  const { mutate: updateUserMutate, isPending } = useMutation({
+    mutationFn: async (user: { name: string }) => {
+      updateUser(user);
+      return user;
     },
-    onMutate: async (newName) => {
-      await queryClient.cancelQueries({ queryKey: USER_QUERY_KEY });
 
-      const previousUser = queryClient.getQueryData(USER_QUERY_KEY);
-
-      queryClient.setQueryData(USER_QUERY_KEY, (old: any) => ({
-        ...old,
-        name: newName,
-      }));
-
-      return { previousUser };
+    onError: (error) => {
+      toast.error("Failed to update profile", {
+        description: error.message,
+      });
     },
-    onError: (_, __, context) => {
-      if (context?.previousUser) {
-        queryClient.setQueryData(USER_QUERY_KEY, context.previousUser);
-      }
-      toast.error("Failed to update name. Please try again.");
-    },
-    onSuccess: (newName) => {
+    onSuccess: (newUserData) => {
       toast.success("Profile updated");
-      reset({ name: newName });
-      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
+      reset({ name: newUserData.name });
+      queryClient.invalidateQueries({ queryKey: AUTH_ME_QUERY_KEY });
+      queryClient.setQueryData(AUTH_ME_QUERY_KEY, newUserData);
+      if (user && newUserData) {
+        setUser({ ...user, name: newUserData.name });
+      }
     },
   });
 
   const onSubmit = (data: AccountFormData) => {
     if (!user) return;
-    updateNameMutation.mutate(data.name.trim());
+    updateUserMutate({ name: data.name.trim() });
   };
 
   const handleReset = () => {
@@ -110,13 +97,13 @@ export function ChangeUserForm() {
         </div>
 
         <div className="flex gap-2">
-          <Button type="submit" size="sm" disabled={!isDirty || !isValid || updateNameMutation.isPending}>
-            {updateNameMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            {updateNameMutation.isPending ? "Updating..." : "Update Profile"}
+          <Button type="submit" size="sm" disabled={!isDirty || !isValid || isPending}>
+            {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {isPending ? "Updating..." : "Update Profile"}
           </Button>
 
           {isDirty && (
-            <Button type="button" variant="outline" onClick={handleReset} disabled={updateNameMutation.isPending}>
+            <Button type="button" variant="outline" onClick={handleReset} disabled={isPending}>
               Reset
             </Button>
           )}
