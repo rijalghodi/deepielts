@@ -1,6 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+type AppError = {
+  message: string;
+  name: string;
+};
+
 type Store = {
   analysis: string | null;
   setAnalysis: (analysis: string) => void;
@@ -10,8 +15,8 @@ type Store = {
   setPdfUrl: (pdfUrl: string | null) => void;
   generating: boolean;
   setGenerating: (generating: boolean) => void;
-  error: string | null;
-  setError: (error: string | null) => void;
+  error: AppError | null;
+  setError: (error: AppError | null) => void;
   abortController: AbortController | null;
   setAbortController: (controller: AbortController | null) => void;
   stopGeneration: () => void;

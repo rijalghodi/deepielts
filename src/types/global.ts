@@ -2,9 +2,11 @@ export class AppError {
   ok = false;
   message?: string;
   code?: number;
-  constructor(p: { message: string; code?: number }) {
+  name?: string;
+  constructor(p: { message: string; code?: number; name?: string }) {
     this.message = p.message;
     this.code = p.code;
+    this.name = p.name;
   }
 }
 

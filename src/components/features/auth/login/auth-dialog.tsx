@@ -2,6 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import React, { useState } from "react";
+import { create } from "zustand";
 
 import { APP_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -19,16 +20,26 @@ import { GoogleButton } from "./google-button";
 import { LoginForm } from "./login-form";
 import { VerifyCodeForm } from "./verify-code-form";
 
+type State = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+export const useAuthDialog = create<State>((set) => ({
+  open: false,
+  onOpenChange: (open) => set({ open }),
+}));
+
 type Props = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children?: React.ReactNode;
 };
 
-export function AuthDialog({ open: openProp, onOpenChange, children }: Props) {
+export function AuthDialog({ children }: Props) {
+  const { open, onOpenChange } = useAuthDialog();
   const [email, setEmail] = useState<string>("");
 
-  const open = openProp;
   const [step, setStep] = useState<"login" | "code">("code");
 
   const handleOpenChange = (open: boolean) => {

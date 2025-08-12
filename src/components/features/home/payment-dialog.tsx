@@ -7,22 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 
 type State = {
-  isOpen: boolean;
-  open: () => void;
-  close: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
 export const usePaymentDialog = create<State>((set) => ({
-  isOpen: false,
-  open: () => set({ isOpen: true }),
-  close: () => set({ isOpen: false }),
+  open: false,
+  onOpenChange: (open) => set({ open }),
 }));
 
 export function PaymentDialog() {
-  const { isOpen, close } = usePaymentDialog();
+  const { open, onOpenChange } = usePaymentDialog();
 
   return (
-    <Dialog open={isOpen} onOpenChange={close}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         {/* <DialogHeader></DialogHeader> */}
         <DialogTitle className="flex flex-col items-center gap-4">

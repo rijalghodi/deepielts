@@ -7,6 +7,8 @@ import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
+import { useAuthDialog } from "../features/auth/login/auth-dialog";
+import { usePaymentDialog } from "../features/home/payment-dialog";
 import { Button } from "../ui/button";
 import { MarkdownRenderer } from "../ui/markdown-renderer";
 
@@ -70,12 +72,24 @@ function ThinkingState() {
   );
 }
 
-function ErrorState({ error }: { error: string }) {
+function ErrorState({ message, name }: { message?: string; name?: string }) {
+  const { onOpenChange: toggleAuthDialog } = useAuthDialog();
+  const { onOpenChange: toggleSettingsDialog } = usePaymentDialog();
   return (
-    <div className="flex flex-col items-center justify-center flex-1 gap-2 py-8">
+    <div className="flex flex-col items-center justify-center flex-1 gap-4 py-8">
       <AlertCircle className="w-5 h-5 text-destructive" />
       <p className="text-base font-semibold text-destructive text-center mt-2">Error occurred</p>
-      <p className="text-base text-muted-foreground text-center">{error}</p>
+      <p className="text-base text-muted-foreground text-center">{message}</p>
+      {name === "FreeUserDailyLimitReached" && (
+        <Button variant="default" onClick={() => toggleSettingsDialog(true)}>
+          Upgrade to Pro
+        </Button>
+      )}
+      {name === "GuestDailyLimitReached" && (
+        <Button variant="default" onClick={() => toggleAuthDialog(true)}>
+          Login
+        </Button>
+      )}
     </div>
   );
 }
@@ -83,7 +97,7 @@ function ErrorState({ error }: { error: string }) {
 function AIOutput() {
   const { analysis, generating, error } = useAIAnalysisStore();
 
-  if (error) return <ErrorState error={error} />;
+  if (error) return <ErrorState message={error.message} name={error.name} />;
 
   if (!analysis) {
     if (generating) return <ThinkingState />;

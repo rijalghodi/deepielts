@@ -48,7 +48,6 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
     generating,
     setAbortController,
     stopGeneration,
-    analysis,
     setPdfUrl,
   } = useAIAnalysisStore();
   const { setOpen, setOpenMobile } = useAside();
@@ -200,7 +199,10 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       if (error.name === "AbortError") {
         setError(null);
       } else {
-        setError(error?.message || "Failed to submit");
+        setError({
+          message: error?.message || "Failed to submit",
+          name: error?.name || "SubmissionError",
+        });
       }
 
       setGenerating(false);

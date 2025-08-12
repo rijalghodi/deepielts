@@ -18,7 +18,7 @@ import { PricingCard, PricingCardProps } from "@/components/ui/pricing-card";
 import { usePaymentDialog } from "./payment-dialog";
 
 export function PricingSection() {
-  const { open } = usePaymentDialog();
+  const { onOpenChange: togglePaymentDialog } = usePaymentDialog();
   const router = useRouter();
   const plans: PricingCardProps[] = [
     {
@@ -47,7 +47,7 @@ export function PricingSection() {
         { name: "Advanced & In-Depth Feedback", included: true },
         // { name: "Export result to PDF file", included: true },
       ],
-      onClickCta: open,
+      onClickCta: () => togglePaymentDialog(true),
     },
   ];
   return (

@@ -2,7 +2,13 @@ import { Timestamp } from "firebase-admin/firestore";
 
 import { db } from "@/lib/firebase/firebase-admin";
 import { openai } from "@/lib/openai/openai";
-import { getChartDataPrompt, getDetailFeedbackPrompt, getModelEssayPrompt, getScorePrompt } from "@/lib/prompts/utils";
+import {
+  getChartDataPrompt,
+  getDetailFeedbackPrompt,
+  getModelEssayPrompt,
+  getScoreParsePrompt,
+  getScorePrompt,
+} from "@/lib/prompts/utils";
 import { convertFeedbackToPDFBuffer } from "@/lib/utils/convert-feedback-to-pdf";
 
 import { QuestionType } from "@/server/models/submission";
@@ -167,12 +173,12 @@ export function createFeedbackReadableStream(params: {
 
       try {
         enqueue(`---\nsubmissionId: ${submissionId}\n---\n\n`);
-        // await streamOpenAI(getScoreParsePrompt({ score: scoreText }));
-        // enqueue("\n\n\n");
-        // fullFeedback += "\n\n\n";
-        // await streamOpenAI(detailFeedbackPrompt);
-        // enqueue("\n\n\n");
-        // fullFeedback += "\n\n\n";
+        await streamOpenAI(getScoreParsePrompt({ score: scoreText }));
+        enqueue("\n\n\n");
+        fullFeedback += "\n\n\n";
+        await streamOpenAI(detailFeedbackPrompt);
+        enqueue("\n\n\n");
+        fullFeedback += "\n\n\n";
         await streamOpenAI(modelEssayPrompt);
       } catch (error) {
         if (error instanceof Error && error.message === "Request cancelled") {

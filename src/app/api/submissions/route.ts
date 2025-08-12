@@ -34,9 +34,10 @@ export async function POST(req: NextRequest) {
     if (!allowed) {
       throw new AppError({
         message: isAuthenticated
-          ? "Daily limit reached. You can submit up to 3 times per day. Upgrade to get more submissions."
-          : "Daily limit reached. Guests can submit only once per day. Sign in to get 3 submissions daily.",
+          ? "Daily limit reached. Free users can submit up to 3 times per day. Upgrade to get more submissions."
+          : "Daily limit reached. Guests can submit only once per day. Login to get more submissions.",
         code: 429,
+        name: isAuthenticated ? "FreeUserDailyLimitReached" : "GuestDailyLimitReached",
       });
     }
 
