@@ -231,7 +231,7 @@ export function PerformanceSectionContent({ questionType }: { questionType: stri
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-3">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
         <ScoresCard label="Latest Scores" {...perf.lastScore} />
         <ScoresCard label="Highest Scores" {...perf.highestScore} />
