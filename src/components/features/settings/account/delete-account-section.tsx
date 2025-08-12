@@ -42,7 +42,7 @@ export function DeleteAccountSection() {
   }
 
   return (
-    <Card className="border-destructive/50">
+    <Card className="">
       <CardHeader>
         <CardTitle className="text-base text-destructive">Danger Zone</CardTitle>
         <CardDescription>Once you delete your account, there is no going back. Please be certain.</CardDescription>
