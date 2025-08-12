@@ -36,48 +36,54 @@ export default function Home() {
             }}
             className={`absolute top-0 right-0 z-0`}
           />
-          <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-16 sm:pt-8 pb-8">
+          <section
+            id="hero-section"
+            className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-16 sm:pt-8 pb-8"
+          >
             <HeroSection />
           </section>
 
-          <section className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden">
-            <Suspense>
+          <section
+            id="submission-section"
+            className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden"
+          >
+            <Suspense fallback={<div>Loading...</div>}>
               <SubmissionSection />
             </Suspense>
           </section>
         </div>
 
-        <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
+        <section id="features-section" className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-lg mx-auto">
             <FeaturesSection />
           </div>
         </section>
 
-        <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
+        <section id="vs-traditional-section" className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-lg mx-auto">
             <VsTraditionalSection />
           </div>
         </section>
 
-        <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
+        <section id="testimonial-section" className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-xl w-fit mx-auto">
             <TestimonialSection />
           </div>
         </section>
 
-        <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
+        <section id="pricing-section" className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-lg mx-auto">
             <PricingSection />
           </div>
         </section>
 
-        <section className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
+        <section id="faq-section" className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-lg mx-auto">
             <FaqSection />
           </div>
         </section>
 
-        <section className="w-full px-5 md:px-6 py-24 lg:py-32">
+        <section id="cta-section" className="w-full px-5 md:px-6 py-24 lg:py-32">
           <div className="max-w-screen-lg mx-auto">
             <CtaSection />
           </div>

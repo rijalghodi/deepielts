@@ -28,6 +28,7 @@ export interface PricingCardProps {
   highlighted?: boolean;
   ctaText?: string;
   discount?: number;
+  onClickCta?: () => void;
 }
 
 export const PricingCard = ({
@@ -38,6 +39,7 @@ export const PricingCard = ({
   popular = false,
   highlighted = false,
   ctaText = "Get Started",
+  onClickCta,
 }: PricingCardProps) => {
   const [billingCycle, setBillingCycle] = useState<"month" | "3-month">("month");
   const [isHovered, setIsHovered] = useState(false);
@@ -167,6 +169,7 @@ export const PricingCard = ({
           className={`w-full ${highlighted ? "bg-primary hover:bg-primary/90" : ""}`}
           variant={highlighted ? "default" : "outline"}
           size="lg"
+          onClick={onClickCta}
         >
           {ctaText}
         </Button>

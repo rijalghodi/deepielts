@@ -17,9 +17,5 @@ export function SubmissionSection() {
     enabled: !!submissionId,
   });
 
-  return (
-    <>
-      <SubmissionForm submissionData={submissionData?.data} />
-    </>
-  );
+  return <SubmissionForm submissionData={submissionData?.data} />;
 }

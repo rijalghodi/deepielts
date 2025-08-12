@@ -1,4 +1,7 @@
+"use client";
+
 import { Percent } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,36 +15,41 @@ import {
 } from "@/components/ui/carousel";
 import { PricingCard, PricingCardProps } from "@/components/ui/pricing-card";
 
-const plans: PricingCardProps[] = [
-  {
-    title: "Free",
-    description: "Try core features for free",
-    features: [
-      { name: "1000+ IELTS Practice Questions", included: true },
-      { name: "3 IELTS Writing Scoring per day", included: true },
-      { name: "Advanced & In-Depth Feedback", included: true },
-      // { name: "Export result to PDF file", included: true },
-    ],
-  },
-  {
-    title: "Pro",
-    description: "Unlimited essay evaluation ",
-    popular: true,
-    highlighted: true,
-    price: {
-      month: 4,
-      "3-month": 8,
-    },
-    features: [
-      { name: "1000+ IELTS Practice Questions", included: true },
-      { name: "Unlimited IELTS Writing Scoring", included: true },
-      { name: "Advanced & In-Depth Feedback", included: true },
-      // { name: "Export result to PDF file", included: true },
-    ],
-  },
-];
+import { usePaymentDialog } from "./payment-dialog";
 
 export function PricingSection() {
+  const { open } = usePaymentDialog();
+  const router = useRouter();
+  const plans: PricingCardProps[] = [
+    {
+      title: "Free",
+      description: "Try core features for free",
+      features: [
+        { name: "1000+ IELTS Practice Questions", included: true },
+        { name: "3 IELTS Writing Scoring per day", included: true },
+        { name: "Advanced & In-Depth Feedback", included: true },
+        // { name: "Export result to PDF file", included: true },
+      ],
+      onClickCta: () => router.push("/?#hero-section"),
+    },
+    {
+      title: "Pro",
+      description: "Unlimited essay evaluation ",
+      popular: true,
+      highlighted: true,
+      price: {
+        month: 4,
+        "3-month": 8,
+      },
+      features: [
+        { name: "1000+ IELTS Practice Questions", included: true },
+        { name: "Unlimited IELTS Writing Scoring", included: true },
+        { name: "Advanced & In-Depth Feedback", included: true },
+        // { name: "Export result to PDF file", included: true },
+      ],
+      onClickCta: open,
+    },
+  ];
   return (
     <div className="w-full">
       {/* Title */}

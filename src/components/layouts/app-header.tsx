@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 import { AuthDialog } from "@/components/features/auth/login/auth-dialog";
 
+import { PaymentDialog, usePaymentDialog } from "../features/home/payment-dialog";
 import { ASIDE_WIDTH, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";
@@ -18,6 +19,7 @@ import { ThemeToggle } from "../ui/theme-toggle";
 
 export function AppHeader() {
   const { user } = useAuth();
+  const { open: openPaymentDialog } = usePaymentDialog();
   const { open: sidebarOpen, isMobile: isSidebarMobile } = useSidebar();
   const { open: asideOpen, isMobile: isAsideMobile } = useAside();
 
@@ -61,7 +63,7 @@ export function AppHeader() {
           <div className="flex gap-2 items-center">
             <div>
               {user ? (
-                <Button>
+                <Button onClick={openPaymentDialog}>
                   <Crown />
                   Upgrade to Pro
                 </Button>
@@ -85,6 +87,8 @@ export function AppHeader() {
           </div>
         </div>
       </div>
+
+      <PaymentDialog />
     </motion.header>
   );
 }
