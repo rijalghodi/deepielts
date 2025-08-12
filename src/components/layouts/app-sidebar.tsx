@@ -20,7 +20,6 @@ import {
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 import { useSettingsDialog } from "../features/settings/settings-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -66,10 +65,10 @@ export function AppSidebar(props: AppSidebarProps) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg" className="flex-1">
-                  <Avatar className="h-7 w-7 shrink-0">
+                  {/* <Avatar className="h-7 w-7 shrink-0">
                     <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
+                  </Avatar> */}
                   <div className="space-y-1 flex-1">
                     <p className="truncate text-left font-medium">{props.userName ?? "User"}</p>
                     <p className="text-xs text-muted-foreground">Free Plan</p>
@@ -82,10 +81,7 @@ export function AppSidebar(props: AppSidebarProps) {
                 side={isMobile ? "bottom" : "right"}
                 sideOffset={10}
               >
-                <DropdownMenuItem onClick={() => settingsDialog.open()}>
-                  <Settings /> Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                {/* <DropdownMenuSeparator /> */}
                 <DropdownMenuItemDiv className="h-9">
                   <Palette /> Theme
                   <DropdownMenuShortcut>
@@ -121,6 +117,11 @@ export function AppSidebar(props: AppSidebarProps) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={() => settingsDialog.open()}>
+                  <Settings /> Settings
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
