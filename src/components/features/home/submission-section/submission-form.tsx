@@ -17,7 +17,6 @@ import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
 import { LoadingBar } from "@/components/ui/loading-bar";
 import { SelectInput } from "@/components/ui/select-input";
 
-import { GetSubmissionResult } from "@/server/dto/submission.dto";
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 
@@ -28,7 +27,13 @@ const schema = createSubmissionBodySchema;
 
 type Props = {
   onSuccess?: (data: any) => void;
-  submissionData?: GetSubmissionResult;
+  submissionData?: {
+    question?: string;
+    answer?: string;
+    questionType?: QuestionType;
+    attachment?: string;
+    feedback?: string;
+  };
 };
 
 const FORM_STORAGE_KEY = "ielts_submission_form_data";
