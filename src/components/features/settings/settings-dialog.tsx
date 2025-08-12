@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { SettingsBoard } from "./settings-borad";
 
@@ -23,6 +23,9 @@ export function SettingsDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
+      <DialogTitle className="sr-only">Settings</DialogTitle>
+      <DialogDescription className="sr-only">Manage your account settings and preferences.</DialogDescription>
+
       <DialogContent className="sm:max-w-3xl px-0">
         <SettingsBoard />
       </DialogContent>

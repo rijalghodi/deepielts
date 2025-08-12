@@ -29,6 +29,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useIsMobile } from "@/hooks";
 
 const QUICK_MENU = [
   {
@@ -55,6 +56,8 @@ type AppSidebarProps = {
 export function AppSidebar(props: AppSidebarProps) {
   const { logout } = useLogout();
   const settingsDialog = useSettingsDialog();
+  const isMobile = useIsMobile();
+
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader className="">
@@ -73,7 +76,12 @@ export function AppSidebar(props: AppSidebarProps) {
                   </div>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[240px]" align="start" side="right" sideOffset={10}>
+              <DropdownMenuContent
+                className="w-[240px]"
+                align="start"
+                side={isMobile ? "bottom" : "right"}
+                sideOffset={10}
+              >
                 <DropdownMenuItem onClick={() => settingsDialog.open()}>
                   <Settings /> Settings
                 </DropdownMenuItem>
