@@ -120,3 +120,19 @@ export async function listUserSubmissions(params: {
     throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
   }
 }
+
+/**
+ * Update submission PDF URL.
+ */
+export async function updateSubmissionPDFUrl(userId: string, submissionId: string, pdfUrl: string): Promise<void> {
+  try {
+    const submissionRef = db.collection("users").doc(userId).collection("submissions").doc(submissionId);
+
+    await submissionRef.update({
+      pdfUrl,
+      updatedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
+  }
+}

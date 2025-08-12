@@ -1,10 +1,14 @@
 "use client";
 
+import { Download, FileText } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import { toast } from "sonner";
+
+import { submissionGeneratePDF } from "@/lib/api/submission.api";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetBody, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -20,6 +24,50 @@ type Props = {
 };
 
 export default function SubmissionView({ isOpen, onClose, question, answer, date, feedback, id }: Props) {
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [hasExistingPDF, setHasExistingPDF] = useState(false);
+
+  // Check if PDF already exists when component mounts
+  React.useEffect(() => {
+    if (isOpen && feedback) {
+      // You could make an API call here to check if PDF exists
+      // For now, we'll assume it doesn't exist initially
+      setHasExistingPDF(false);
+    }
+  }, [isOpen, feedback]);
+
+  const handleGeneratePDF = async () => {
+    if (!feedback) {
+      toast.error("No feedback available to generate PDF");
+      return;
+    }
+
+    setIsGeneratingPDF(true);
+    try {
+      const response = await submissionGeneratePDF(id, `feedback_${id}`);
+
+      if (response?.data?.pdfUrl) {
+        // Open the PDF in a new tab
+        window.open(response.data.pdfUrl, "_blank");
+
+        if (response.data.isExisting) {
+          setHasExistingPDF(true);
+          toast.success("PDF retrieved successfully!");
+        } else {
+          setHasExistingPDF(true);
+          toast.success("PDF generated successfully!");
+        }
+      } else {
+        toast.error("Failed to generate PDF");
+      }
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate PDF. Please try again.");
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent side="right" containerClassName="w-full sm:w-[600px]">
@@ -46,7 +94,33 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
 
           {/* Feedback */}
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-semibold">Feedback</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Feedback</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleGeneratePDF}
+                disabled={isGeneratingPDF || !feedback}
+                className="flex items-center gap-2"
+              >
+                {isGeneratingPDF ? (
+                  <>
+                    <FileText className="h-4 w-4 animate-pulse" />
+                    Generating...
+                  </>
+                ) : hasExistingPDF ? (
+                  <>
+                    <Download className="h-4 w-4" />
+                    Download PDF
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-4 w-4" />
+                    Generate PDF
+                  </>
+                )}
+              </Button>
+            </div>
             <div className="ai-output">
               <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                 {feedback}

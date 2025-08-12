@@ -1,3 +1,7 @@
+import PDFDocument from "pdfkit";
+
+import { env } from "@/lib/env";
+import { storage } from "@/lib/firebase";
 import { openai } from "@/lib/openai/openai";
 import {
   getChartDataPrompt,
@@ -187,4 +191,125 @@ export function createFeedbackReadableStream(params: {
       }
     },
   });
+}
+
+export async function convertFeedbackToPDF(params: {
+  feedbackText: string;
+  submissionId: string;
+  fileName?: string;
+}): Promise<string> {
+  const { feedbackText, submissionId, fileName = "feedback" } = params;
+
+  try {
+    // Create a new PDF document
+    const doc = new PDFDocument({
+      size: "A4",
+      margins: {
+        top: 50,
+        bottom: 50,
+        left: 50,
+        right: 50,
+      },
+    });
+
+    // Collect PDF chunks
+    const chunks: Buffer[] = [];
+    doc.on("data", (chunk) => chunks.push(chunk));
+
+    // Add title
+    doc.fontSize(24).font("Helvetica-Bold").text("IELTS Writing Feedback", { align: "center" }).moveDown(2);
+
+    // Add submission ID
+    doc.fontSize(12).font("Helvetica").text(`Submission ID: ${submissionId}`).moveDown(1);
+
+    // Add timestamp
+    doc.text(`Generated on: ${new Date().toLocaleString()}`).moveDown(2);
+
+    // Add feedback content
+    doc.fontSize(14).font("Helvetica-Bold").text("Feedback Analysis").moveDown(1);
+
+    // Split feedback into paragraphs and add them
+    const paragraphs = feedbackText.split("\n\n").filter((p) => p.trim());
+
+    paragraphs.forEach((paragraph) => {
+      if (paragraph.trim()) {
+        // Check if it's a heading (starts with # or is all caps)
+        if (paragraph.startsWith("#") || paragraph.toUpperCase() === paragraph) {
+          doc
+            .fontSize(16)
+            .font("Helvetica-Bold")
+            .text(paragraph.replace(/^#+\s*/, ""))
+            .moveDown(0.5);
+        } else {
+          doc
+            .fontSize(12)
+            .font("Helvetica")
+            .text(paragraph, {
+              width: doc.page.width - 100,
+              align: "justify",
+            })
+            .moveDown(0.5);
+        }
+      }
+    });
+
+    // Finalize the PDF
+    doc.end();
+
+    // Wait for the PDF to be generated
+    return new Promise((resolve, reject) => {
+      doc.on("end", async () => {
+        try {
+          const pdfBuffer = Buffer.concat(chunks);
+
+          // Generate unique filename
+          const timestamp = Date.now();
+          const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9]/g, "_");
+          const pdfFileName = `${sanitizedFileName}_${submissionId}_${timestamp}.pdf`;
+
+          // Upload to Firebase Storage
+          const bucket = storage.bucket(env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
+          const file = bucket.file(`feedback-pdfs/${pdfFileName}`);
+
+          await file.save(pdfBuffer, {
+            metadata: {
+              contentType: "application/pdf",
+              metadata: {
+                submissionId,
+                generatedAt: new Date().toISOString(),
+                originalFileName: fileName,
+              },
+            },
+          });
+
+          // Make the file publicly accessible and get the download URL
+          await file.makePublic();
+          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+
+          resolve(publicUrl);
+        } catch (error) {
+          reject(
+            new AppError({
+              message: `Failed to upload PDF to Firebase: ${error instanceof Error ? error.message : "Unknown error"}`,
+              code: 500,
+            }),
+          );
+        }
+      });
+
+      doc.on("error", (error) => {
+        reject(
+          new AppError({
+            message: `Failed to generate PDF: ${error.message}`,
+            code: 500,
+          }),
+        );
+      });
+    });
+  } catch (error) {
+    throw new AppError({
+      message: `Failed to create PDF: ${error instanceof Error ? error.message : "Unknown error"}`,
+      code: 500,
+    });
+  }
 }

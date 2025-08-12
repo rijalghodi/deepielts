@@ -10,6 +10,7 @@ export interface Submission {
   questionType?: QuestionType;
   score?: IELTSScore;
   feedback?: string;
+  pdfUrl?: string;
   readonly createdAt?: Timestamp;
   readonly updatedAt?: Timestamp;
   readonly deletedAt?: Timestamp;
