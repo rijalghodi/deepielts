@@ -24,7 +24,7 @@ export function ChangeUserForm() {
   const {
     register,
     handleSubmit,
-    formState: { isDirty, isValid, errors },
+    formState: { isDirty, errors },
     reset,
   } = useForm<AccountFormData>({
     defaultValues: {
@@ -97,7 +97,7 @@ export function ChangeUserForm() {
         </div>
 
         <div className="flex gap-2">
-          <Button type="submit" size="sm" disabled={!isDirty || !isValid || isPending}>
+          <Button type="submit" size="sm" disabled={isPending}>
             {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {isPending ? "Updating..." : "Update Profile"}
           </Button>
