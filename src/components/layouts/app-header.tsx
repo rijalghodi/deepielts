@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 import { AuthDialog } from "@/components/features/auth/login/auth-dialog";
 
-import { PaymentDialog, usePaymentDialog } from "../features/home/payment-dialog";
+import { usePaymentDialog } from "../features/home/payment-dialog";
 import { ASIDE_WIDTH, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";
@@ -87,8 +87,6 @@ export function AppHeader() {
           </div>
         </div>
       </div>
-
-      <PaymentDialog />
     </motion.header>
   );
 }

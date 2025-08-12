@@ -64,3 +64,56 @@ export async function getUserById(id: string): Promise<StringifyTimestamp<User> 
     updatedAt: userData.updatedAt?.toDate().toISOString(),
   };
 }
+
+/**
+ * Update user's name in Firestore.
+ */
+export async function updateUser(userId: string, user: Partial<User>): Promise<void> {
+  try {
+    await db
+      .collection("users")
+      .doc(userId)
+      .update({
+        ...user,
+        updatedAt: new Date(),
+      });
+    console.log(`Successfully updated name for user: ${userId}`);
+  } catch (error) {
+    console.error(`Error updating name for user ${userId}:`, error);
+    throw new Error(`Failed to update name: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
+}
+
+/**
+ * Delete a user account and all associated data.
+ * This will remove the user from Firebase Auth and delete all related documents.
+ */
+export async function deleteUserAccount(userId: string): Promise<void> {
+  try {
+    // Delete user from Firebase Auth
+    await admin.auth().deleteUser(userId);
+
+    // Delete user document from Firestore
+    await db.collection("users").doc(userId).delete();
+
+    // Delete all user submissions
+    const submissionsQuery = await db.collection("submissions").where("userId", "==", userId).get();
+    const submissionDeletions = submissionsQuery.docs.map((doc) => doc.ref.delete());
+    await Promise.all(submissionDeletions);
+
+    // Delete all user performance records
+    const performanceQuery = await db.collection("performance").where("userId", "==", userId).get();
+    const performanceDeletions = performanceQuery.docs.map((doc) => doc.ref.delete());
+    await Promise.all(performanceDeletions);
+
+    // Delete all user sessions
+    const sessionsQuery = await db.collection("sessions").where("userId", "==", userId).get();
+    const sessionDeletions = sessionsQuery.docs.map((doc) => doc.ref.delete());
+    await Promise.all(sessionDeletions);
+
+    console.log(`Successfully deleted account and all data for user: ${userId}`);
+  } catch (error) {
+    console.error(`Error deleting account for user ${userId}:`, error);
+    throw new Error(`Failed to delete account: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
+}

@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
+import { useSettingsDialog } from "../features/settings/settings-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -53,6 +54,7 @@ type AppSidebarProps = {
 
 export function AppSidebar(props: AppSidebarProps) {
   const { logout } = useLogout();
+  const settingsDialog = useSettingsDialog();
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader className="">
@@ -72,7 +74,7 @@ export function AppSidebar(props: AppSidebarProps) {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[240px]" align="start" side="right" sideOffset={10}>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => settingsDialog.open()}>
                   <Settings /> Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

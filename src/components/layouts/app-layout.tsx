@@ -13,6 +13,8 @@ import { SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sideba
 import { AIAside } from "./ai-aside";
 import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
+import { PaymentDialog } from "../features/home/payment-dialog";
+import { SettingsDialog } from "../features/settings/settings-dialog";
 import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 
@@ -97,6 +99,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </AsideInset>
       </SidebarInset>
       {isDashboard && <AIAside />}
+      <SettingsDialog />
+      <PaymentDialog />
     </>
   );
 }

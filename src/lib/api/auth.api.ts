@@ -2,7 +2,7 @@
 
 import { User } from "@/server/models";
 
-import { apiGet, apiPost } from "./utils";
+import { apiDelete, apiGet, apiPost, apiPut } from "./utils";
 import { AUTH_CHANGED_KEY } from "../constants/brand";
 
 import { ApiResponse } from "@/types";
@@ -52,4 +52,17 @@ export const useLogout = () => {
     window.location.href = "/";
   };
   return { logout };
+};
+
+export const updateUser = async (data: { name: string }) => {
+  return apiPut<ApiResponse<User>>({
+    endpoint: "/auth/me",
+    data,
+  });
+};
+
+export const deleteUserAccount = async () => {
+  return apiDelete<ApiResponse<User>>({
+    endpoint: "/auth/delete-account",
+  });
 };
