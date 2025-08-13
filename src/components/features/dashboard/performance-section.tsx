@@ -17,7 +17,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 import { GetPerformanceResult } from "@/server/dto/performance.dto";
 import { QuestionType } from "@/server/models";
-import { dummyPerformance } from "./dummy";
 
 type Props = {
   className?: string;
@@ -252,7 +251,7 @@ export function PerformanceSectionContent({ questionType }: { questionType: stri
         <ScoresCard label="Highest Scores" {...perf.highestScore} />
         <StatBox label="Total Submissions" value={perf.count ?? 0} />
       </div>
-      <ScoreTrend data={dummyPerformance} />
+      <ScoreTrend data={data.data?.scoreTimeline ?? []} />
     </div>
   );
 }
