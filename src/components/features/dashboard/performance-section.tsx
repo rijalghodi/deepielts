@@ -104,7 +104,7 @@ const stateClasses: Record<string, string> = {
 function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
   const [criteria, setCriteria] = useState<string[]>(["OVR"]);
 
-  const [timeRange, setTimeRange] = useState("1h");
+  const [timeRange, setTimeRange] = useState("all");
 
   const timeRanges = [
     { label: "Last 7 days", value: "7days" },
