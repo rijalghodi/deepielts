@@ -22,7 +22,6 @@ export async function PUT(req: NextRequest) {
 
     const body = await req.json();
 
-    console.log("body", body);
     const { targetBandScore, testDate, language } = body;
 
     if (targetBandScore !== undefined && !TARGET_BAND_SCORE.some((score) => score.value === targetBandScore)) {

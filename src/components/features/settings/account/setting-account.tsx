@@ -2,6 +2,8 @@
 
 import { useAuth } from "@/lib/contexts/auth-context";
 
+import { Separator } from "@/components/ui/separator";
+
 import { ChangeUserForm } from "./change-user-form";
 import { DeleteAccountSection } from "./delete-account-section";
 
@@ -17,6 +19,7 @@ export function SettingAccount() {
       <p className="text-base font-semibold">Account Settings</p>
       <div className="space-y-8">
         <ChangeUserForm />
+        <Separator />
         <DeleteAccountSection />
       </div>
     </div>

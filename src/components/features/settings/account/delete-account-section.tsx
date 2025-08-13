@@ -43,7 +43,7 @@ export function DeleteAccountSection() {
   }
 
   return (
-    <SettingItem className="p-5 border rounded-lg border-destructive/50">
+    <SettingItem className="">
       <SettingItemLabel className="text-destructive font-medium">Delete Account</SettingItemLabel>
       <SettingItemContent>
         <Dialog

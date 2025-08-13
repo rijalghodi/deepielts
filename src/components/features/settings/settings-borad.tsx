@@ -20,31 +20,33 @@ import { SettingPreferences } from "./preferences/setting-preferences";
 export function SettingsBoard({ defaultTab = "account" }: { defaultTab?: "account" | "personalization" }) {
   const isMobile = useIsMobile();
   return (
-    <div className="flex flex-col gap-4 px-0">
-      <Tabs defaultValue={defaultTab} orientation={isMobile ? "horizontal" : "vertical"}>
-        <TabsList className={cn("px-5 sm:px-5")}>
-          <TabsTrigger value="account">
-            <User className="w-4 h-4" />
-            Account
-          </TabsTrigger>
-          <TabsTrigger value="personalization">
-            <Settings className="w-4 h-4" />
-            Preferences
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="account" className="h-[440px] overflow-auto px-5 sm:pl-0">
-          <SettingAccount />
-        </TabsContent>
-        <TabsContent value="personalization" className="h-[440px] overflow-auto px-5 sm:pl-0">
-          <SettingPreferences />
-        </TabsContent>
-      </Tabs>
-    </div>
+    <Tabs defaultValue={defaultTab} orientation={isMobile ? "horizontal" : "vertical"} className="md:gap-0">
+      <TabsList className={cn("mx-5")}>
+        <TabsTrigger value="account">
+          <User className="w-4 h-4" />
+          Account
+        </TabsTrigger>
+        <TabsTrigger value="personalization">
+          <Settings className="w-4 h-4" />
+          Preferences
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="account" className="h-[440px] overflow-auto px-5">
+        <SettingAccount />
+      </TabsContent>
+      <TabsContent value="personalization" className="h-[440px] overflow-auto px-5">
+        <SettingPreferences />
+      </TabsContent>
+    </Tabs>
   );
 }
 
 export function SettingItem({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("flex gap-2 justify-between items-center w-full", className)}>{children}</div>;
+  return (
+    <div className={cn("flex flex-col sm:flex-row gap-1.5 justify-between items-start w-full", className)}>
+      {children}
+    </div>
+  );
 }
 
 export function SettingItemLabel({
@@ -57,7 +59,7 @@ export function SettingItemLabel({
   htmlFor?: string;
 }) {
   return (
-    <label htmlFor={htmlFor} className={cn("text-sm flex-1", className)}>
+    <label htmlFor={htmlFor} className={cn("text-sm flex-1 font-medium", className)}>
       {children}
     </label>
   );
