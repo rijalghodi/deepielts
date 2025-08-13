@@ -38,7 +38,7 @@ export function SettingPreferences() {
       <p className="text-base font-semibold">Preferences</p>
 
       <SettingItem>
-        <SettingItemLabel>Target Band Score</SettingItemLabel>
+        <SettingItemLabel>Target Score</SettingItemLabel>
         <SettingItemContent>
           <SettingSelectableText
             options={TARGET_BAND_SCORE}

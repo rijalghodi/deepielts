@@ -42,11 +42,7 @@ export function SettingsBoard({ defaultTab = "account" }: { defaultTab?: "accoun
 }
 
 export function SettingItem({ children, className }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={cn("flex flex-col sm:flex-row gap-1.5 justify-between items-start w-full", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn("flex gap-1.5 justify-between items-center w-full", className)}>{children}</div>;
 }
 
 export function SettingItemLabel({
