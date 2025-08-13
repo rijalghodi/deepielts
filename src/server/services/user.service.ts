@@ -1,4 +1,4 @@
-import { admin, db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 
 import { Role, User } from "../models";
 
@@ -25,7 +25,7 @@ export async function getUserByEmail(email: string): Promise<StringifyTimestamp<
  */
 export async function createUserWithEmail(email: string): Promise<StringifyTimestamp<User>> {
   // Create user in Firebase Auth
-  const userRecord = await admin.auth().createUser({
+  const userRecord = await auth.createUser({
     email,
     emailVerified: true,
   });
@@ -91,7 +91,7 @@ export async function updateUser(userId: string, user: Partial<User>): Promise<v
 export async function deleteUserAccount(userId: string): Promise<void> {
   try {
     // Delete user from Firebase Auth
-    await admin.auth().deleteUser(userId);
+    await auth.deleteUser(userId);
 
     // Delete user document from Firestore
     await db.collection("users").doc(userId).delete();

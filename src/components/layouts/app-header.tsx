@@ -19,7 +19,7 @@ import { ThemeToggle } from "../ui/theme-toggle";
 
 export function AppHeader() {
   const { user } = useAuth();
-  const { open: openPaymentDialog } = usePaymentDialog();
+  const { onOpenChange: setOpenPaymentDialog } = usePaymentDialog();
   const { open: sidebarOpen, isMobile: isSidebarMobile } = useSidebar();
   const { open: asideOpen, isMobile: isAsideMobile } = useAside();
 
@@ -63,7 +63,7 @@ export function AppHeader() {
           <div className="flex gap-2 items-center">
             <div>
               {user ? (
-                <Button onClick={openPaymentDialog}>
+                <Button onClick={() => setOpenPaymentDialog(true)}>
                   <Crown />
                   Upgrade to Pro
                 </Button>

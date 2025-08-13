@@ -30,8 +30,6 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
   // Check if PDF already exists when component mounts
   React.useEffect(() => {
     if (isOpen && feedback) {
-      // You could make an API call here to check if PDF exists
-      // For now, we'll assume it doesn't exist initially
       setHasExistingPDF(false);
     }
   }, [isOpen, feedback]);
@@ -44,19 +42,14 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
 
     setIsGeneratingPDF(true);
     try {
-      const response = await submissionGeneratePDF(id, `feedback_${id}`);
+      const response = await submissionGeneratePDF(id);
 
-      if (response?.data?.pdfUrl) {
+      if (response?.data?.url) {
         // Open the PDF in a new tab
-        window.open(response.data.pdfUrl, "_blank");
+        window.open(response.data.url, "_blank");
 
-        if (response.data.isExisting) {
-          setHasExistingPDF(true);
-          toast.success("PDF retrieved successfully!");
-        } else {
-          setHasExistingPDF(true);
-          toast.success("PDF generated successfully!");
-        }
+        setHasExistingPDF(true);
+        toast.success("PDF generated successfully!");
       } else {
         toast.error("Failed to generate PDF");
       }

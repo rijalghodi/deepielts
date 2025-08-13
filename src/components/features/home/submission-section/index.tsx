@@ -28,10 +28,14 @@ export function SubmissionSection() {
               answer: "",
               question: "",
               questionType: QuestionType.TASK_1_GENERAL,
-              attachment: undefined,
-              feedback: undefined,
             }
-          : submissionData?.data
+          : {
+              answer: submissionData?.data?.answer,
+              question: submissionData?.data?.question,
+              questionType: submissionData?.data?.questionType,
+              attachment: submissionData?.data?.attachment || undefined,
+              feedback: submissionData?.data?.feedback || undefined,
+            }
       }
     />
   );
