@@ -51,7 +51,7 @@ TabsSideTrigger.displayName = "TabsSideTrigger";
 const TabsSideContent = React.forwardRef<
   React.ElementRef<typeof TabsContent>,
   React.ComponentPropsWithoutRef<typeof TabsContent>
->(({ className, ...props }, ref) => <TabsContent ref={ref} className={cn("grow pl-4", className)} {...props} />);
+>(({ className, ...props }, ref) => <TabsContent ref={ref} className={cn("grow", className)} {...props} />);
 TabsSideContent.displayName = "TabsSideContent";
 
 export { TabsSide, TabsSideContent, TabsSideList, TabsSideTrigger };

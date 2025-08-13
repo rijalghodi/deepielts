@@ -14,7 +14,7 @@ export function SettingAccount() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Account Settings</h2>
+      <p className="text-base font-semibold">Account Settings</p>
       <div className="space-y-8">
         <ChangeUserForm />
         <DeleteAccountSection />

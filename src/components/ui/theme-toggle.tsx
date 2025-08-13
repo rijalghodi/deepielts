@@ -1,6 +1,6 @@
 "use client";
 
-import { Monitor, Moon, Sun } from "lucide-react";
+import { ChevronDown, Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ThemeToggle({ variant = "dropdown" }: { variant?: "dropdown" | "horizontal" }) {
+export function ThemeToggle({ variant = "icon" }: { variant?: "icon" | "horizontal" | "dropdown" }) {
   const [mounted, setMounted] = useState(false);
   const { setTheme, theme } = useTheme();
 
@@ -33,15 +33,44 @@ export function ThemeToggle({ variant = "dropdown" }: { variant?: "dropdown" | "
     );
   }
 
-  if (variant === "dropdown") {
+  if (variant === "icon") {
     return (
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon-sm">
             <Sun className={cn("absolute transition-all scale-0", theme === "light" && "scale-100")} />
             <Moon className={cn("absolute transition-all scale-0", theme === "dark" && "scale-100")} />
-            <Monitor className={cn("absolutetransition-all scale-0", theme === "system" && "scale-100")} />
+            <Monitor className={cn("absolute transition-all scale-0", theme === "system" && "scale-100")} />
             <span className="sr-only">Toggle theme</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => setTheme("light")} className="text-xs">
+            <Sun className="mr-2 h-3.5 w-3.5" />
+            <span className="text-xs">Light</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setTheme("dark")} className="text-xs">
+            <Moon className="mr-2 h-3.5 w-3.5" />
+            <span>Dark</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setTheme("system")} className="text-xs">
+            <Monitor className="mr-2 h-3.5 w-3.5" />
+            <span>System</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  if (variant === "dropdown") {
+    return (
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="flex justify-end gap-2 text-sm font-normal">
+            {theme === "light" && "Light"}
+            {theme === "dark" && "Dark"}
+            {theme === "system" && "System"}
+            <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

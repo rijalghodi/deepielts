@@ -43,7 +43,7 @@ export function PaymentDialog() {
         </div>
 
         <DialogFooter className="flex justify-center sm:justify-center gap-2">
-          <Button variant="outline" onClick={close}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Got it!
           </Button>
         </DialogFooter>

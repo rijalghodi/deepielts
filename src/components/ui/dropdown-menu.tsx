@@ -18,7 +18,10 @@ function DropdownMenuTrigger({ className, ...props }: React.ComponentProps<typeo
   return (
     <DropdownMenuPrimitive.Trigger
       data-slot="dropdown-menu-trigger"
-      className={cn("focus:outline-none focus:ring-0 focus-visible:ring-0 data-[state=open]:bg-accent", className)}
+      className={cn(
+        "focus:outline-none focus:ring-0 focus-visible:ring-0 data-[state=open]:bg-accent [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+      )}
       {...props}
     />
   );

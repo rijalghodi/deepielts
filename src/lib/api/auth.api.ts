@@ -32,6 +32,8 @@ export const getCurrentUser = async () => {
   });
 };
 
+export const GET_CURRENT_USER_QUERY_KEY = ["get-current-user"] as const;
+
 // login by google
 export const loginByGoogle = async (idToken: string) => {
   return apiPost<ApiResponse<User>>({
