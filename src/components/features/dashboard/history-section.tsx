@@ -159,7 +159,7 @@ export default function HistorySection({ className }: Props) {
               <IconChevronDown />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="start" className="w-56">
             {QUESTION_TYPES.map((type) => (
               <DropdownMenuCheckboxItem
                 className="capitalize"

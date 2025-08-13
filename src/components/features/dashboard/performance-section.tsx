@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import { performanceGet, performanceGetKey } from "@/lib/api/performance.api";
@@ -17,6 +17,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 import { GetPerformanceResult } from "@/server/dto/performance.dto";
 import { QuestionType } from "@/server/models";
+import { dummyPerformance } from "./dummy";
 
 type Props = {
   className?: string;
@@ -106,6 +107,24 @@ function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
 
   const [timeRange, setTimeRange] = useState("1h");
 
+  const timeRanges = [
+    { label: "Last 7 days", value: "7days" },
+    { label: "Last 30 days", value: "30days" },
+    { label: "All time", value: "all" },
+  ];
+
+  const filteredData = useMemo(() => {
+    if (timeRange === "all") return data;
+    const now = new Date();
+    const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    return data.filter((item) => {
+      if (timeRange === "7days") return item.date && new Date(item.date) >= last7Days;
+      if (timeRange === "30days") return item.date && new Date(item.date) >= last30Days;
+      return false;
+    });
+  }, [data, timeRange]);
+
   return (
     <Card>
       <CardHeader>
@@ -119,15 +138,11 @@ function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="1h" className="rounded-lg">
-                Last 7 days
-              </SelectItem>
-              <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
-              </SelectItem>
-              <SelectItem value="all" className="rounded-lg">
-                All time
-              </SelectItem>
+              {timeRanges.map(({ label, value }) => (
+                <SelectItem key={value} value={value} className="rounded-lg">
+                  {label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <ToggleGroup
@@ -149,7 +164,7 @@ function ScoreTrend({ data }: { data: GetPerformanceResult["scoreTimeline"] }) {
 
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[250px] w-full">
-          <LineChart data={data}>
+          <LineChart data={filteredData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -237,7 +252,7 @@ export function PerformanceSectionContent({ questionType }: { questionType: stri
         <ScoresCard label="Highest Scores" {...perf.highestScore} />
         <StatBox label="Total Submissions" value={perf.count ?? 0} />
       </div>
-      <ScoreTrend data={perf.scoreTimeline} />
+      <ScoreTrend data={dummyPerformance} />
     </div>
   );
 }
