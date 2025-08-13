@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
 import { env } from "@/lib/env";
-import { admin, db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { signAccessToken, signRefreshToken } from "@/lib/jwt";
 import logger from "@/lib/logger";
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     if (!idToken) throw new AppError({ message: "Missing token", code: 400 });
 
     // Verify Firebase ID token
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const decodedToken = await auth.verifyIdToken(idToken);
     const uid = decodedToken.uid;
 
     // Fetch user role from Firestore

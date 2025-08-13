@@ -135,7 +135,7 @@ export function AIAside() {
     if (!container) return;
 
     const handleScroll = () => {
-      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 20;
+      const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 60;
       setAutoScroll(atBottom);
     };
 

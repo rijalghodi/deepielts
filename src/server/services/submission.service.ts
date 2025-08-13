@@ -9,7 +9,7 @@ import {
   getScoreParsePrompt,
   getScorePrompt,
 } from "@/lib/prompts/utils";
-import { convertFeedbackToPDFBuffer } from "@/lib/utils/convert-feedback-to-pdf";
+import { convertMarkdownToPDFBuffer } from "@/lib/utils/convert-md-to-pdf";
 
 import { QuestionType } from "@/server/models/submission";
 
@@ -218,15 +218,12 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     };
   }
 
-  const pdfBuffer = await convertFeedbackToPDFBuffer({
-    feedbackText: submission.feedback,
-    submissionId,
-  });
+  const pdfBuffer = await convertMarkdownToPDFBuffer({ markdown: submission.feedback });
 
   const uploadedFile = await uploadFileToStorage({
     file: pdfBuffer,
     folder: "feedback-pdfs",
-    fileName: `${submissionId}.pdf`,
+    fileName: "feedback.pdf",
     contentType: "application/pdf",
     metadata: {
       submissionId,
