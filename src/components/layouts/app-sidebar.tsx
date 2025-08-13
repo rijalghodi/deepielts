@@ -16,6 +16,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
@@ -56,7 +57,7 @@ export function AppSidebar(props: AppSidebarProps) {
   const { logout } = useLogout();
   const settingsDialog = useSettingsDialog();
   const isMobile = useIsMobile();
-
+  const { setOpenMobile } = useSidebar();
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader className="">
@@ -104,13 +105,19 @@ export function AppSidebar(props: AppSidebarProps) {
       <SidebarRail />
       <SidebarContent>
         <SidebarGroup>
-          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {QUICK_MENU.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => {
+                        if (isMobile) {
+                          setOpenMobile(false);
+                        }
+                      }}
+                    >
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>
@@ -118,7 +125,14 @@ export function AppSidebar(props: AppSidebarProps) {
                 </SidebarMenuItem>
               ))}
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={() => settingsDialog.open()}>
+                <SidebarMenuButton
+                  onClick={() => {
+                    if (isMobile) {
+                      setOpenMobile(false);
+                    }
+                    settingsDialog.open();
+                  }}
+                >
                   <Settings /> Settings
                 </SidebarMenuButton>
               </SidebarMenuItem>
