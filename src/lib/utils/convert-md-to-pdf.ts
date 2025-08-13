@@ -21,7 +21,7 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
     return (
       text
         // Remove metadata blocks (YAML-style with --- delimiters)
-        .replace(/---[\s\S]*?---/g, "")
+        .replace(/^---[\s\S]*?---/g, "")
         // Convert HTML tags to markdown equivalents
         .replace(/<strong[^>]*>(.*?)<\/strong>/g, "**$1**")
         .replace(/<b[^>]*>(.*?)<\/b>/g, "**$1**")
@@ -52,6 +52,7 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
     doc.moveDown(0.5);
     doc.fontSize(12).font("Helvetica");
   };
+
   const processFormattedText = (
     text: string,
     options: { width?: number; align?: "left" | "right" | "center" | "justify" } = {},
@@ -135,9 +136,16 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
 
         const cellWidth = (doc.page.width - 100) / cells.length;
         let currentX = 50;
+        const currentY = doc.y;
 
         cells.forEach((cell, cellIndex) => {
-          doc.text(cell, currentX, doc.y, { width: cellWidth - 5 });
+          // Draw cell border
+          // doc
+          //   .strokeColor("#000000")
+          //   .rect(currentX, currentY, cellWidth - 5, 20)
+          //   .stroke();
+
+          doc.text(cell, currentX + 2, currentY + 2, { width: cellWidth - 5 });
           currentX += cellWidth;
         });
 
@@ -161,7 +169,10 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
 
   // Process the cleaned feedback text
   const cleanedText = cleanText(markdown);
+  console.log("cleanedText", cleanedText);
   const paragraphs = cleanedText.split("\n\n").filter((p) => p.trim());
+
+  console.log("paragraphs", paragraphs);
 
   paragraphs.forEach((paragraph) => {
     const trimmedParagraph = paragraph.trim();
