@@ -34,7 +34,7 @@ const QUICK_MENU = [
   {
     title: "New Check",
     icon: () => <Edit />,
-    href: "/?new=true",
+    href: "/",
   },
   {
     title: "Progress",

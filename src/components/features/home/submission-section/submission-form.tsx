@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { submissionCreateStream, submissionGeneratePDF } from "@/lib/api/submission.api";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { useAside } from "@/components/ui/aside";
@@ -51,6 +52,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
     setPdfUrl,
   } = useAIAnalysisStore();
   const { setOpen, setOpenMobile } = useAside();
+  const { user } = useAuth();
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Get stored form data on first render
@@ -183,7 +185,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       const { data } = matter(localAnalysis || "");
       const submissionId = data?.submissionId?.trim();
 
-      if (submissionId) {
+      if (submissionId && submissionId !== "temp" && user?.id) {
         const pdf = await submissionGeneratePDF(submissionId);
         setPdfUrl(pdf?.data?.url || null);
       }
