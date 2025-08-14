@@ -1,7 +1,7 @@
 "use client";
 
-import HistorySection from "@/components/features/dashboard/history-section";
-import PerformanceSection from "@/components/features/dashboard/performance-section";
+import HistorySection from "@/components/dashboard/history-section";
+import PerformanceSection from "@/components/dashboard/performance-section";
 
 export default function DashboardPage() {
   return (

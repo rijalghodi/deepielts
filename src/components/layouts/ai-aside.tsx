@@ -7,8 +7,8 @@ import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
-import { useAuthDialog } from "../features/auth/login/auth-dialog";
-import { usePaymentDialog } from "../features/home/payment-dialog";
+import { useAuthDialog } from "../auth/auth-dialog";
+import { usePaymentDialog } from "../home/payment-dialog";
 import { Button } from "../ui/button";
 import { MarkdownRenderer } from "../ui/markdown-renderer";
 

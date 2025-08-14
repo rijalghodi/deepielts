@@ -8,9 +8,9 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
-import { AuthDialog } from "@/components/features/auth/login/auth-dialog";
+import { AuthDialog } from "@/components/auth/auth-dialog";
 
-import { usePaymentDialog } from "../features/home/payment-dialog";
+import { usePaymentDialog } from "../home/payment-dialog";
 import { ASIDE_WIDTH, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";

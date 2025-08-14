@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 import { submissionGet, submissionGetKey } from "@/lib/api/submission.api";
 
-import { SubmissionForm } from "@/components/features/home/submission-section/submission-form";
+import { SubmissionForm } from "@/components/home/submission-section/submission-form";
 
 export function SubmissionSection() {
   const searchParams = useSearchParams();

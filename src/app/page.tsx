@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 
-import { CtaSection } from "@/components/features/home/cta-section";
-import { FaqSection } from "@/components/features/home/faq-section";
-import { FeaturesSection } from "@/components/features/home/features-section";
-import { HeroSection } from "@/components/features/home/hero-section";
-import { PricingSection } from "@/components/features/home/pricing-section";
-import { SubmissionSection } from "@/components/features/home/submission-section";
-import { TestimonialSection } from "@/components/features/home/testimonial-section";
-import { VsTraditionalSection } from "@/components/features/home/vs-traditional-section";
+import { CtaSection } from "@/components/home/cta-section";
+import { FaqSection } from "@/components/home/faq-section";
+import { FeaturesSection } from "@/components/home/features-section";
+import { HeroSection } from "@/components/home/hero-section";
+import { PricingSection } from "@/components/home/pricing-section";
+import { SubmissionSection } from "@/components/home/submission-section";
+import { TestimonialSection } from "@/components/home/testimonial-section";
+import { VsTraditionalSection } from "@/components/home/vs-traditional-section";
 import { FallingStarsBackground } from "@/components/ui/falling-stars-bg";
 
 export default function Home() {
