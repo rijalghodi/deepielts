@@ -61,3 +61,11 @@ SENTRY_AUTH_TOKEN=
 # Redis
 #-------------------------------------------------------------
 REDIS_URL=
+
+# -----------------------------------------------------------
+# Paddle Configuration
+# -----------------------------------------------------------
+NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=
+NEXT_PUBLIC_PADDLE_ENV=sandbox # production
+PADDLE_API_KEY=
+PADDLE_WEBHOOK_SECRET=

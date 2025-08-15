@@ -16,10 +16,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       { name: "Advanced & In-Depth Feedback", included: true },
       { name: "Export result to PDF file", included: true },
     ],
-    priceIds: {
-      month: null,
-      quarter: null,
-    },
+    priceIds: {},
   },
   {
     title: "Pro",

@@ -1,42 +1,41 @@
-"use client";
+// "use client";
 
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+// import React, { useEffect } from "react";
 
-import { usePaddleCheckout } from "@/lib/contexts/paddle";
+// import { usePaddleCheckout } from "@/lib/contexts/paddle";
 
-import { Button } from "../ui/button";
+// import { Skeleton } from "../ui/skeleton";
 
-type Props = {
-  priceId: string;
-  quantity: number;
-  userEmail?: string;
-};
+// type Props = {
+//   priceId: string;
+//   quantity: number;
+//   userEmail?: string;
+// };
 
-export function CheckoutSection({ priceId, quantity, userEmail }: Props) {
-  const { openCheckout, isInitialized } = usePaddleCheckout();
+// export function CheckoutSection({ priceId, quantity, userEmail }: Props) {
+//   const { openCheckout, isInitialized, isLoading } = usePaddleCheckout();
 
-  const router = useRouter();
+//   useEffect(() => {
+//     if (!isInitialized) return;
+//     openCheckout({
+//       priceId,
+//       quantity,
+//       userEmail,
+//       successUrl: "/checkout/success",
+//       variant: "one-page",
+//       displayMode: "inline",
+//     });
+//   }, [openCheckout, priceId, quantity, userEmail, isInitialized]);
 
-  useEffect(() => {
-    if (!isInitialized) return;
-    openCheckout({
-      priceId,
-      quantity,
-      userEmail,
-      successUrl: `${window.location.origin}/checkout/success`,
-    });
-  }, [openCheckout, priceId, quantity, userEmail, isInitialized]);
+//   // if (isLoading)
+//   //   return (
+//   //     <div className="flex items-center justify-center h-screen">
+//   //       <Skeleton className="w-xl h-xl" />
+//   //       <Skeleton className="w-xl h-xl" />
+//   //       <Skeleton className="w-xl h-xl" />
+//   //       <Skeleton className="w-xl h-xl" />
+//   //     </div>
+//   //   );
 
-  //   if (!isInitialized) return <div>Loading...</div>;
-  return (
-    <div className="max-w-screen-lg px-5 mx-auto relative py-5">
-      <Button variant="outline" size="sm" onClick={() => router.back()}>
-        <ArrowLeft /> Back
-      </Button>
-      <div className="checkout-container" />
-      {!isInitialized && <div>Checkout not initialized</div>}
-    </div>
-  );
-}
+//   return <div className="checkout-container" />;
+// }

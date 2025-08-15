@@ -15,29 +15,13 @@ import { ToggleFrequency } from "../checkout/toggle-frequency";
 import { Skeleton } from "../ui/skeleton";
 
 export function PricingSection() {
-  // const { onOpenChange: togglePaymentDialog } = usePaymentDialog();
   const router = useRouter();
 
   const [frequency, setFrequency] = useState<BillingFrequency>(BILLING_FREQUENCY[0]);
-  // const { paddle, isLoading, isInitialized } = usePaddle();
-  // const [paddle, setPaddle] = useState<Paddle | undefined>(undefined);
 
   const { prices, loading } = usePaddlePrices("US");
 
   console.log("prices section", prices);
-
-  // useEffect(() => {
-  //   if (process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
-  //     initializePaddle({
-  //       token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-  //       environment: process.env.NEXT_PUBLIC_PADDLE_ENV as Environments,
-  //     }).then((paddle) => {
-  //       if (paddle) {
-  //         setPaddle(paddle);
-  //       }
-  //     });
-  //   }
-  // }, []);
 
   return (
     <div className="w-full">
@@ -70,6 +54,11 @@ export function PricingSection() {
                   key={plan.title}
                   {...plan}
                   onClickCta={() => router.push(`/checkout/${priceId}`)}
+                  // onClickCta={() => {
+                  //   if (priceId) {
+                  //     openCheckout({ priceId });
+                  //   }
+                  // }}
                   price={priceId === null ? "0" : price}
                   suffixPrice={frequency.suffix}
                   free={plan.title === "Free"}

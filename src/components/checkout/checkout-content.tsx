@@ -1,96 +1,68 @@
 "use client";
 
-import { type Environments, initializePaddle, type Paddle } from "@paddle/paddle-js";
-import type { CheckoutEventsData } from "@paddle/paddle-js/types/checkout/events";
-// import throttle from "lodash.throttle";
-import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
+import { usePaddle } from "@/lib/contexts/paddle";
+
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
+import { CheckoutItems } from "./checkout-items";
 import { PriceSection } from "./price-section";
-
-interface PathParams {
-  priceId: string;
-  [key: string]: string | string[];
-}
+import { Button } from "../ui/button";
 
 interface Props {
   userEmail?: string;
+  priceId: string;
 }
 
-export function CheckoutContents({ userEmail }: Props) {
-  const { priceId } = useParams<PathParams>();
-  const [quantity, setQuantity] = useState<number>(1);
-  const [paddle, setPaddle] = useState<Paddle | null>(null);
-  const [checkoutData, setCheckoutData] = useState<CheckoutEventsData | null>(null);
-
-  const handleCheckoutEvents = (event: CheckoutEventsData) => {
-    setCheckoutData(event);
-  };
-
-  //   const updateItems = useCallback(
-  //     throttle((paddle: Paddle, priceId: string, quantity: number) => {
-  //       paddle.Checkout.updateItems([{ priceId, quantity }]);
-  //     }, 1000),
-  //     [],
-  //   );
-
-  const updateItems = useCallback((paddle: Paddle, priceId: string, quantity: number) => {
-    paddle.Checkout.updateItems([{ priceId, quantity }]);
-  }, []);
+export function CheckoutContents({ userEmail, priceId }: Props) {
+  const router = useRouter();
+  const { resolvedTheme } = useTheme();
+  const { openCheckout, isInitialized, checkoutData } = usePaddle();
 
   useEffect(() => {
-    if (!paddle?.Initialized && process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
-      initializePaddle({
-        token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-        environment: process.env.NEXT_PUBLIC_PADDLE_ENV as Environments,
-        eventCallback: (event) => {
-          if (event.data && event.name) {
-            handleCheckoutEvents(event.data);
-          }
-        },
-        checkout: {
-          settings: {
-            variant: "one-page",
-            displayMode: "inline",
-            theme: "dark",
-            allowLogout: !userEmail,
-            frameTarget: "paddle-checkout-frame",
-            frameInitialHeight: 450,
-            frameStyle: "width: 100%; background-color: transparent; border: none",
-            successUrl: "/checkout/success",
-          },
-        },
-      }).then(async (paddle) => {
-        if (paddle && priceId) {
-          setPaddle(paddle);
-          paddle.Checkout.open({
-            ...(userEmail && { customer: { email: userEmail } }),
-            items: [{ priceId: priceId, quantity: 1 }],
-          });
-        }
+    if (isInitialized && priceId) {
+      openCheckout({
+        priceId,
+        userEmail,
+        theme: resolvedTheme as any,
       });
     }
-  }, [paddle?.Initialized, priceId, userEmail]);
-
-  useEffect(() => {
-    if (paddle && priceId && paddle.Initialized) {
-      updateItems(paddle, priceId, quantity);
-    }
-  }, [paddle, priceId, quantity, updateItems]);
+  }, [isInitialized, priceId, userEmail, resolvedTheme, openCheckout]);
 
   return (
-    <div
-      className={
-        "rounded-lg md:bg-background/80 md:backdrop-blur-[24px] md:p-10 md:pl-16 md:pt-16 md:min-h-[400px] flex flex-col justify-between relative"
-      }
-    >
-      <div className={"flex flex-col md:flex-row gap-8 md:gap-16"}>
-        <div className={"w-full md:w-[400px]"}>
-          <PriceSection checkoutData={checkoutData} />
+    <div className="w-screen h-screen">
+      <Button variant="ghost" size="sm" className="absolute top-4 left-4" onClick={() => router.back()}>
+        <ArrowLeft className="w-4 h-4" />
+        Back
+      </Button>
+      <div className={"grid grid-cols-1 md:grid-cols-2 w-full h-full"}>
+        <div className={"w-full bg-muted/50 px-6 pt-20 md:py-20 md:px-16 flex justify-center md:justify-end"}>
+          <div className={"hidden md:flex flex-col gap-6 w-full max-w-[400px]"}>
+            <PriceSection checkoutData={checkoutData} />
+            <CheckoutItems checkoutData={checkoutData} />
+          </div>
+          <div className={"md:hidden flex flex-col items-center w-full max-w-[400px]"}>
+            <PriceSection checkoutData={checkoutData} />
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item-1" className="border-none flex flex-col gap-4 items-center">
+                <AccordionTrigger className={"w-fit"}>
+                  <span className="text-muted-foreground no-underline!">Order summary</span>
+                </AccordionTrigger>
+                <AccordionContent className={"pb-16"}>
+                  <CheckoutItems checkoutData={checkoutData} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
         </div>
-        <div className={"min-w-[375px] lg:min-w-[535px]"}>
-          <div className={"text-base leading-[20px] font-semibold mb-8"}>Payment details</div>
-          <div className={"paddle-checkout-frame"} />
+        <div className={"bg-background px-6 py-16 md:py-20 md:px-16 shadow-lg"}>
+          <div className={"w-full max-w-[540px]"}>
+            <div className={"paddle-checkout-frame"} />
+          </div>
         </div>
       </div>
     </div>

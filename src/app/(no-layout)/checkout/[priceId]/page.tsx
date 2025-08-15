@@ -4,15 +4,19 @@ import { useParams } from "next/navigation";
 
 import { useAuth } from "@/lib/contexts/auth-context";
 
-import { CheckoutSection } from "@/components/checkout/checkout-section";
+import { CheckoutContents } from "@/components/checkout/checkout-content";
 
 export default function CheckoutPage() {
   const { priceId } = useParams<{ priceId: string }>();
   const { user } = useAuth();
-  console.log(user);
+
+  if (!priceId) {
+    return <div>No priceId</div>;
+  }
+
   return (
     <div>
-      <CheckoutSection userEmail={user?.email} priceId={priceId} quantity={1} />
+      <CheckoutContents userEmail={user?.email} priceId={priceId} />
     </div>
   );
 }
