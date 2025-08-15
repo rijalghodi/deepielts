@@ -2,54 +2,43 @@
 
 import { Percent } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
+
+import { BILLING_FREQUENCY, BillingFrequency, PRICING_PLANS } from "@/lib/constants/pricing";
+import { usePaddlePrices } from "@/lib/contexts/paddle";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPagination,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { PricingCard, PricingCardProps } from "@/components/ui/pricing-card";
+import { PricingCard } from "@/components/ui/pricing-card";
 
-import { usePaymentDialog } from "./payment-dialog";
+// import { usePaymentDialog } from "./payment-dialog";
+import { ToggleFrequency } from "../checkout/toggle-frequency";
+import { Skeleton } from "../ui/skeleton";
 
 export function PricingSection() {
-  const { onOpenChange: togglePaymentDialog } = usePaymentDialog();
+  // const { onOpenChange: togglePaymentDialog } = usePaymentDialog();
   const router = useRouter();
-  const plans: PricingCardProps[] = [
-    {
-      title: "Free",
-      description: "Try core features for free",
-      features: [
-        { name: "1000+ IELTS Practice Questions", included: true },
-        { name: "3 IELTS Writing Scoring per day", included: true },
-        { name: "Advanced & In-Depth Feedback", included: true },
-        // { name: "Export result to PDF file", included: true },
-      ],
-      onClickCta: () => router.push("/?#hero-section"),
-    },
-    {
-      title: "Pro",
-      description: "Unlimited essay evaluation ",
-      popular: true,
-      highlighted: true,
-      price: {
-        month: 4,
-        "3-month": 8,
-      },
-      features: [
-        { name: "1000+ IELTS Practice Questions", included: true },
-        { name: "Unlimited IELTS Writing Scoring", included: true },
-        { name: "Advanced & In-Depth Feedback", included: true },
-        // { name: "Export result to PDF file", included: true },
-      ],
-      onClickCta: () => togglePaymentDialog(true),
-    },
-  ];
+
+  const [frequency, setFrequency] = useState<BillingFrequency>(BILLING_FREQUENCY[0]);
+  // const { paddle, isLoading, isInitialized } = usePaddle();
+  // const [paddle, setPaddle] = useState<Paddle | undefined>(undefined);
+
+  const { prices, loading } = usePaddlePrices("US");
+
+  console.log("prices section", prices);
+
+  // useEffect(() => {
+  //   if (process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
+  //     initializePaddle({
+  //       token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
+  //       environment: process.env.NEXT_PUBLIC_PADDLE_ENV as Environments,
+  //     }).then((paddle) => {
+  //       if (paddle) {
+  //         setPaddle(paddle);
+  //       }
+  //     });
+  //   }
+  // }, []);
+
   return (
     <div className="w-full">
       {/* Title */}
@@ -62,34 +51,56 @@ export function PricingSection() {
         <p className="section-desc">Start with the free plan, and upgrade to Pro anytime for more features.</p>
       </div>
 
-      {/* Desktop: Grid layout (hidden on small screens) */}
-      <div className="hidden md:flex gap-4 justify-center">
-        {plans.map((plan) => (
-          <PricingCard key={plan.title} {...plan} />
-        ))}
-      </div>
+      <ToggleFrequency frequency={frequency} setFrequency={setFrequency} />
 
-      {/* Mobile: Carousel layout (hidden on large screens) */}
-      <div className="md:hidden w-full">
-        <Carousel
-          opts={{
-            align: "center",
-            loop: false,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {plans.map((plan) => (
-              <CarouselItem key={plan.title} className="flex justify-center">
-                <PricingCard {...plan} />
-              </CarouselItem>
+      <div className="flex flex-col items-center md:items-start md:flex-row gap-4 justify-center">
+        {loading ? (
+          <>
+            {Array.from({ length: 2 }).map((_, index) => (
+              <Skeleton key={index} className="w-full max-w-[300px] h-[500px]" />
             ))}
-          </CarouselContent>
-          <CarouselPagination />
-          <CarouselPrevious className="-left-2" />
-          <CarouselNext className="-right-2" />
-        </Carousel>
+          </>
+        ) : (
+          <>
+            {PRICING_PLANS.map((plan) => {
+              const priceId = plan.priceIds?.[frequency.value];
+              const price = priceId ? prices?.[priceId]?.formattedPrice : null;
+              return (
+                <PricingCard
+                  key={plan.title}
+                  {...plan}
+                  onClickCta={() => router.push(`/checkout/${priceId}`)}
+                  price={priceId === null ? "0" : price}
+                  suffixPrice={frequency.suffix}
+                  free={plan.title === "Free"}
+                />
+              );
+            })}
+          </>
+        )}
       </div>
     </div>
   );
 }
+
+// {/* Mobile: Carousel layout (hidden on large screens) */}
+// {/* <div className="md:hidden w-full">
+//   <Carousel
+//     opts={{
+//       align: "center",
+//       loop: false,
+//     }}
+//     className="w-full"
+//   >
+//     <CarouselContent className="-ml-2 md:-ml-4">
+//       {PRICING_PLANS.map((plan) => (
+//         <CarouselItem key={plan.title} className="flex justify-center">
+//           <PricingCard {...plan} />
+//         </CarouselItem>
+//       ))}
+//     </CarouselContent>
+//     <CarouselPagination />
+//     <CarouselPrevious className="-left-2" />
+//     <CarouselNext className="-right-2" />
+//   </Carousel>
+// </div> */}

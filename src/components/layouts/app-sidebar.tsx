@@ -4,6 +4,16 @@ import Link from "next/link";
 import { useLogout } from "@/lib/api/auth.api";
 import { useIsMobile } from "@/hooks";
 
+import { useSettingsDialog } from "@/components/settings/settings-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemDiv,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -19,17 +29,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-
-import { useSettingsDialog } from "../features/settings/settings-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemDiv,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 
 const QUICK_MENU = [
   {

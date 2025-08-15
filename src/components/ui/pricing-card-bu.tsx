@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { Switch } from "./switch";
+
 interface PricingFeature {
   name: string;
   included?: boolean;
@@ -15,11 +17,12 @@ interface PricingFeature {
 }
 
 export interface PricingCardProps {
-  free?: boolean;
   title?: string;
   description?: string;
-  price?: string | null;
-  suffixPrice?: string;
+  prices?: {
+    month: number;
+    quarter: number;
+  };
   features?: PricingFeature[];
   popular?: boolean;
   highlighted?: boolean;
@@ -29,18 +32,21 @@ export interface PricingCardProps {
 }
 
 export const PricingCard = ({
-  free = false,
   title = "Professional",
   description = "Perfect for growing businesses and teams.",
-  price,
-  suffixPrice,
+  prices,
   features = [],
   popular = false,
   highlighted = false,
   ctaText = "Get Started",
   onClickCta,
 }: PricingCardProps) => {
+  const [billingCycle, setBillingCycle] = useState<"month" | "quarter">("month");
   const [isHovered, setIsHovered] = useState(false);
+
+  const currentPrice = prices ? (billingCycle === "month" ? prices.month : prices.quarter) : 0;
+  const threeMonthSavings = prices ? prices.month * 3 - prices.quarter : 0;
+  const discount = prices ? ((threeMonthSavings / (prices.month * 3)) * 100).toFixed(0) : 0;
 
   return (
     <Card
@@ -64,7 +70,7 @@ export const PricingCard = ({
         </div>
       )}
 
-      <CardHeader className={`relative pb-3`}>
+      <CardHeader className={`relative pb-8`}>
         <div className="flex items-center gap-2">
           <CardTitle className="text-xl">{title}</CardTitle>
           {highlighted && (
@@ -79,9 +85,50 @@ export const PricingCard = ({
 
       <CardContent className="space-y-6 relative">
         {/* Pricing section */}
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-3xl font-bold">{free ? "Free" : price}</span>
-          {!free && suffixPrice && <span className="text-muted-foreground">{suffixPrice}</span>}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-3xl font-bold">${currentPrice}</span>
+              {prices && (
+                <span className="text-muted-foreground">/{billingCycle === "month" ? "month" : "3 month"}</span>
+              )}
+            </div>
+            {prices && (
+              <div className="flex items-center gap-2">
+                {/* <span className="text-sm">1 Month</span> */}
+                <Switch onCheckedChange={(checked) => setBillingCycle(checked ? "quarter" : "month")} />
+                <span className="text-sm">3 Months</span>
+              </div>
+            )}
+            {/* {price && (
+              <Select
+                value={billingCycle}
+                onValueChange={(currentValue) => {
+                  setBillingCycle(currentValue as "month" | "week" | "quarter");
+                }}
+              >
+                <SelectTrigger
+                  className={cn(
+                    "w-full max-w-[120px] shadow-none border-primary/50",
+                    highlighted ? "border-primary/50" : "",
+                  )}
+                >
+                  <SelectValue placeholder="Select billing cycle" />
+                </SelectTrigger>
+                <SelectContent className={cn(highlighted ? "border-primary/50" : "")}>
+                  <SelectItem value="week">1 Week</SelectItem>
+                  <SelectItem value="month">1 Month</SelectItem>
+                  <SelectItem value="quarter">3 Month</SelectItem>
+                </SelectContent>
+              </Select>
+            )} */}
+          </div>
+
+          {billingCycle === "quarter" && (
+            <div className="text-xs text-success font-medium">
+              Save ${threeMonthSavings} ({discount}%) with 3 month billing
+            </div>
+          )}
         </div>
 
         {/* Features list */}

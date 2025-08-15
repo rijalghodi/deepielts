@@ -7,14 +7,14 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
+import { PaymentDialog } from "@/components/home/payment-dialog";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
+import { SettingsDialog } from "@/components/settings/settings-dialog";
 import { SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AIAside } from "./ai-aside";
 import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
-import { PaymentDialog } from "../home/payment-dialog";
-import { SettingsDialog } from "../features/settings/settings-dialog";
 import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 
