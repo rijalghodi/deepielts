@@ -1,0 +1,126 @@
+"use client";
+
+import { Brain, Crown, FileDown, FileText, MessageSquare } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { create } from "zustand";
+
+import { PRICING_PLANS } from "@/lib/constants/pricing";
+import { usePaddlePrices } from "@/lib/contexts/paddle";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
+type State = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+export const useCheckoutDialog = create<State>((set) => ({
+  open: false,
+  onOpenChange: (open) => set({ open }),
+}));
+
+export function CheckoutDialog() {
+  const { open, onOpenChange } = useCheckoutDialog();
+  const router = useRouter();
+  const { prices, loading } = usePaddlePrices();
+
+  const handleCheckout = (frequency: "month" | "quarter") => {
+    const proPlan = PRICING_PLANS.find((plan) => plan.title === "Pro");
+    if (proPlan?.priceIds?.[frequency]) {
+      router.push(`/checkout/${proPlan.priceIds[frequency]}`);
+      onOpenChange(false);
+    }
+  };
+
+  const getPrice = (frequency: "month" | "quarter") => {
+    const proPlan = PRICING_PLANS.find((plan) => plan.title === "Pro");
+    const priceId = proPlan?.priceIds?.[frequency];
+    if (priceId && prices[priceId]) {
+      return prices[priceId].formattedPrice;
+    }
+    // Fallback prices if Paddle prices aren't loaded yet
+    return frequency === "month" ? "$12" : "$30";
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md p-0 border-0">
+        <div className="relative p-6">
+          {/* Header */}
+          <DialogHeader className="flex flex-col items-center text-center mb-6">
+            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+              <Crown className="h-5 w-5 text-primary" />
+            </div>
+            <DialogTitle className="text-xl font-semibold">Upgrade to Pro</DialogTitle>
+            <DialogDescription className=" text-sm">Unlimited essay evaluation</DialogDescription>
+          </DialogHeader>
+
+          {/* Features */}
+          <div className="space-y-4 mb-6">
+            <div className="flex items-start gap-3">
+              <FileText className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="">1000+ IELTS Practice Questions</p>
+                <p className="text-sm text-muted-foreground">Access comprehensive practice materials</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <MessageSquare className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="">Unlimited IELTS Writing Scoring</p>
+                <p className="text-sm text-muted-foreground">Get unlimited evaluations for your essays</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <Brain className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="">Advanced & In-Depth Feedback</p>
+                <p className="text-sm text-muted-foreground">Receive detailed analysis and improvement tips</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <FileDown className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="">Export result to PDF file</p>
+                <p className="text-sm text-muted-foreground">Save and share your results easily</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pricing Plans */}
+          <div className="space-y-3 mb-6">
+            <Button className="w-full relative" onClick={() => handleCheckout("quarter")} disabled={loading}>
+              Quarterly Plan - {getPrice("quarter")}/3 months
+              <Badge className="bg-primary/80 absolute right-3">Best value</Badge>
+            </Button>
+
+            <Button
+              variant="light"
+              className="border border-primary/50 w-full"
+              onClick={() => handleCheckout("month")}
+              disabled={loading}
+            >
+              Monthly Plan - {getPrice("month")}/month
+            </Button>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center">
+            <p className="text-xs text-gray-500">
+              By upgrading you agree to our{" "}
+              <Link href="/terms-of-service" className="text-primary cursor-pointer hover:underline">
+                terms of service
+              </Link>
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}

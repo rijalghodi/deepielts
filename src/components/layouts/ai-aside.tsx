@@ -8,7 +8,7 @@ import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
 
 import { useAuthDialog } from "../auth/auth-dialog";
-import { usePaymentDialog } from "../home/payment-dialog";
+import { useCheckoutDialog } from "../home/checkout-dialog";
 import { Button } from "../ui/button";
 import { MarkdownRenderer } from "../ui/markdown-renderer";
 
@@ -74,14 +74,14 @@ function ThinkingState() {
 
 function ErrorState({ message, name }: { message?: string; name?: string }) {
   const { onOpenChange: toggleAuthDialog } = useAuthDialog();
-  const { onOpenChange: toggleSettingsDialog } = usePaymentDialog();
+  const { onOpenChange: toggleCheckoutDialog } = useCheckoutDialog();
   return (
     <div className="flex flex-col items-center justify-center flex-1 gap-4 py-8">
       <AlertCircle className="w-5 h-5 text-destructive" />
       <p className="text-base font-semibold text-destructive text-center mt-2">Error occurred</p>
       <p className="text-base text-muted-foreground text-center">{message}</p>
       {name === "FreeUserDailyLimitReached" && (
-        <Button variant="default" onClick={() => toggleSettingsDialog(true)}>
+        <Button variant="default" onClick={() => toggleCheckoutDialog(true)}>
           Upgrade to Pro
         </Button>
       )}

@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
-import { PaymentDialog } from "@/components/home/payment-dialog";
+import { CheckoutDialog } from "@/components/home/checkout-dialog";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { SettingsDialog } from "@/components/settings/settings-dialog";
 import { SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
@@ -100,7 +100,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </SidebarInset>
       {isDashboard && <AIAside />}
       <SettingsDialog />
-      <PaymentDialog />
+      <CheckoutDialog />
     </>
   );
 }

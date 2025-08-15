@@ -1,7 +1,7 @@
 export interface PricingPlan {
   title: string;
   description: string;
-  features: { name: string; included: boolean }[];
+  features: { name: string; included: boolean; description?: string }[];
   highlighted?: boolean;
   priceIds: Record<string, string | null>;
 }
