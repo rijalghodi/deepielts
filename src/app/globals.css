@@ -78,7 +78,7 @@
 :root {
   /** Theme primary colors */
   --primary-0: 24.6 95% 53.1%;
-  --success-0: 137 80% 30%;
+  --success-0: 142 100% 32.5%;
   --destructive-0: 0 84.2% 60.2%;
 
   --dark: 0 0% 0%;
@@ -153,7 +153,7 @@
   /** Primary colors */
   --primary-0: 25 96% 62%;
   --success-0: 137 95% 65%;
-  --destructive-0: 0 84.2% 68%;
+  --destructive-0: 0 84.2% 67%;
 
   /** Surface colors */
   --surface-0: 0 0% 10%;

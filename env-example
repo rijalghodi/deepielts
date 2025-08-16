@@ -66,6 +66,8 @@ REDIS_URL=
 # Paddle Configuration
 # -----------------------------------------------------------
 NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=
+NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID=
+NEXT_PUBLIC_PADDLE_PRO_QUARTER_PRICE_ID=
 NEXT_PUBLIC_PADDLE_ENV=sandbox # production
 PADDLE_API_KEY=
 PADDLE_WEBHOOK_SECRET=

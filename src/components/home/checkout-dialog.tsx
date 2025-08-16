@@ -8,7 +8,6 @@ import { create } from "zustand";
 import { PRICING_PLANS } from "@/lib/constants/pricing";
 import { usePaddlePrices } from "@/lib/contexts/paddle";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -97,7 +96,6 @@ export function CheckoutDialog() {
           <div className="space-y-3 mb-6">
             <Button className="w-full relative" onClick={() => handleCheckout("quarter")} disabled={loading}>
               Quarterly Plan - {getPrice("quarter")}/3 months
-              <Badge className="bg-primary/80 absolute right-3">Best value</Badge>
             </Button>
 
             <Button

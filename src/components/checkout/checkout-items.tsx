@@ -50,26 +50,28 @@ export function CheckoutItems({ checkoutData }: Props) {
           <p className={"text-sm font-medium"}>{checkoutData?.items[0].product.name}</p>
           <p className={"text-xs text-muted-foreground"}>{checkoutData?.items[0].product.description}</p>
         </div>
-        <LoadingText currencyCode={checkoutData?.currency_code} value={checkoutData?.items[0].totals.subtotal} />
+        <span className={"text-base font-semibold"}>
+          <LoadingText currencyCode={checkoutData?.currency_code} value={checkoutData?.items[0].totals.subtotal} />
+        </span>
       </div>
-      <div className="space-y-5 pl-11">
+      <div className="space-y-5">
         <Separator className={"bg-border "} />
         <div className={"flex justify-between"}>
-          <span className={"text-sm leading-[20px] font-medium"}>Subtotal</span>
-          <span className={"text-base leading-[20px] font-semibold"}>
+          <span className={"text-sm font-medium"}>Subtotal</span>
+          <span className={"text-base font-semibold"}>
             <LoadingText currencyCode={checkoutData?.currency_code} value={checkoutData?.totals.subtotal} />
           </span>
         </div>
         <div className={"flex justify-between"}>
-          <span className={"text-sm leading-[20px] font-medium"}>Tax</span>
-          <span className={"text-base leading-[20px] font-semibold"}>
+          <span className={"text-sm font-medium"}>Tax</span>
+          <span className={"text-base font-semibold"}>
             <LoadingText currencyCode={checkoutData?.currency_code} value={checkoutData?.totals.tax} />
           </span>
         </div>
         <Separator className={"bg-border"} />
         <div className={"flex justify-between"}>
-          <span className={"text-sm leading-[20px] font-medium"}>Total due today</span>
-          <span className={"text-base leading-[20px] font-semibold"}>
+          <span className={"text-sm font-medium"}>Total due today</span>
+          <span className={"text-base font-semibold"}>
             <LoadingText currencyCode={checkoutData?.currency_code} value={checkoutData?.totals.total} />
           </span>
         </div>

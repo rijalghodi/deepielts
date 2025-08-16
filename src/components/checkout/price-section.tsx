@@ -19,7 +19,7 @@ export function PriceSection({ checkoutData }: Props) {
   }
 
   return (
-    <div className="w-full flex flex-col items-center md:items-start">
+    <div className="w-full flex flex-col items-center lg:items-start">
       <p className="text-base tracking-tight font-medium mb-4 text-muted-foreground">
         Subscribe to {checkoutData?.items[0].product.name}
       </p>

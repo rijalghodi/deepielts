@@ -1,22 +1,22 @@
-"use client";
-
-import { useParams } from "next/navigation";
-
-import { useAuth } from "@/lib/contexts/auth-context";
-
 import { CheckoutContents } from "@/components/checkout/checkout-content";
 
-export default function CheckoutPage() {
-  const { priceId } = useParams<{ priceId: string }>();
-  const { user } = useAuth();
+import { authGetUser } from "@/app/api/auth/auth-middleware";
+
+interface CheckoutPageProps {
+  params: Promise<{ priceId: string }>;
+}
+
+export default async function CheckoutPage({ params }: CheckoutPageProps) {
+  const { priceId } = await params;
+  const user = await authGetUser();
 
   if (!priceId) {
     return <div>No priceId</div>;
   }
 
   return (
-    <div>
+    <main>
       <CheckoutContents userEmail={user?.email} priceId={priceId} />
-    </div>
+    </main>
   );
 }

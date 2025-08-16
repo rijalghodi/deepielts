@@ -39,13 +39,13 @@ export function CheckoutContents({ userEmail, priceId }: Props) {
         <ArrowLeft className="w-4 h-4" />
         Back
       </Button>
-      <div className={"grid grid-cols-1 md:grid-cols-2 w-full h-full"}>
-        <div className={"w-full bg-muted/50 px-6 pt-20 md:py-20 md:px-16 flex justify-center md:justify-end"}>
-          <div className={"hidden md:flex flex-col gap-6 w-full max-w-[400px]"}>
+      <div className={"grid grid-cols-1 lg:grid-cols-2 w-full h-full"}>
+        <div className={"w-full bg-muted/50 px-6 pt-20 lg:py-20 lg:px-16 flex justify-center lg:justify-end"}>
+          <div className={"hidden lg:flex flex-col gap-6 w-full max-w-[400px]"}>
             <PriceSection checkoutData={checkoutData} />
             <CheckoutItems checkoutData={checkoutData} />
           </div>
-          <div className={"md:hidden flex flex-col items-center w-full max-w-[400px]"}>
+          <div className={"lg:hidden flex flex-col items-center w-full max-w-[400px]"}>
             <PriceSection checkoutData={checkoutData} />
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1" className="border-none flex flex-col gap-4 items-center">
@@ -59,7 +59,7 @@ export function CheckoutContents({ userEmail, priceId }: Props) {
             </Accordion>
           </div>
         </div>
-        <div className={"bg-background px-6 py-16 md:py-20 md:px-16 shadow-lg"}>
+        <div className={"bg-background px-6 py-16 lg:py-20 lg:px-16 shadow-lg flex justify-center lg:justify-start"}>
           <div className={"w-full max-w-[540px]"}>
             <div className={"paddle-checkout-frame"} />
           </div>
