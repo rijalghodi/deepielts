@@ -21,17 +21,27 @@ interface Props {
 export function CheckoutContents({ userEmail, priceId }: Props) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
-  const { openCheckout, isInitialized, checkoutData } = usePaddle();
+  const { isInitialized, checkoutData, isLoading, paddle } = usePaddle();
 
   useEffect(() => {
     if (isInitialized && priceId) {
-      openCheckout({
-        priceId,
-        userEmail,
-        theme: resolvedTheme as any,
+      paddle?.Checkout.open({
+        ...(userEmail && { customer: { email: userEmail } }),
+        items: [{ priceId, quantity: 1 }],
+        settings: {
+          showAddDiscounts: false,
+          theme: "light",
+          variant: "one-page",
+          displayMode: "inline",
+          allowLogout: true,
+          frameTarget: "paddle-checkout-frame",
+          frameInitialHeight: 600,
+          frameStyle: "width: 100%; background-color: white; padding:12px; border-radius: 10px;  border: none;",
+          successUrl: `${window.location.origin}/checkout/success`,
+        },
       });
     }
-  }, [isInitialized, priceId, userEmail, resolvedTheme, openCheckout]);
+  }, [isInitialized, priceId, userEmail, resolvedTheme, paddle]);
 
   return (
     <div className="w-screen h-screen">
@@ -42,11 +52,11 @@ export function CheckoutContents({ userEmail, priceId }: Props) {
       <div className={"grid grid-cols-1 lg:grid-cols-2 w-full h-full"}>
         <div className={"w-full bg-muted/50 px-6 pt-20 lg:py-20 lg:px-16 flex justify-center lg:justify-end"}>
           <div className={"hidden lg:flex flex-col gap-6 w-full max-w-[400px]"}>
-            <PriceSection checkoutData={checkoutData} />
+            <PriceSection checkoutData={checkoutData} isLoading={isLoading} />
             <CheckoutItems checkoutData={checkoutData} />
           </div>
           <div className={"lg:hidden flex flex-col items-center w-full max-w-[400px]"}>
-            <PriceSection checkoutData={checkoutData} />
+            <PriceSection checkoutData={checkoutData} isLoading={isLoading} />
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1" className="border-none flex flex-col gap-4 items-center">
                 <AccordionTrigger className={"w-fit"}>
@@ -59,9 +69,9 @@ export function CheckoutContents({ userEmail, priceId }: Props) {
             </Accordion>
           </div>
         </div>
-        <div className={"bg-background px-6 py-16 lg:py-20 lg:px-16 shadow-lg flex justify-center lg:justify-start"}>
+        <div className={"px-6 py-16 lg:py-20 lg:px-16 shadow-lg flex justify-center lg:justify-start"}>
           <div className={"w-full max-w-[540px]"}>
-            <div className={"paddle-checkout-frame"} />
+            <div className="paddle-checkout-frame" />
           </div>
         </div>
       </div>

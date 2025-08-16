@@ -1,5 +1,4 @@
 import { CheckoutEventsData } from "@paddle/paddle-js/types/checkout/events";
-import { Crown } from "lucide-react";
 
 import { formatMoney } from "@/lib/paddle/parse-money";
 
@@ -43,9 +42,6 @@ export function CheckoutItems({ checkoutData }: Props) {
   return (
     <div className={"space-y-5"}>
       <div className={"flex items-start gap-3"}>
-        <div className="flex items-center justify-center w-8 h-8 rounded-sm bg-primary/10">
-          <Crown className="text-primary w-5 h-5" />
-        </div>
         <div className="flex-1 space-y-1">
           <p className={"text-sm font-medium"}>{checkoutData?.items[0].product.name}</p>
           <p className={"text-xs text-muted-foreground"}>{checkoutData?.items[0].product.description}</p>

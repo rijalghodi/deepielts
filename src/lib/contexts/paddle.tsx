@@ -73,7 +73,9 @@ export function PaddleProvider({ children, defaultEventCallback }: PaddleProvide
                 allowLogout: true,
                 frameTarget: "paddle-checkout-frame",
                 frameInitialHeight: 450,
-                frameStyle: "width: 100%; background-color: transparent; border: none",
+                frameStyle:
+                  "width: 100%; background-color: transparent; border: none; padding:20px; border-radius: 10px;",
+                theme: "light",
                 successUrl: "/checkout/success",
               },
             },
