@@ -36,7 +36,7 @@ export function CheckoutContents({ userEmail, priceId }: Props) {
           allowLogout: true,
           frameTarget: "paddle-checkout-frame",
           frameInitialHeight: 600,
-          frameStyle: "width: 100%; background-color: white; padding:12px; border-radius: 10px;  border: none;",
+          frameStyle: "width: 100%; background-color: white;  border: none;",
           successUrl: `${window.location.origin}/checkout/success`,
         },
       });
@@ -44,12 +44,12 @@ export function CheckoutContents({ userEmail, priceId }: Props) {
   }, [isInitialized, priceId, userEmail, resolvedTheme, paddle]);
 
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen">
       <Button variant="ghost" size="sm" className="absolute top-4 left-4" onClick={() => router.back()}>
         <ArrowLeft className="w-4 h-4" />
         Back
       </Button>
-      <div className={"grid grid-cols-1 lg:grid-cols-2 w-full h-full"}>
+      <div className={"grid grid-cols-1 lg:grid-cols-2 w-full min-h-screen"}>
         <div className={"w-full bg-muted/50 px-6 pt-20 lg:py-20 lg:px-16 flex justify-center lg:justify-end"}>
           <div className={"hidden lg:flex flex-col gap-6 w-full max-w-[400px]"}>
             <PriceSection checkoutData={checkoutData} isLoading={isLoading} />

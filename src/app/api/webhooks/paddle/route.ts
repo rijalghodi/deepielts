@@ -14,25 +14,22 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get("paddle-signature");
     const rawRequestBody = await request.text();
 
+    console.log(request);
+
     if (!signature) {
+      logger.error("Missing Paddle signature");
       throw new AppError({ message: "Missing Paddle signature", code: 400 });
     }
 
     const webhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
     if (!webhookSecret) {
+      logger.error("Webhook secret not configured");
       throw new AppError({ message: "Webhook secret not configured", code: 500 });
     }
-
-    // const validator = new WebhooksValidator();
-
-    // if (!validator.isValidSignature(rawRequestBody, signature, webhookSecret)) {
-    //   throw new AppError({ message: "Invalid webhook signature", code: 401 });
-    // }
 
     const paddle = getPaddleInstance();
     const eventData = await paddle.webhooks.unmarshal(rawRequestBody, webhookSecret, signature);
 
-    // Process the webhook event
     await processEvent(eventData);
 
     return NextResponse.json(
