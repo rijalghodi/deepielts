@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 import { GET_CURRENT_USER_QUERY_KEY } from "@/lib/api/auth.api";
 import { updateUserSettings } from "@/lib/api/settings.api";
-import { TARGET_BAND_SCORE } from "@/lib/constants/data";
+import { TARGET_BAND_SCORE } from "@/lib/constants/band-scores";
 import { useAuth } from "@/lib/contexts/auth-context";
 
 import { ThemeToggle } from "@/components/ui/theme-toggle";
