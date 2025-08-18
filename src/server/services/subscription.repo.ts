@@ -18,3 +18,24 @@ export async function updateSubscription(userId: string, subscription: Subscript
     });
   }
 }
+
+export async function getSubscriptionByUserId(userId: string): Promise<Subscription | null> {
+  try {
+    const subscriptionsRef = db.collection("users").doc(userId).collection("subscriptions");
+    const snapshot = await subscriptionsRef.limit(1).get();
+
+    if (snapshot.empty) {
+      return null;
+    }
+
+    // Get the first (and should be only) subscription
+    const doc = snapshot.docs[0];
+    return { id: doc.id, ...doc.data() } as Subscription;
+  } catch (error: any) {
+    throw new AppError({
+      message: error.message,
+      name: "getSubscriptionDataError",
+      code: 500,
+    });
+  }
+}

@@ -1,4 +1,4 @@
-import { Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react";
+import { Edit, History, LogOut, Palette, PieChart, Settings, CreditCard } from "lucide-react";
 import Link from "next/link";
 
 import { useLogout } from "@/lib/api/auth.api";
@@ -45,6 +45,11 @@ const QUICK_MENU = [
     title: "History",
     icon: () => <History />,
     href: "/dashboard#history",
+  },
+  {
+    title: "Billing",
+    icon: () => <CreditCard />,
+    href: "/billing",
   },
 ];
 
