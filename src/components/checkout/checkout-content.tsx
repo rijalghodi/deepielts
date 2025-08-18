@@ -15,10 +15,11 @@ import { Button } from "../ui/button";
 
 interface Props {
   userEmail?: string;
+  userId?: string;
   priceId: string;
 }
 
-export function CheckoutContents({ userEmail, priceId }: Props) {
+export function CheckoutContents({ userEmail, userId, priceId }: Props) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
   const { isInitialized, checkoutData, isLoading, paddle } = usePaddle();
@@ -28,6 +29,10 @@ export function CheckoutContents({ userEmail, priceId }: Props) {
       paddle?.Checkout.open({
         ...(userEmail && { customer: { email: userEmail } }),
         items: [{ priceId, quantity: 1 }],
+        customData: {
+          userId,
+          userEmail,
+        },
         settings: {
           showAddDiscounts: false,
           theme: "light",

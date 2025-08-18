@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import { BILLING_FREQUENCY, BillingFrequency, PRICING_PLANS } from "@/lib/constants/pricing";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { usePaddlePrices } from "@/lib/contexts/paddle";
 
+import { useAuthDialog } from "@/components/auth/auth-dialog";
 import { Badge } from "@/components/ui/badge";
 import { PricingCard } from "@/components/ui/pricing-card";
 
@@ -16,12 +18,10 @@ import { Skeleton } from "../ui/skeleton";
 
 export function PricingSection() {
   const router = useRouter();
-
+  const { user } = useAuth();
+  const { onOpenChange: toggleAuthDialog } = useAuthDialog();
   const [frequency, setFrequency] = useState<BillingFrequency>(BILLING_FREQUENCY[0]);
-
   const { prices, loading } = usePaddlePrices("US");
-
-  console.log("prices section", prices);
 
   return (
     <div className="w-full">
@@ -41,7 +41,7 @@ export function PricingSection() {
         {loading ? (
           <>
             {Array.from({ length: 2 }).map((_, index) => (
-              <Skeleton key={index} className="w-full max-w-[300px] h-[500px]" />
+              <Skeleton key={index} className="w-full max-w-sm h-[400px] rounded-xl" />
             ))}
           </>
         ) : (
@@ -53,15 +53,21 @@ export function PricingSection() {
                 <PricingCard
                   key={plan.title}
                   {...plan}
-                  onClickCta={() => router.push(`/checkout/${priceId}`)}
-                  // onClickCta={() => {
-                  //   if (priceId) {
-                  //     openCheckout({ priceId });
-                  //   }
-                  // }}
+                  onClickCta={() => {
+                    if (user) {
+                      if (priceId === null) {
+                        router.push("/#hero-section");
+                        return;
+                      }
+                      router.push(`/checkout/${priceId}`);
+                      return;
+                    }
+
+                    toggleAuthDialog(true);
+                  }}
                   price={priceId === null ? "0" : price}
                   suffixPrice={frequency.suffix}
-                  free={plan.title === "Free"}
+                  free={priceId === null}
                 />
               );
             })}

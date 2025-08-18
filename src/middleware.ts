@@ -11,7 +11,7 @@ import logger from "./lib/logger";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const protectedRoutes = ["/dashboard"];
+  const protectedRoutes = ["/dashboard", "/checkout"];
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
 
   if (!isProtectedRoute) {

@@ -54,15 +54,15 @@ export function CheckoutDialog() {
               <Crown className="h-5 w-5 text-primary" />
             </div>
             <DialogTitle className="text-xl font-semibold">Upgrade to Pro</DialogTitle>
-            <DialogDescription className=" text-sm">Unlimited essay evaluation</DialogDescription>
+            <DialogDescription className="">Unlimited essay evaluation</DialogDescription>
           </DialogHeader>
 
           {/* Features */}
-          <div className="space-y-4 mb-6">
+          <div className="space-y-5 mb-6">
             <div className="flex items-start gap-3">
               <FileText className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
-                <p className="">1000+ IELTS Practice Questions</p>
+                <p className="text-sm font-medium">1000+ IELTS Practice Questions</p>
                 <p className="text-sm text-muted-foreground">Access comprehensive practice materials</p>
               </div>
             </div>
@@ -70,7 +70,7 @@ export function CheckoutDialog() {
             <div className="flex items-start gap-3">
               <MessageSquare className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
-                <p className="">Unlimited IELTS Writing Scoring</p>
+                <p className="text-sm font-medium">Unlimited IELTS Writing Scoring</p>
                 <p className="text-sm text-muted-foreground">Get unlimited evaluations for your essays</p>
               </div>
             </div>
@@ -78,7 +78,7 @@ export function CheckoutDialog() {
             <div className="flex items-start gap-3">
               <Brain className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
-                <p className="">Advanced & In-Depth Feedback</p>
+                <p className="text-sm font-medium">Advanced & In-Depth Feedback</p>
                 <p className="text-sm text-muted-foreground">Receive detailed analysis and improvement tips</p>
               </div>
             </div>
@@ -86,7 +86,7 @@ export function CheckoutDialog() {
             <div className="flex items-start gap-3">
               <FileDown className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
-                <p className="">Export result to PDF file</p>
+                <p className="text-sm font-medium">Export result to PDF file</p>
                 <p className="text-sm text-muted-foreground">Save and share your results easily</p>
               </div>
             </div>

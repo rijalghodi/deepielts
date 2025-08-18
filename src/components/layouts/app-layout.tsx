@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
+import { AuthDialog } from "@/components/auth/auth-dialog";
 import { CheckoutDialog } from "@/components/home/checkout-dialog";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { SettingsDialog } from "@/components/settings/settings-dialog";
@@ -101,6 +102,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {isDashboard && <AIAside />}
       <SettingsDialog />
       <CheckoutDialog />
+      <AuthDialog />
     </>
   );
 }

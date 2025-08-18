@@ -8,7 +8,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
-import { AuthDialog } from "@/components/auth/auth-dialog";
+import { useAuthDialog } from "@/components/auth/auth-dialog";
 
 import { useCheckoutDialog } from "../home/checkout-dialog";
 import { ASIDE_WIDTH, useAside } from "../ui/aside";
@@ -19,6 +19,7 @@ import { ThemeToggle } from "../ui/theme-toggle";
 
 export function AppHeader() {
   const { user } = useAuth();
+  const { onOpenChange: toggleAuthDialog } = useAuthDialog();
   const { onOpenChange: setOpenCheckoutDialog } = useCheckoutDialog();
   const { open: sidebarOpen, isMobile: isSidebarMobile } = useSidebar();
   const { open: asideOpen, isMobile: isAsideMobile } = useAside();
@@ -75,11 +76,9 @@ export function AppHeader() {
                     </Button>
                   }
                 >
-                  <AuthDialog>
-                    <Button>
-                      Login <Sparkles />
-                    </Button>
-                  </AuthDialog>
+                  <Button onClick={() => toggleAuthDialog(true)}>
+                    Login <Sparkles />
+                  </Button>
                 </Suspense>
               )}
             </div>

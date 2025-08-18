@@ -78,7 +78,7 @@ export function VerifyCodeForm({ email, onSuccess }: Props) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <Form {...form}>
         <FormField
           name="code"
@@ -101,7 +101,7 @@ export function VerifyCodeForm({ email, onSuccess }: Props) {
         </Button>
       </Form>
 
-      <p className="text-xs text-muted-foreground text-center">
+      <p className="text-sm text-muted-foreground text-center">
         Didn't receive the code?{" "}
         <button
           type="button"

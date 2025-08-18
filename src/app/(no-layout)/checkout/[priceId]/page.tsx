@@ -16,7 +16,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
   return (
     <main>
-      <CheckoutContents userEmail={user?.email} priceId={priceId} />
+      <CheckoutContents userEmail={user?.email} userId={user?.uid} priceId={priceId} />
     </main>
   );
 }

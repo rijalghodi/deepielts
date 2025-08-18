@@ -12,9 +12,8 @@ import { AppError, AppResponse } from "@/types";
 export async function POST(request: NextRequest) {
   try {
     const signature = request.headers.get("paddle-signature");
-    const rawRequestBody = await request.text();
 
-    console.log(request);
+    const rawRequestBody = await request.text();
 
     if (!signature) {
       logger.error("Missing Paddle signature");
