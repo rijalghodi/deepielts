@@ -1,5 +1,6 @@
-import { CreditCard, Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react";
+import { CreditCard, Edit, History, LogOut, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useLogout } from "@/lib/api/auth.api";
 import { useIsMobile } from "@/hooks";
@@ -9,9 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuItemDiv,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -28,7 +26,6 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const QUICK_MENU = [
   {
@@ -46,11 +43,6 @@ const QUICK_MENU = [
     icon: () => <History />,
     href: "/dashboard#history",
   },
-  {
-    title: "Billing",
-    icon: () => <CreditCard />,
-    href: "/billing",
-  },
 ];
 
 type AppSidebarProps = {
@@ -62,6 +54,7 @@ export function AppSidebar(props: AppSidebarProps) {
   const settingsDialog = useSettingsDialog();
   const isMobile = useIsMobile();
   const { setOpenMobile } = useSidebar();
+  const router = useRouter();
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader className="">
@@ -70,10 +63,6 @@ export function AppSidebar(props: AppSidebarProps) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg" className="flex-1">
-                  {/* <Avatar className="h-7 w-7 shrink-0">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar> */}
                   <div className="space-y-1 flex-1">
                     <p className="truncate text-left font-medium">{props.userName ?? "User"}</p>
                     <p className="text-xs text-muted-foreground">Free Plan</p>
@@ -86,14 +75,19 @@ export function AppSidebar(props: AppSidebarProps) {
                 side={isMobile ? "bottom" : "right"}
                 sideOffset={10}
               >
-                {/* <DropdownMenuSeparator /> */}
-                <DropdownMenuItemDiv className="h-9">
+                {/* <DropdownMenuItemDiv className="h-9">
                   <Palette /> Theme
                   <DropdownMenuShortcut>
                     <ThemeToggle variant="horizontal" />
                   </DropdownMenuShortcut>
                 </DropdownMenuItemDiv>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator /> */}
+                <DropdownMenuItem onClick={() => settingsDialog.open()}>
+                  <Settings /> Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/billing")}>
+                  <CreditCard /> Billing
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => logout()}>
                   <LogOut /> Log out
                 </DropdownMenuItem>
@@ -128,18 +122,6 @@ export function AppSidebar(props: AppSidebarProps) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => {
-                    if (isMobile) {
-                      setOpenMobile(false);
-                    }
-                    settingsDialog.open();
-                  }}
-                >
-                  <Settings /> Settings
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

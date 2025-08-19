@@ -50,7 +50,7 @@ export function CheckoutDialog() {
         <div className="relative p-6">
           {/* Header */}
           <DialogHeader className="flex flex-col items-center text-center mb-6">
-            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
               <Crown className="h-5 w-5 text-primary" />
             </div>
             <DialogTitle className="text-xl font-semibold">Upgrade to Pro</DialogTitle>
@@ -94,17 +94,12 @@ export function CheckoutDialog() {
 
           {/* Pricing Plans */}
           <div className="space-y-3 mb-6">
-            <Button className="w-full relative" onClick={() => handleCheckout("quarter")} disabled={loading}>
+            {/* <Button className="w-full relative" onClick={() => handleCheckout("quarter")} disabled={loading}>
               Quarterly Plan - {getPrice("quarter")}/3 months
-            </Button>
+            </Button> */}
 
-            <Button
-              variant="light"
-              className="border border-primary/50 w-full"
-              onClick={() => handleCheckout("month")}
-              disabled={loading}
-            >
-              Monthly Plan - {getPrice("month")}/month
+            <Button variant="default" className="w-full" onClick={() => handleCheckout("month")} disabled={loading}>
+              Upgrade to Pro - {getPrice("month")}/month
             </Button>
           </div>
 

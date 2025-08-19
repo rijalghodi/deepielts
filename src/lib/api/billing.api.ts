@@ -1,4 +1,5 @@
 import { GetTransactionsResult } from "@/server/dto/transactions.dto";
+
 import { apiGet, apiPost } from "./utils";
 
 import { ApiResponse } from "@/types";
@@ -23,10 +24,10 @@ export const billingGetSubscription = async (userId: string) => {
   });
 };
 
-export const billingGetTransactions = async (userId: string, limit: number = 10) => {
+export const billingGetTransactions = async (userId: string, limit: number = 10, all: boolean) => {
   return apiGet<ApiResponse<GetTransactionsResult>>({
     endpoint: `/billing/transactions`,
-    queryParams: { userId, limit },
+    queryParams: { userId, limit, all },
   });
 };
 
@@ -39,4 +40,9 @@ export const billingCancelSubscription = async (
 };
 
 export const billingGetSubscriptionKey = (userId: string) => ["subscriptions", userId];
-export const billingGetTransactionsKey = (userId: string, limit: number) => ["transactions", userId, limit];
+export const billingGetTransactionsKey = (userId: string, limit: number, all: boolean) => [
+  "transactions",
+  userId,
+  limit,
+  all,
+];

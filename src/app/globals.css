@@ -41,6 +41,12 @@
   --color-card: hsl(var(--card));
   --color-success: hsl(var(--success));
   --color-success-foreground: hsl(var(--success-foreground));
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-neutral: hsl(var(--neutral));
+  --color-neutral-foreground: hsl(var(--neutral-foreground));
 
   --radius-xs: calc(var(--radius) - 6px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -80,6 +86,9 @@
   --primary-0: 24.6 95% 53.1%;
   --success-0: 142 100% 32.5%;
   --destructive-0: 0 84.2% 60.2%;
+  --info-0: 224 76.3% 48%;
+  --warning-0: 35 2.7% 36.9%;
+  --neutral-0: 216 31% 17.1%;
 
   --dark: 0 0% 0%;
   --light: 0 0% 100%;
@@ -127,6 +136,12 @@
   --radius: 0.75rem;
   --success: var(--success-0);
   --success-foreground: var(--light);
+  --info: var(--info-0);
+  --info-foreground: var(--light);
+  --warning: var(--warning-0);
+  --warning-foreground: var(--light);
+  --neutral: var(--neutral-0);
+  --neutral-foreground: var(--light);
 
   /* Sidebar */
   --sidebar: var(--surface-0);
@@ -154,6 +169,9 @@
   --primary-0: 25 96% 62%;
   --success-0: 137 95% 65%;
   --destructive-0: 0 84.2% 67%;
+  --info-0: 204 100% 67.6%;
+  --warning-0: 50 97.8% 63.5%;
+  --neutral-0: 0 0% 70%;
 
   /** Surface colors */
   --surface-0: 0 0% 10%;
@@ -197,6 +215,12 @@
   --ring: var(--primary-0);
   --success: var(--success-0);
   --success-foreground: var(--dark);
+  --info: var(--info-0);
+  --info-foreground: var(--dark);
+  --warning: var(--warning-0);
+  --warning-foreground: var(--dark);
+  --neutral: var(--neutral-0);
+  --neutral-foreground: var(--dark);
 
   /* Sidebar */
   --sidebar: var(--surface-1);

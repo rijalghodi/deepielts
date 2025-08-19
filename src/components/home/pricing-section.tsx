@@ -2,9 +2,9 @@
 
 import { Percent } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 
-import { BILLING_FREQUENCY, BillingFrequency, PRICING_PLANS } from "@/lib/constants/pricing";
+import { PRICING_PLANS } from "@/lib/constants/pricing";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { usePaddlePrices } from "@/lib/contexts/paddle";
 
@@ -13,14 +13,14 @@ import { Badge } from "@/components/ui/badge";
 import { PricingCard } from "@/components/ui/pricing-card";
 
 // import { usePaymentDialog } from "./payment-dialog";
-import { ToggleFrequency } from "../checkout/toggle-frequency";
+// import { ToggleFrequency } from "../checkout/toggle-frequency";
 import { Skeleton } from "../ui/skeleton";
 
 export function PricingSection() {
   const router = useRouter();
   const { user } = useAuth();
   const { onOpenChange: toggleAuthDialog } = useAuthDialog();
-  const [frequency, setFrequency] = useState<BillingFrequency>(BILLING_FREQUENCY[0]);
+  // const [frequency, setFrequency] = useState<BillingFrequency>(BILLING_FREQUENCY[0]);
   const { prices, loading } = usePaddlePrices("US");
 
   return (
@@ -35,7 +35,7 @@ export function PricingSection() {
         <p className="section-desc">Start with the free plan, and upgrade to Pro anytime for more features.</p>
       </div>
 
-      <ToggleFrequency frequency={frequency} setFrequency={setFrequency} />
+      {/* <ToggleFrequency frequency={frequency} setFrequency={setFrequency} /> */}
 
       <div className="flex flex-col items-center md:items-start md:flex-row gap-4 justify-center">
         {loading ? (
@@ -47,7 +47,8 @@ export function PricingSection() {
         ) : (
           <>
             {PRICING_PLANS.map((plan) => {
-              const priceId = plan.priceIds?.[frequency.value];
+              const priceId = plan.priceIds?.month;
+              // const priceId = plan.priceIds?.[frequency.value];
               const price = priceId ? prices?.[priceId]?.formattedPrice : null;
               return (
                 <PricingCard
@@ -66,7 +67,8 @@ export function PricingSection() {
                     toggleAuthDialog(true);
                   }}
                   price={priceId === null ? "0" : price}
-                  suffixPrice={frequency.suffix}
+                  // suffixPrice={frequency.suffix}
+                  suffixPrice="/month"
                   free={priceId === null}
                 />
               );

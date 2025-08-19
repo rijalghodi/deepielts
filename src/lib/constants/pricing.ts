@@ -18,7 +18,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     ],
     priceIds: {
       month: null,
-      quarter: null,
+      // quarter: null,
     },
   },
   {
@@ -27,7 +27,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     highlighted: true,
     priceIds: {
       month: "pri_01k2jwa6k408c4gp8z55kgcet9",
-      quarter: "pri_01k2jw96cd3dn513rar0r7rsrc",
+      // quarter: "pri_01k2jw96cd3dn513rar0r7rsrc",
     },
     features: [
       { name: "1000+ IELTS Practice Questions", included: true },

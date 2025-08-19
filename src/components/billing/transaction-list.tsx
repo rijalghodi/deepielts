@@ -1,9 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { FileText } from "lucide-react";
 import { useState } from "react";
-import { Badge } from "../ui/badge";
 
 import { billingGetTransactions, billingGetTransactionsKey } from "@/lib/api/billing.api";
 
@@ -11,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { Badge } from "../ui/badge";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 
 interface Props {
@@ -18,11 +17,11 @@ interface Props {
 }
 
 export function TransactionList({ userId }: Props) {
-  const [limit, setLimit] = useState(10);
+  const [all, setAll] = useState<boolean>(false);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: billingGetTransactionsKey(userId, limit),
-    queryFn: () => billingGetTransactions(userId, limit),
+    queryKey: billingGetTransactionsKey(userId, 10, all),
+    queryFn: () => billingGetTransactions(userId, 10, all),
   });
 
   const transactions = data?.data?.transactions || [];
@@ -31,20 +30,17 @@ export function TransactionList({ userId }: Props) {
     return (
       <Card>
         <CardHeader>
-          <Skeleton className="h-6 w-32" />
-          <Skeleton className="h-4 w-48" />
+          <Skeleton className="h-4 w-32" />
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
+          <div className="space-y-6">
+            {[...Array(10)].map((_, i) => (
               <div key={i} className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
-                  <Skeleton className="h-4 w-32 mb-2" />
-                  <Skeleton className="h-3 w-24" />
+                  <Skeleton className="h-4 w-36" />
                 </div>
                 <div className="flex items-center gap-2">
                   <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-8 w-8" />
                 </div>
               </div>
             ))}
@@ -65,32 +61,42 @@ export function TransactionList({ userId }: Props) {
             <Table>
               <TableBody>
                 {transactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
+                  <TableRow
+                    key={transaction.id}
+                    className="cursor-pointer"
+                    onClick={() => window.open(transaction.invoiceUrl, "_blank")}
+                  >
                     <TableCell className="font-medium">
                       {new Date(transaction.createdAt).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
+                        // hour: "2-digit",
+                        // minute: "2-digit",
+                        // hour12: false,
                       })}
                     </TableCell>
-                    <TableCell>{formatAmount(transaction.amount, transaction.currencyCode)}</TableCell>
+                    <TableCell>{formatAmount(transaction.amount, transaction.currencyCode || "USD")}</TableCell>
                     <TableCell>
                       <TransactionStatusBadge status={transaction.status} />
                     </TableCell>
-                    <TableCell className="text-right">{transaction.name}</TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" onClick={() => window.open(transaction.invoiceUrl, "_blank")}>
-                        <FileText className="w-4 h-4" />
-                      </Button>
-                    </TableCell>
+                    <TableCell className="">{transaction.name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+
+            {all && (
+              <div className="flex justify-center">
+                <Button variant="ghost" size="sm" onClick={() => setAll(false)}>
+                  Show Less
+                </Button>
+              </div>
+            )}
             {data?.data?.hasMore && (
               <div className="flex justify-center">
-                <Button variant="ghost" size="sm" className="mt-2" onClick={() => setLimit(limit + 10)}>
-                  Show More
+                <Button variant="ghost" size="sm" onClick={() => setAll(true)}>
+                  Show All
                 </Button>
               </div>
             )}
@@ -120,19 +126,21 @@ function formatAmount(amount: string, currency: string) {
 
 const TransactionStatusBadge = ({ status }: { status: string }) => {
   switch (status.toLowerCase()) {
+    case "completed":
+    case "success":
     case "complete":
-      return <Badge className="bg-success/10 text-success">Complete</Badge>;
+      return <Badge className="bg-success/10 text-success">Completed</Badge>;
     case "incomplete":
     case "ready":
     case "pending":
     case "draft":
     case "billed":
     case "paid":
-      return <Badge className="bg-blue-50 text-blue-500">Incomplete</Badge>;
+      return <Badge className="bg-info/10 text-info">Incomplete</Badge>;
     case "canceled":
     case "past_due":
       return <Badge className="bg-destructive/10 text-destructive">Canceled</Badge>;
     default:
-      return <Badge className="bg-gray-50 text-gray-500">Unknown</Badge>;
+      return <Badge className="bg-neutral/10 text-neutral">Unknown</Badge>;
   }
 };
