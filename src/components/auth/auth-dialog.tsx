@@ -27,13 +27,13 @@ export function AuthDialog() {
   const { open, onOpenChange } = useAuthDialog();
   const [email, setEmail] = useState<string>("");
 
-  const [step, setStep] = useState<"login" | "code">("code");
+  const [step, setStep] = useState<"login" | "code">("login");
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       onOpenChange?.(false);
-    } else {
       setStep("login");
+    } else {
       onOpenChange?.(true);
     }
   };
@@ -46,7 +46,13 @@ export function AuthDialog() {
           <DialogDescription>Please log in to continue</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6">
-          <GoogleButton variant="accent" />
+          <GoogleButton
+            variant="accent"
+            onSuccess={() => {
+              onOpenChange?.(false);
+              setStep("login");
+            }}
+          />
 
           <div className="flex items-center gap-4 text-muted-foreground">
             <div className="flex-1 border-t" />
