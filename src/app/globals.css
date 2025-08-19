@@ -171,8 +171,8 @@
   --chart-1: 210 60% 55%;
   --chart-2: 160 60% 45%;
   --chart-3: 30 80% 55%;
-  --chart-4: 280 55% 60%;
-  --chart-5: 340 65% 60%;
+  --chart-4: 280 80% 70%;
+  --chart-5: 340 80% 70%;
 
   /* Theme colors */
   --background: var(--surface-0);

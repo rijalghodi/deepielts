@@ -3,22 +3,24 @@ import { NextRequest, NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
 import { getPaddleInstance } from "@/lib/paddle/get-paddle-instance";
-import { getSubscriptionByUserId } from "@/server/services/subscription.repo";
 
 import { handleError } from "@/server/services/interceptor";
+import { getSubscriptionByUserId } from "@/server/services/subscription.repo";
+
+import { authGetUser } from "../../auth/auth-middleware";
+
 import { AppError, AppResponse } from "@/types";
 
 export async function GET(request: NextRequest) {
   try {
-    // Get user ID from query params or headers (you may need to implement auth middleware)
-    const userId = request.nextUrl.searchParams.get("userId");
+    const user = await authGetUser();
 
-    if (!userId) {
+    if (!user) {
       throw new AppError({ message: "User ID is required", code: 400 });
     }
 
     // Get subscription from database
-    const subscription = await getSubscriptionByUserId(userId);
+    const subscription = await getSubscriptionByUserId(user.uid);
 
     if (!subscription) {
       return NextResponse.json(

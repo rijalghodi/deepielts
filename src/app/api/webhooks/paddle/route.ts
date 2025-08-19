@@ -10,6 +10,8 @@ import { handleError } from "@/server/services/interceptor";
 import { AppError, AppResponse } from "@/types";
 
 export async function POST(request: NextRequest) {
+  console.log("OK -----------------------------------------------");
+
   try {
     const signature = request.headers.get("paddle-signature");
 

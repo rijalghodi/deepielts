@@ -4,9 +4,8 @@ import { Subscription } from "../models/subscription";
 
 import { AppError } from "@/types/global";
 
-export async function updateSubscription(userId: string, subscription: Subscription): Promise<void> {
+export async function upsertSubscription(userId: string, subscription: Subscription): Promise<void> {
   try {
-    // Insert/update subscription under users/{userId}/subscriptions/{subscriptionId}
     const subscriptionRef = db.collection("users").doc(userId).collection("subscriptions").doc(subscription.id);
 
     await subscriptionRef.set(subscription, { merge: true });
@@ -14,6 +13,23 @@ export async function updateSubscription(userId: string, subscription: Subscript
     throw new AppError({
       message: error.message,
       name: "updateSubscriptionDataError",
+      code: 500,
+    });
+  }
+}
+
+export async function upsertCustomerId(userId: string, customerId: string): Promise<void> {
+  try {
+    const userRef = db.collection("users").doc(userId);
+
+    await userRef.set(
+      { customerId }, // only new field
+      { merge: true }, // keep existing fields
+    );
+  } catch (error: any) {
+    throw new AppError({
+      message: error.message,
+      name: "updateCustomerDataError",
       code: 500,
     });
   }

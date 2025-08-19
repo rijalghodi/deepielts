@@ -1,4 +1,4 @@
-import { Edit, History, LogOut, Palette, PieChart, Settings, CreditCard } from "lucide-react";
+import { CreditCard, Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
 
 import { useLogout } from "@/lib/api/auth.api";

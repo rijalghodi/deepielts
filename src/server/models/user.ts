@@ -1,9 +1,10 @@
 import { Timestamp } from "firebase-admin/firestore";
 
 export interface User {
-  id?: string;
+  id: string;
   name?: string;
   email?: string;
+  customerId?: string;
   role?: Role;
   settings?: UserSettings;
   readonly createdAt?: Timestamp;

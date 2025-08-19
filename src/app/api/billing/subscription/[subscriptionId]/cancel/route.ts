@@ -5,6 +5,7 @@ import logger from "@/lib/logger";
 import { getPaddleInstance } from "@/lib/paddle/get-paddle-instance";
 
 import { handleError } from "@/server/services/interceptor";
+
 import { AppError, AppResponse } from "@/types";
 
 export async function POST(_request: NextRequest, { params }: { params: Promise<{ subscriptionId: string }> }) {

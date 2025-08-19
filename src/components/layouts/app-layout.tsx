@@ -89,12 +89,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <AsideInset>
           <AppHeader />
           <main
-            className={cn("relative transition-[padding-left] duration-200 ease-linear overflow-hidden")}
+            className={cn(
+              "flex flex-col relative transition-[padding-left] duration-200 ease-linear overflow-hidden min-h-screen",
+            )}
             style={{
               paddingTop: 60,
             }}
           >
-            {children}
+            <div className="flex-1">{children}</div>
             <AppFooter />
           </main>
         </AsideInset>

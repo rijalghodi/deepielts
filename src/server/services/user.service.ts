@@ -20,17 +20,13 @@ export async function getUserByEmail(email: string): Promise<StringifyTimestamp<
   };
 }
 
-/**
- * Create a new user in Firebase Auth and Firestore, returns { id, ...data }.
- */
 export async function createUserWithEmail(email: string): Promise<StringifyTimestamp<User>> {
-  // Create user in Firebase Auth
   const userRecord = await auth.createUser({
     email,
     emailVerified: true,
   });
   const uid = userRecord.uid;
-  // Create user document in Firestore
+
   const newUser = {
     email,
     name: email.split("@")[0], // Use email prefix as default name
@@ -49,9 +45,6 @@ export async function createUserWithEmail(email: string): Promise<StringifyTimes
   };
 }
 
-/**
- * Get a user by Firestore document ID. Returns { id, ...data } or null if not found.
- */
 export async function getUserById(id: string): Promise<StringifyTimestamp<User> | null> {
   const userDoc = await db.collection("users").doc(id).get();
   if (!userDoc.exists) return null;
@@ -65,9 +58,19 @@ export async function getUserById(id: string): Promise<StringifyTimestamp<User> 
   };
 }
 
-/**
- * Update user's name in Firestore.
- */
+export async function getUserByCustomerId(customerId: string): Promise<StringifyTimestamp<User> | null> {
+  const userQuery = await db.collection("users").where("customerId", "==", customerId).limit(1).get();
+  if (userQuery.empty) return null;
+  const userDoc = userQuery.docs[0];
+  const userData = userDoc.data();
+  return {
+    id: userDoc.id,
+    ...userData,
+    createdAt: userDoc.createTime?.toDate().toISOString(),
+    updatedAt: userDoc.updateTime?.toDate().toISOString(),
+  };
+}
+
 export async function updateUser(userId: string, user: Partial<User>): Promise<void> {
   try {
     await db
@@ -84,16 +87,9 @@ export async function updateUser(userId: string, user: Partial<User>): Promise<v
   }
 }
 
-/**
- * Delete a user account and all associated data.
- * This will remove the user from Firebase Auth and delete all related documents.
- */
 export async function deleteUserAccount(userId: string): Promise<void> {
   try {
-    // Delete user from Firebase Auth
     await auth.deleteUser(userId);
-
-    // Delete user document from Firestore
     await db.collection("users").doc(userId).delete();
 
     // Delete all user submissions

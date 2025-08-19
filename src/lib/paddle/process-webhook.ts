@@ -1,8 +1,21 @@
-import { EventEntity, EventName, SubscriptionCreatedEvent, SubscriptionUpdatedEvent } from "@paddle/paddle-node-sdk";
+import {
+  CustomerCreatedEvent,
+  CustomerUpdatedEvent,
+  EventEntity,
+  EventName,
+  SubscriptionActivatedEvent,
+  SubscriptionCreatedEvent,
+  SubscriptionUpdatedEvent,
+} from "@paddle/paddle-node-sdk";
 import { Timestamp } from "firebase-admin/firestore";
 
 import { Subscription } from "@/server/models/subscription";
-import { updateSubscription } from "@/server/services/subscription.repo";
+import { upsertCustomerId as insertCustomerId, upsertSubscription } from "@/server/services/subscription.repo";
+import { getUserByCustomerId, getUserByEmail } from "@/server/services/user.service";
+
+import logger from "../logger";
+
+import { AppError } from "@/types";
 
 export interface CustomerData {
   userId: string;
@@ -16,28 +29,40 @@ export async function processEvent(eventData: EventEntity) {
   switch (eventData.eventType) {
     case EventName.SubscriptionCreated:
     case EventName.SubscriptionUpdated:
-      await updateSubscriptionData(eventData);
+    case EventName.SubscriptionActivated:
+      await upsertSubscriptionData(eventData);
       break;
     case EventName.SubscriptionCanceled:
     case EventName.SubscriptionPastDue:
     case EventName.SubscriptionPaused:
       // TODO: Handle cancel / pause / past due / paused subscription events
       break;
+    case EventName.CustomerCreated:
+    case EventName.CustomerUpdated:
+      await upsertCustomerData(eventData);
+      break;
   }
 }
 
-async function updateSubscriptionData(eventData: SubscriptionCreatedEvent | SubscriptionUpdatedEvent) {
+async function upsertSubscriptionData(
+  eventData: SubscriptionCreatedEvent | SubscriptionUpdatedEvent | SubscriptionActivatedEvent,
+) {
   try {
-    const userId = (eventData.data.customData as { userId: string })?.userId;
-    const customerId = eventData.data.customerId;
-    if (!customerId) {
-      console.error("No customer ID found in subscription event");
-      return;
+    let userId = (eventData.data.customData as { userId: string })?.userId;
+
+    if (!userId) {
+      const customerId = eventData.data.customerId;
+      const customer = await getUserByCustomerId(customerId);
+      if (!customer) {
+        throw new AppError({ message: "No user found with customer ID " + customerId, code: 400 });
+      }
+      userId = customer.id;
     }
+
     const subscriptionData: Subscription = {
       id: eventData.data.id,
       status: eventData.data.status,
-      customerId: customerId,
+      customerId: eventData.data.customerId,
       currencyCode: eventData.data.currencyCode,
       startedAt: eventData.data.startedAt,
       nextBilledAt: eventData.data.nextBilledAt,
@@ -45,13 +70,33 @@ async function updateSubscriptionData(eventData: SubscriptionCreatedEvent | Subs
       createdAt: eventData.data.createdAt,
       updatedAt: eventData.data.updatedAt,
       userId: userId,
-      items: eventData.data.items,
+      priceId: eventData.data.items?.[0]?.price?.id || "",
+      productId: eventData.data.items?.[0]?.product?.id || "",
     };
-    await updateSubscription(userId, subscriptionData);
+    await upsertSubscription(userId, subscriptionData);
   } catch (error) {
-    console.error("Error updating subscription data:", error);
+    logger.error(error, "Error updating subscription data");
     throw error;
   }
 }
 
 // TODO: Handle cancel / pause / past due / paused subscription events
+async function upsertCustomerData(eventData: CustomerCreatedEvent | CustomerUpdatedEvent) {
+  const customerId = eventData.data.id;
+
+  console.log("customerId", customerId);
+  const email = eventData.data.email;
+
+  // get user by email
+  const user = await getUserByEmail(email);
+
+  if (!user) {
+    throw new AppError({ message: "No user found with email " + email, code: 400 });
+  }
+
+  if (!customerId) {
+    throw new AppError({ message: "No customer ID found in customer event", code: 400 });
+  }
+
+  await insertCustomerId(user.id, customerId);
+}

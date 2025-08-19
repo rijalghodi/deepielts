@@ -1,3 +1,4 @@
+import { GetTransactionsResult } from "@/server/dto/transactions.dto";
 import { apiGet, apiPost } from "./utils";
 
 import { ApiResponse } from "@/types";
@@ -15,27 +16,17 @@ export interface Subscription {
   userId: string;
 }
 
-export interface Transaction {
-  id: string;
-  status: string;
-  amount: string;
-  currencyCode: string;
-  invoiceUrl: string;
-  createdAt: string;
-  description: string;
-}
-
-export const billingGetSubscription = async (userId: string): Promise<ApiResponse<Subscription> | undefined> => {
+export const billingGetSubscription = async (userId: string) => {
   return apiGet<ApiResponse<Subscription>>({
     endpoint: `/billing/subscription`,
     queryParams: { userId },
   });
 };
 
-export const billingGetTransactions = async (customerId: string): Promise<ApiResponse<Transaction[]> | undefined> => {
-  return apiGet<ApiResponse<Transaction[]>>({
+export const billingGetTransactions = async (userId: string, limit: number = 10) => {
+  return apiGet<ApiResponse<GetTransactionsResult>>({
     endpoint: `/billing/transactions`,
-    queryParams: { customerId },
+    queryParams: { userId, limit },
   });
 };
 
@@ -47,5 +38,5 @@ export const billingCancelSubscription = async (
   });
 };
 
-export const billingGetSubscriptionKey = (userId: string) => ["billing-subscription", userId];
-export const billingGetTransactionsKey = (customerId: string) => ["billing-transactions", customerId];
+export const billingGetSubscriptionKey = (userId: string) => ["subscriptions", userId];
+export const billingGetTransactionsKey = (userId: string, limit: number) => ["transactions", userId, limit];
