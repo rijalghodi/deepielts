@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import logger from "@/lib/logger";
 
 import { handleError } from "@/server/services/interceptor";
-import { incrementDailyUsage, isBelowDailyLimit } from "@/server/services/rate-limiter";
+import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
 import { uploadFileToStorage } from "@/server/services/upload.service";
 
 import { authGetUser } from "../auth/auth-middleware";
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const dailyAttemptId = isAuthenticated
       ? `file-upload:${user.uid}`
       : `file-upload:${req.headers.get("x-forwarded-for")}`;
-    const allowed = await isBelowDailyLimit(dailyAttemptId, MAX_FILE_UPLOAD_PER_DAY);
+    const allowed = await isBelowLimit(dailyAttemptId, MAX_FILE_UPLOAD_PER_DAY);
 
     if (!allowed) {
       throw new AppError({
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       fileName: file.name,
     });
 
-    await incrementDailyUsage(dailyAttemptId);
+    await incrementUsage(dailyAttemptId);
 
     return NextResponse.json(
       new AppResponse({

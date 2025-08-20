@@ -6,7 +6,7 @@ import logger from "@/lib/logger";
 import { createSubmissionBodySchema, listSubmissionsQuerySchema } from "@/server/dto/submission.dto";
 import { QuestionType, Submission } from "@/server/models/submission";
 import { handleError } from "@/server/services/interceptor";
-import { incrementDailyUsage, isBelowDailyLimit } from "@/server/services/rate-limiter";
+import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
 import { createSubmission, listUserSubmissions } from "@/server/services/submission.repo";
 import {
   createFeedbackReadableStream,
@@ -21,6 +21,9 @@ import { authGetUser, authMiddleware } from "../auth/auth-middleware";
 import { AppError, AppPaginatedResponse } from "@/types/global";
 export const runtime = "nodejs";
 
+const MAX_SUBMISSIONS_PER_DAY = 3;
+const GUEST_MAX_SUBMISSIONS_PER_DAY = 1;
+
 export async function POST(req: NextRequest) {
   const headers = Object.fromEntries(req.headers.entries());
   console.log(headers);
@@ -31,8 +34,8 @@ export async function POST(req: NextRequest) {
     const submitDailyId = isAuthenticated
       ? `submit-daily:${user.uid}`
       : `submit-daily:${req.headers.get("x-forwarded-for")}`;
-    const maxSubmissions = isAuthenticated ? 3 : 1;
-    const allowed = await isBelowDailyLimit(submitDailyId, maxSubmissions);
+    const maxSubmissions = isAuthenticated ? MAX_SUBMISSIONS_PER_DAY : GUEST_MAX_SUBMISSIONS_PER_DAY;
+    const allowed = await isBelowLimit(submitDailyId, maxSubmissions);
 
     if (!allowed) {
       throw new AppError({
@@ -108,7 +111,7 @@ export async function POST(req: NextRequest) {
           }
         } finally {
           onCompleteResolve();
-          await incrementDailyUsage(submitDailyId);
+          await incrementUsage(submitDailyId);
         }
       },
     });
