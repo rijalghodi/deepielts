@@ -15,6 +15,7 @@ import {
   insertFeedbackToSubmission,
   parseScoreJson,
 } from "@/server/services/submission.service";
+import { getSubscriptionByUserId } from "@/server/services/subscription.repo";
 
 import { authGetUser, authMiddleware } from "../auth/auth-middleware";
 
@@ -23,6 +24,7 @@ export const runtime = "nodejs";
 
 const MAX_SUBMISSIONS_PER_DAY = 3;
 const GUEST_MAX_SUBMISSIONS_PER_DAY = 1;
+const PRO_MAX_SUBMISSIONS_PER_DAY = 20;
 
 export async function POST(req: NextRequest) {
   const headers = Object.fromEntries(req.headers.entries());
@@ -31,10 +33,17 @@ export async function POST(req: NextRequest) {
   try {
     const user = await authGetUser();
     const isAuthenticated = !!user?.uid;
+    const subscription = isAuthenticated ? await getSubscriptionByUserId(user?.uid) : null;
+
     const submitDailyId = isAuthenticated
       ? `submit-daily:${user.uid}`
       : `submit-daily:${req.headers.get("x-forwarded-for")}`;
-    const maxSubmissions = isAuthenticated ? MAX_SUBMISSIONS_PER_DAY : GUEST_MAX_SUBMISSIONS_PER_DAY;
+    const maxSubmissions = isAuthenticated
+      ? subscription?.status.toLowerCase() === "active"
+        ? PRO_MAX_SUBMISSIONS_PER_DAY
+        : MAX_SUBMISSIONS_PER_DAY
+      : GUEST_MAX_SUBMISSIONS_PER_DAY;
+
     const allowed = await isBelowLimit(submitDailyId, maxSubmissions);
 
     if (!allowed) {
