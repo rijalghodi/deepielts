@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { toast } from "sonner";
 
 import { billingGetPortalUrl, billingGetSubscription, billingGetSubscriptionKey } from "@/lib/api/billing.api";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,6 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/componen
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useCheckoutDialog } from "../home/checkout-dialog";
-import { toast } from "sonner";
 
 interface Props {
   userId: string;
