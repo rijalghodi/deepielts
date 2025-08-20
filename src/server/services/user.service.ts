@@ -98,27 +98,34 @@ export async function updateUser(userId: string, user: Partial<User>): Promise<v
 export async function deleteUserAccount(userId: string): Promise<void> {
   try {
     await auth.deleteUser(userId);
-    await db.collection("users").doc(userId).delete();
+    await db.collection("users").doc(userId).set(
+      {
+        email: null,
+        name: null,
+        updatedAt: new Date(),
+      },
+      { merge: true },
+    );
 
     // Delete all user submissions
-    const submissionsQuery = await db.collection("submissions").where("userId", "==", userId).get();
-    const submissionDeletions = submissionsQuery.docs.map((doc) => doc.ref.delete());
-    await Promise.all(submissionDeletions);
+    // const submissionsQuery = await db.collection("submissions").where("userId", "==", userId).get();
+    // const submissionDeletions = submissionsQuery.docs.map((doc) => doc.ref.delete());
+    // await Promise.all(submissionDeletions);
 
-    // Delete all user performance records
-    const performanceQuery = await db.collection("performance").where("userId", "==", userId).get();
-    const performanceDeletions = performanceQuery.docs.map((doc) => doc.ref.delete());
-    await Promise.all(performanceDeletions);
+    // // Delete all user performance records
+    // const performanceQuery = await db.collection("performance").where("userId", "==", userId).get();
+    // const performanceDeletions = performanceQuery.docs.map((doc) => doc.ref.delete());
+    // await Promise.all(performanceDeletions);
 
-    // Delete all user sessions
-    const sessionsQuery = await db.collection("sessions").where("userId", "==", userId).get();
-    const sessionDeletions = sessionsQuery.docs.map((doc) => doc.ref.delete());
-    await Promise.all(sessionDeletions);
+    // // Delete all user sessions
+    // const sessionsQuery = await db.collection("sessions").where("userId", "==", userId).get();
+    // const sessionDeletions = sessionsQuery.docs.map((doc) => doc.ref.delete());
+    // await Promise.all(sessionDeletions);
 
-    // Delete all user subscriptions
-    const subscriptionQuery = await db.collection("subscriptions").where("userId", "==", userId).get();
-    const subscriptionDeletions = subscriptionQuery.docs.map((doc) => doc.ref.delete());
-    await Promise.all(subscriptionDeletions);
+    // // Delete all user subscriptions
+    // const subscriptionQuery = await db.collection("subscriptions").where("userId", "==", userId).get();
+    // const subscriptionDeletions = subscriptionQuery.docs.map((doc) => doc.ref.delete());
+    // await Promise.all(subscriptionDeletions);
   } catch (error) {
     throw new AppError({ message: (error as any).message, code: 500 });
   }

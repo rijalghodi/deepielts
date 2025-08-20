@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 import { JwtDecode } from "@/lib/jwt";
@@ -8,14 +9,14 @@ import { getUserById, updateUser } from "@/server/services/user.service";
 
 import { authGetUser, authMiddleware } from "../auth-middleware";
 
-import { AppResponse } from "@/types";
+import { AppError, AppResponse } from "@/types";
 
 export async function GET(req: NextRequest & { user: JwtDecode }) {
   try {
     await authMiddleware(req);
 
     const user = await getUserById(req.user.uid);
-    if (!user) throw new Error("User not found");
+    if (!user) throw new AppError({ message: "User not found", code: 404 });
 
     return NextResponse.json(
       new AppResponse({
@@ -24,6 +25,7 @@ export async function GET(req: NextRequest & { user: JwtDecode }) {
     );
   } catch (error: any) {
     logger.error(error, "GET /auth/me");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }
@@ -33,7 +35,7 @@ export async function PUT(request: NextRequest) {
     // Authenticate the user
     const authResult = await authGetUser();
     if (!authResult) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw new AppError({ message: "Unauthorized", code: 401 });
     }
 
     const userId = authResult.uid;
@@ -41,15 +43,16 @@ export async function PUT(request: NextRequest) {
 
     // Validate input
     if (!name || typeof name !== "string" || name.trim().length === 0) {
-      return NextResponse.json({ error: "Name is required and must be a non-empty string" }, { status: 400 });
+      throw new AppError({ message: "Name is required and must be a non-empty string", code: 400 });
     }
 
     // Update the user's name
     await updateUser(userId, { name: name.trim() });
 
-    return NextResponse.json({ message: "Name updated successfully", name: name.trim() }, { status: 200 });
-  } catch (error) {
-    console.error("Error updating name:", error);
-    return NextResponse.json({ error: "Failed to update name" }, { status: 500 });
+    return NextResponse.json(new AppResponse({ data: { name: name.trim() }, message: "Name updated successfully" }));
+  } catch (error: any) {
+    logger.error(error, "PUT /auth/me");
+    Sentry.captureException(error);
+    return handleError(error);
   }
 }

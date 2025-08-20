@@ -6,6 +6,7 @@ export interface User {
   email?: string;
   customerId?: string;
   role?: Role;
+  isVerified?: boolean;
   settings?: UserSettings;
   readonly createdAt?: Timestamp;
   readonly updatedAt?: Timestamp;

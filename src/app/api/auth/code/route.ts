@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import ms, { StringValue } from "ms";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -44,6 +45,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(new AppResponse({ data: null, message: "Code sent" }));
   } catch (error: any) {
     logger.error(error, "GET /auth/code");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }
@@ -118,6 +120,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(new AppResponse({ data: userData, message: "Code verified" }));
   } catch (error: any) {
     logger.error(error, "POST /auth/code");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }

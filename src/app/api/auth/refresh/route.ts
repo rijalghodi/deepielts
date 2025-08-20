@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import ms, { StringValue } from "ms";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -12,10 +13,10 @@ import { handleError } from "@/server/services";
 import { AppError, AppResponse } from "@/types";
 
 export async function POST(_: Request) {
-  const refreshToken = (await cookies()).get(REFRESH_TOKEN_KEY)?.value;
-  if (!refreshToken) throw new AppError({ message: "Unauthorized", code: 401 });
-
   try {
+    const refreshToken = (await cookies()).get(REFRESH_TOKEN_KEY)?.value;
+    if (!refreshToken) throw new AppError({ message: "Unauthorized", code: 401 });
+
     const jwtDecode = await verifyRefreshToken(refreshToken);
 
     if (!jwtDecode) throw new AppError({ message: "Invalid token" });
@@ -42,6 +43,7 @@ export async function POST(_: Request) {
     return NextResponse.json(new AppResponse({ data: payload, message: "Token refreshed" }));
   } catch (error: any) {
     logger.error(error, "POST /auth/refresh");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }
