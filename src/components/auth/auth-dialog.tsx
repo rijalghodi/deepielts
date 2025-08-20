@@ -41,7 +41,7 @@ export function AuthDialog() {
   function LoginSection() {
     return (
       <>
-        <DialogHeader className="">
+        <DialogHeader>
           <DialogTitle> Welcome to {APP_NAME}</DialogTitle>
           <DialogDescription>Please log in to continue</DialogDescription>
         </DialogHeader>

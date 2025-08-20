@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { billingGetPortalUrl, billingGetSubscription, billingGetSubscriptionKey } from "@/lib/api/billing.api";
@@ -12,6 +12,7 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/componen
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useCheckoutDialog } from "../home/checkout-dialog";
+import { toast } from "sonner";
 
 interface Props {
   userId: string;
@@ -19,7 +20,6 @@ interface Props {
 
 export function CurrentSubscription({ userId }: Props) {
   const { onOpenChange: openCheckoutDialog } = useCheckoutDialog();
-  const [loadingPortalUrl, setLoadingPortalUrl] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: billingGetSubscriptionKey(userId),
@@ -27,15 +27,22 @@ export function CurrentSubscription({ userId }: Props) {
     enabled: !!userId,
   });
 
-  const handleManageSubscription = async () => {
-    setLoadingPortalUrl(true);
-    const response = await billingGetPortalUrl();
+  const { mutate: getPortalUrl, isPending: isLoadingPortalUrl } = useMutation({
+    mutationKey: ["portal-url"],
+    mutationFn: () => billingGetPortalUrl(),
+    onSuccess: (data) => {
+      const url = data?.data?.url;
+      if (url) {
+        window.open(url, "_blank");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
-    const url = response?.data?.url;
-    if (url) {
-      window.open(url, "_blank");
-    }
-    setLoadingPortalUrl(false);
+  const handleManageSubscription = async () => {
+    await getPortalUrl();
   };
 
   const subscription = data?.data;
@@ -67,7 +74,7 @@ export function CurrentSubscription({ userId }: Props) {
                 size="sm"
                 className="w-36"
                 onClick={handleManageSubscription}
-                loading={loadingPortalUrl}
+                loading={isLoadingPortalUrl}
               >
                 Manage Subscription
               </Button>
