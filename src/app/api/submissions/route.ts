@@ -22,6 +22,9 @@ import { AppError, AppPaginatedResponse } from "@/types/global";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  const headers = Object.fromEntries(req.headers.entries());
+  console.log(headers);
+
   try {
     const user = await authGetUser();
     const isAuthenticated = !!user?.uid;

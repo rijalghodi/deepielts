@@ -1,10 +1,11 @@
 import { auth, db } from "@/lib/firebase";
+import logger from "@/lib/logger";
 
 import { getSubscriptionByUserId } from "./subscription.repo";
 import { Role, User } from "../models";
 import { Subscription } from "../models/subscription";
 
-import { AppError, StringifyTimestamp } from "@/types";
+import { StringifyTimestamp } from "@/types";
 
 /**
  * Get a user by email from Firestore. Returns { id, ...data } or null if not found.
@@ -88,10 +89,9 @@ export async function updateUser(userId: string, user: Partial<User>): Promise<v
         ...user,
         updatedAt: new Date(),
       });
-    console.log(`Successfully updated name for user: ${userId}`);
-  } catch (error) {
-    console.error(`Error updating name for user ${userId}:`, error);
-    throw new Error(`Failed to update name: ${error instanceof Error ? error.message : "Unknown error"}`);
+  } catch (error: any) {
+    logger.error(error, `Failed to update name for user: ${userId}`);
+    throw error;
   }
 }
 
@@ -126,7 +126,8 @@ export async function deleteUserAccount(userId: string): Promise<void> {
     // const subscriptionQuery = await db.collection("subscriptions").where("userId", "==", userId).get();
     // const subscriptionDeletions = subscriptionQuery.docs.map((doc) => doc.ref.delete());
     // await Promise.all(subscriptionDeletions);
-  } catch (error) {
-    throw new AppError({ message: (error as any).message, code: 500 });
+  } catch (error: any) {
+    logger.error(error, `Failed to delete user account: ${userId}`);
+    throw error;
   }
 }

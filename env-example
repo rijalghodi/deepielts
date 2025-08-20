@@ -3,6 +3,7 @@
 # -----------------------------------------------------------
 NEXT_PUBLIC_BASE_URL=http://localhost:3003
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3003/api
+ALLOWED_ORIGIN_CORS= # comma separated
 
 # -----------------------------------------------------------
 # Firebase Configuration
@@ -55,8 +56,6 @@ SENTRY_PROJECT=
 # You can also set this env variable in your own `.env` files and remove this file.
 SENTRY_AUTH_TOKEN=
 
-
-
 #-------------------------------------------------------------
 # Redis
 #-------------------------------------------------------------
@@ -68,6 +67,6 @@ REDIS_URL=
 NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=
 NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID=
 NEXT_PUBLIC_PADDLE_PRO_QUARTER_PRICE_ID=
-NEXT_PUBLIC_PADDLE_ENV=sandbox # production
+NEXT_PUBLIC_PADDLE_ENV=sandbox # or production
 PADDLE_API_KEY=
 PADDLE_WEBHOOK_SECRET=
