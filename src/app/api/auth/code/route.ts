@@ -22,7 +22,7 @@ import { AppError, AppResponse } from "@/types";
 
 const resend = new Resend(env.RESEND_API_KEY);
 const MAX_REQUEST_LOGIN_CODE = 5;
-const TTL_REQUEST_LOGIN_CODE = 5 * 60; // 5 minutes
+const TTL_REQUEST_LOGIN_CODE = 2 * 60; // 2 minutes
 
 export async function GET(req: NextRequest) {
   try {
