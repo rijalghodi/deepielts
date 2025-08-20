@@ -95,7 +95,7 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
 
   // Helper function to process lists
   const processList = (items: string[]): void => {
-    items.forEach((item, index) => {
+    items.forEach((item) => {
       const bullet = "• ";
       const cleanItem = item.replace(/^[-*•]\s/, "");
 
@@ -138,7 +138,7 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
         let currentX = 50;
         const currentY = doc.y;
 
-        cells.forEach((cell, cellIndex) => {
+        cells.forEach((cell) => {
           // Draw cell border
           // doc
           //   .strokeColor("#000000")

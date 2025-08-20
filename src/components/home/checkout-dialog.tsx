@@ -51,13 +51,23 @@ export function CheckoutDialog() {
       <DialogContent className="sm:max-w-md p-0 border-0">
         <div className="relative p-6">
           {/* Header */}
-          <DialogHeader className="flex flex-col items-center text-center mb-6">
-            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-              <Crown className="h-5 w-5 text-primary" />
-            </div>
-            <DialogTitle className="text-xl font-semibold">Upgrade to Pro</DialogTitle>
-            <DialogDescription className="">Unlimited essay evaluation</DialogDescription>
-          </DialogHeader>
+          {user?.activeSubscription ? (
+            <DialogHeader className="flex flex-col items-center text-center mb-6">
+              <div className="w-10 h-10 bg-success/10 rounded-full flex items-center justify-center">
+                <Crown className="h-5 w-5 text-success" />
+              </div>
+              <DialogTitle className="text-xl font-semibold">You are already a Pro</DialogTitle>
+              <DialogDescription className="">Enjoy unlimited essay evaluation</DialogDescription>
+            </DialogHeader>
+          ) : (
+            <DialogHeader className="flex flex-col items-center text-center mb-6">
+              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <Crown className="h-5 w-5 text-primary" />
+              </div>
+              <DialogTitle className="text-xl font-semibold">Upgrade to Pro</DialogTitle>
+              <DialogDescription className="">Unlimited essay evaluation</DialogDescription>
+            </DialogHeader>
+          )}
 
           {/* Features */}
           <div className="space-y-5 mb-6">
@@ -94,35 +104,30 @@ export function CheckoutDialog() {
             </div>
           </div>
 
-          {/* Pricing Plans */}
-          <div className="space-y-3 mb-6">
-            {/* <Button className="w-full relative" onClick={() => handleCheckout("quarter")} disabled={loading}>
+          {!user?.activeSubscription && (
+            <>
+              {/* Pricing Plans */}
+              <div className="space-y-3 mb-6">
+                {/* <Button className="w-full relative" onClick={() => handleCheckout("quarter")} disabled={loading}>
               Quarterly Plan - {getPrice("quarter")}/3 months
             </Button> */}
 
-            {user?.activeSubscription ? (
-              <Button
-                variant="outline"
-                className="w-full bg-success/10 text-success hover:bg-success/10 hover:text-success cursor-default"
-              >
-                Already have a subscription
-              </Button>
-            ) : (
-              <Button variant="default" className="w-full" onClick={() => handleCheckout("month")} disabled={loading}>
-                Upgrade to Pro - {getPrice("month")}/month
-              </Button>
-            )}
-          </div>
+                <Button variant="default" className="w-full" onClick={() => handleCheckout("month")} disabled={loading}>
+                  Upgrade to Pro - {getPrice("month")}/month
+                </Button>
+              </div>
 
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-xs text-gray-500">
-              By upgrading you agree to our{" "}
-              <Link href="/terms-of-service" className="text-primary cursor-pointer hover:underline">
-                terms of service
-              </Link>
-            </p>
-          </div>
+              {/* Footer */}
+              <div className="text-center">
+                <p className="text-xs text-gray-500">
+                  By upgrading you agree to our{" "}
+                  <Link href="/terms-of-service" className="text-primary cursor-pointer hover:underline">
+                    terms of service
+                  </Link>
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

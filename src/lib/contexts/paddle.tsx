@@ -37,7 +37,7 @@ interface PaddleProviderProps {
   defaultEventCallback?: (event: any) => void;
 }
 
-export function PaddleProvider({ children, defaultEventCallback }: PaddleProviderProps) {
+export function PaddleProvider({ children }: PaddleProviderProps) {
   const [paddle, setPaddle] = useState<Paddle | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

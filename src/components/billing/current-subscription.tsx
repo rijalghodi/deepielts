@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { billingGetPortalUrl, billingGetSubscription, billingGetSubscriptionKey } from "@/lib/api/billing.api";
@@ -8,56 +8,34 @@ import { cn } from "@/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+
+import { useCheckoutDialog } from "../home/checkout-dialog";
 
 interface Props {
   userId: string;
 }
 
 export function CurrentSubscription({ userId }: Props) {
-  const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const queryClient = useQueryClient();
-  // const [showPortal, setShowPortal] = useState(false);
+  const { onOpenChange: openCheckoutDialog } = useCheckoutDialog();
+  const [loadingPortalUrl, setLoadingPortalUrl] = useState(false);
 
-  // Fetch subscription data
   const { data, isLoading, error } = useQuery({
     queryKey: billingGetSubscriptionKey(userId),
     queryFn: () => billingGetSubscription(userId),
     enabled: !!userId,
   });
 
-  // const {
-  //   data: portalUrlData,
-  //   isLoading: isPortalUrlLoading,
-  //   error: portalUrlError,
-  // } = useQuery({
-  //   queryKey: billingGetPortalUrlKey(userId),
-  //   queryFn: () => billingGetPortalUrl(userId),
-  //   enabled: !!userId && showPortal,
-  // });
-
-  // // Cancel subscription mutation
-  // const { mutate: cancelSubscription, isPending: isCanceling } = useMutation({
-  //   mutationFn: (subscriptionId: string) => billingCancelSubscription(subscriptionId),
-  //   onSuccess: () => {
-  //     // Invalidate and refetch subscription data
-  //     queryClient.invalidateQueries({ queryKey: billingGetSubscriptionKey(userId) });
-  //     setShowCancelDialog(false);
-  //   },
-  //   onError: (error) => {
-  //     console.error("Failed to cancel subscription:", error);
-  //     // You might want to show a toast notification here
-  //   },
-  // });
-
   const handleManageSubscription = async () => {
-    const response = await billingGetPortalUrl(userId);
+    setLoadingPortalUrl(true);
+    const response = await billingGetPortalUrl();
 
     const url = response?.data?.url;
     if (url) {
       window.open(url, "_blank");
     }
+    setLoadingPortalUrl(false);
   };
 
   const subscription = data?.data;
@@ -82,6 +60,19 @@ export function CurrentSubscription({ userId }: Props) {
       <Card>
         <CardHeader>
           <CardTitle>Current Subscription</CardTitle>
+          {subscription && (
+            <CardAction>
+              <Button
+                variant="accent"
+                size="sm"
+                className="w-36"
+                onClick={handleManageSubscription}
+                loading={loadingPortalUrl}
+              >
+                Manage Subscription
+              </Button>
+            </CardAction>
+          )}
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 md:flex-row flex-col justify-between">
@@ -102,7 +93,7 @@ export function CurrentSubscription({ userId }: Props) {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Status</span>
                   <Badge className={cn(getStatusColor(subscription.status))}>
-                    {subscription.status.replace("_", " ").toUpperCase()}
+                    {subscription.status?.replace("_", " ").toUpperCase() ?? "N/A"}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
@@ -145,44 +136,18 @@ export function CurrentSubscription({ userId }: Props) {
             ) : error ? (
               <p className="text-sm text-muted-foreground">Error loading subscription.</p>
             ) : (
-              <p className="text-sm text-muted-foreground">
-                {(error as any)?.message || "No active subscription found."}
-              </p>
-            )}
-            <div className="flex flex-col gap-2 mt-4">
-              <Button variant="accent" onClick={handleManageSubscription}>
-                Manage Subscription
-              </Button>
-              {/* {subscription && subscription.status !== "canceled" && (
-                <Button variant="destructive" onClick={() => setShowCancelDialog(true)} disabled={isCanceling}>
-                  {isCanceling ? "Canceling..." : "Cancel Subscription"}
+              <div className="flex flex-col gap-4">
+                <p className="text-sm text-muted-foreground">
+                  {(error as any)?.message || "No active subscription found."}
+                </p>
+                <Button variant="accent" size="sm" className="w-36" onClick={() => openCheckoutDialog(true)}>
+                  Upgrade to Pro
                 </Button>
-              )} */}
-            </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
-
-      {/* Cancel Subscription Confirmation Dialog */}
-      {/* <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Cancel Subscription</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to cancel your subscription? This action cannot be undone. Your subscription will
-              remain active until the end of the current billing period.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCancelDialog(false)} disabled={isCanceling}>
-              Keep Subscription
-            </Button>
-            <Button variant="destructive" onClick={handleCancelSubscription} disabled={isCanceling}>
-              {isCanceling ? "Canceling..." : "Yes, Cancel"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog> */}
     </>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { Percent } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 import { PRICING_PLANS } from "@/lib/constants/pricing";
@@ -12,14 +11,15 @@ import { useAuthDialog } from "@/components/auth/auth-dialog";
 import { Badge } from "@/components/ui/badge";
 import { PricingCard } from "@/components/ui/pricing-card";
 
+import { useCheckoutDialog } from "./checkout-dialog";
 // import { usePaymentDialog } from "./payment-dialog";
 // import { ToggleFrequency } from "../checkout/toggle-frequency";
 import { Skeleton } from "../ui/skeleton";
 
 export function PricingSection() {
-  const router = useRouter();
   const { user } = useAuth();
   const { onOpenChange: toggleAuthDialog } = useAuthDialog();
+  const { onOpenChange: toggleCheckoutDialog } = useCheckoutDialog();
   // const [frequency, setFrequency] = useState<BillingFrequency>(BILLING_FREQUENCY[0]);
   const { prices, loading } = usePaddlePrices("US");
 
@@ -56,11 +56,7 @@ export function PricingSection() {
                   {...plan}
                   onClickCta={() => {
                     if (user) {
-                      if (priceId === null) {
-                        router.push("/#hero-section");
-                        return;
-                      }
-                      router.push(`/checkout/${priceId}`);
+                      toggleCheckoutDialog(true);
                       return;
                     }
 

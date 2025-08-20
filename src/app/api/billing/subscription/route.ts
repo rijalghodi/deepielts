@@ -10,7 +10,7 @@ import { authGetUser } from "../../auth/auth-middleware";
 
 import { AppError, AppResponse } from "@/types";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const user = await authGetUser();
 
@@ -33,9 +33,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       new AppResponse({
         message: "Subscription retrieved successfully",
-        data: {
-          subscription,
-        },
+        data: subscription,
       }),
     );
 

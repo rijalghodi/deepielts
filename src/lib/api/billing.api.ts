@@ -6,33 +6,32 @@ import { ApiResponse } from "@/types";
 
 export interface Subscription {
   id: string;
-  status: string;
-  customerId: string;
-  currencyCode: string;
-  startedAt: string | null;
-  nextBilledAt: string | null;
-  canceledAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-  userId: string;
-  productId: string;
-  productName: string;
-  priceId: string;
-  priceName: string;
-  priceUnit: string;
-  billingCycleInterval: string;
-  billingCycleFrequency: number;
-  price: number;
+  status?: string;
+  customerId?: string;
+  currencyCode?: string;
+  startedAt?: string | null;
+  nextBilledAt?: string | null;
+  canceledAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: string;
+  productId?: string;
+  productName?: string;
+  priceId?: string;
+  priceName?: string;
+  priceUnit?: string;
+  billingCycleInterval?: string;
+  billingCycleFrequency?: number;
+  price?: number;
 }
 
 type PortalUrlResponse = {
   url: string;
 };
 
-export const billingGetPortalUrl = async (userId: string) => {
+export const billingGetPortalUrl = async () => {
   return apiGet<ApiResponse<PortalUrlResponse>>({
     endpoint: `/billing/portal-url`,
-    queryParams: { userId },
   });
 };
 
