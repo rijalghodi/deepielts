@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { useLogout } from "@/lib/api/auth.api";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { useIsMobile } from "@/hooks";
 
 import { useSettingsDialog } from "@/components/settings/settings-dialog";
@@ -26,6 +27,8 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+
+import { Badge } from "../ui/badge";
 
 const QUICK_MENU = [
   {
@@ -51,6 +54,7 @@ type AppSidebarProps = {
 
 export function AppSidebar(props: AppSidebarProps) {
   const { logout } = useLogout();
+  const { user } = useAuth();
   const settingsDialog = useSettingsDialog();
   const isMobile = useIsMobile();
   const { setOpenMobile } = useSidebar();
@@ -65,7 +69,15 @@ export function AppSidebar(props: AppSidebarProps) {
                 <SidebarMenuButton size="lg" className="flex-1">
                   <div className="space-y-1 flex-1">
                     <p className="truncate text-left font-medium">{props.userName ?? "User"}</p>
-                    <p className="text-xs text-muted-foreground">Free Plan</p>
+                    {user?.activeSubscription ? (
+                      <Badge variant="light" className="text-success bg-success/10">
+                        Pro Plan
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-neutral bg-neutral/10">
+                        Free Plan
+                      </Badge>
+                    )}
                   </div>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>

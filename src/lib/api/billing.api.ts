@@ -15,7 +15,26 @@ export interface Subscription {
   createdAt: string;
   updatedAt: string;
   userId: string;
+  productId: string;
+  productName: string;
+  priceId: string;
+  priceName: string;
+  priceUnit: string;
+  billingCycleInterval: string;
+  billingCycleFrequency: number;
+  price: number;
 }
+
+type PortalUrlResponse = {
+  url: string;
+};
+
+export const billingGetPortalUrl = async (userId: string) => {
+  return apiGet<ApiResponse<PortalUrlResponse>>({
+    endpoint: `/billing/portal-url`,
+    queryParams: { userId },
+  });
+};
 
 export const billingGetSubscription = async (userId: string) => {
   return apiGet<ApiResponse<Subscription>>({
@@ -40,6 +59,7 @@ export const billingCancelSubscription = async (
 };
 
 export const billingGetSubscriptionKey = (userId: string) => ["subscriptions", userId];
+export const billingGetPortalUrlKey = (userId: string) => ["portal-url", userId];
 export const billingGetTransactionsKey = (userId: string, limit: number, all: boolean) => [
   "transactions",
   userId,

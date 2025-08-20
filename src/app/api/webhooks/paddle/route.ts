@@ -10,7 +10,7 @@ import { handleError } from "@/server/services/interceptor";
 import { AppError, AppResponse } from "@/types";
 
 export async function POST(request: NextRequest) {
-  console.log("OK -----------------------------------------------");
+  // console.log("OK -----------------------------------------------");
 
   try {
     const signature = request.headers.get("paddle-signature");
@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       new AppResponse({
-        message: "Webhook processed successfully",
         data: {
           eventData,
         },

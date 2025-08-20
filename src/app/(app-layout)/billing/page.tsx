@@ -1,5 +1,4 @@
 import { CurrentSubscription } from "@/components/billing/current-subscription";
-import { TransactionList } from "@/components/billing/transaction-list";
 
 import { authGetUser } from "@/app/api/auth/auth-middleware";
 
@@ -15,7 +14,7 @@ export default async function BillingPage() {
       <div className="space-y-8">
         <CurrentSubscription userId={user.uid} />
 
-        <TransactionList userId={user.uid} />
+        {/* <TransactionList userId={user.uid} /> */}
       </div>
     </section>
   );

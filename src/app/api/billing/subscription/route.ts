@@ -2,7 +2,6 @@ import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
-import { getPaddleInstance } from "@/lib/paddle/get-paddle-instance";
 
 import { handleError } from "@/server/services/interceptor";
 import { getSubscriptionByUserId } from "@/server/services/subscription.repo";
@@ -31,37 +30,46 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get additional subscription details from Paddle if needed
-    const paddle = getPaddleInstance();
+    return NextResponse.json(
+      new AppResponse({
+        message: "Subscription retrieved successfully",
+        data: {
+          subscription,
+        },
+      }),
+    );
 
-    try {
-      const paddleSubscription = await paddle.subscriptions.get(subscription.id);
+    // // Get additional subscription details from Paddle if needed
+    // const paddle = getPaddleInstance();
 
-      // Merge Paddle data with our stored data
-      const enrichedSubscription = {
-        ...subscription,
-        // Add any additional fields from Paddle that we want to expose
-        items: paddleSubscription.items,
-        billingDetails: paddleSubscription.billingDetails,
-      };
+    // try {
+    //   const paddleSubscription = await paddle.subscriptions.get(subscription.id);
 
-      return NextResponse.json(
-        new AppResponse({
-          message: "Subscription retrieved successfully",
-          data: enrichedSubscription,
-        }),
-      );
-    } catch (paddleError) {
-      // If Paddle call fails, return the stored subscription data
-      logger.warn(`Failed to fetch Paddle subscription data: ${paddleError}`);
+    //   // Merge Paddle data with our stored data
+    //   const enrichedSubscription = {
+    //     ...subscription,
+    //     // Add any additional fields from Paddle that we want to expose
+    //     items: paddleSubscription.items,
+    //     billingDetails: paddleSubscription.billingDetails,
+    //   };
 
-      return NextResponse.json(
-        new AppResponse({
-          message: "Subscription retrieved successfully",
-          data: subscription,
-        }),
-      );
-    }
+    //   return NextResponse.json(
+    //     new AppResponse({
+    //       message: "Subscription retrieved successfully",
+    //       data: enrichedSubscription,
+    //     }),
+    //   );
+    // } catch (paddleError) {
+    //   // If Paddle call fails, return the stored subscription data
+    //   logger.warn(`Failed to fetch Paddle subscription data: ${paddleError}`);
+
+    //   return NextResponse.json(
+    //     new AppResponse({
+    //       message: "Subscription retrieved successfully",
+    //       data: subscription,
+    //     }),
+    //   );
+    // }
   } catch (error: any) {
     logger.error(error, "GET /api/billing/subscription");
     Sentry.captureException(error);

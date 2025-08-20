@@ -64,10 +64,12 @@ export function AppHeader() {
           <div className="flex gap-2 items-center">
             <div>
               {user ? (
-                <Button onClick={() => setOpenCheckoutDialog(true)}>
-                  <Crown />
-                  Upgrade to Pro
-                </Button>
+                !user.activeSubscription && (
+                  <Button onClick={() => setOpenCheckoutDialog(true)}>
+                    <Crown />
+                    Upgrade to Pro
+                  </Button>
+                )
               ) : (
                 <Suspense
                   fallback={

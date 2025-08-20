@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { create } from "zustand";
 
 import { PRICING_PLANS } from "@/lib/constants/pricing";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { usePaddlePrices } from "@/lib/contexts/paddle";
 
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ export const useCheckoutDialog = create<State>((set) => ({
 export function CheckoutDialog() {
   const { open, onOpenChange } = useCheckoutDialog();
   const router = useRouter();
+  const { user } = useAuth();
   const { prices, loading } = usePaddlePrices();
 
   const handleCheckout = (frequency: "month" | "quarter") => {
@@ -98,9 +100,18 @@ export function CheckoutDialog() {
               Quarterly Plan - {getPrice("quarter")}/3 months
             </Button> */}
 
-            <Button variant="default" className="w-full" onClick={() => handleCheckout("month")} disabled={loading}>
-              Upgrade to Pro - {getPrice("month")}/month
-            </Button>
+            {user?.activeSubscription ? (
+              <Button
+                variant="outline"
+                className="w-full bg-success/10 text-success hover:bg-success/10 hover:text-success cursor-default"
+              >
+                Already have a subscription
+              </Button>
+            ) : (
+              <Button variant="default" className="w-full" onClick={() => handleCheckout("month")} disabled={loading}>
+                Upgrade to Pro - {getPrice("month")}/month
+              </Button>
+            )}
           </div>
 
           {/* Footer */}

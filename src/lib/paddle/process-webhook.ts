@@ -4,7 +4,10 @@ import {
   EventEntity,
   EventName,
   SubscriptionActivatedEvent,
+  SubscriptionCanceledEvent,
   SubscriptionCreatedEvent,
+  SubscriptionPastDueEvent,
+  SubscriptionPausedEvent,
   SubscriptionUpdatedEvent,
 } from "@paddle/paddle-node-sdk";
 import { Timestamp } from "firebase-admin/firestore";
@@ -36,6 +39,7 @@ export async function processEvent(eventData: EventEntity) {
     case EventName.SubscriptionPastDue:
     case EventName.SubscriptionPaused:
       // TODO: Handle cancel / pause / past due / paused subscription events
+      await upsertSubscriptionData(eventData);
       break;
     case EventName.CustomerCreated:
     case EventName.CustomerUpdated:
@@ -45,7 +49,13 @@ export async function processEvent(eventData: EventEntity) {
 }
 
 async function upsertSubscriptionData(
-  eventData: SubscriptionCreatedEvent | SubscriptionUpdatedEvent | SubscriptionActivatedEvent,
+  eventData:
+    | SubscriptionCreatedEvent
+    | SubscriptionUpdatedEvent
+    | SubscriptionActivatedEvent
+    | SubscriptionCanceledEvent
+    | SubscriptionPastDueEvent
+    | SubscriptionPausedEvent,
 ) {
   try {
     let userId = (eventData.data.customData as { userId: string })?.userId;
@@ -59,20 +69,34 @@ async function upsertSubscriptionData(
       userId = customer.id;
     }
 
+    const item = eventData.data.items?.[0];
+
+    const amountMinor = Number(item?.price?.unitPrice?.amount) || 0;
+    const currency = item?.price?.unitPrice?.currencyCode || eventData.data.currencyCode;
+
+    // Convert minor units (e.g. cents) to major units
+    const amount = amountMinor / 100;
+
     const subscriptionData: Subscription = {
       id: eventData.data.id,
       status: eventData.data.status,
       customerId: eventData.data.customerId,
-      currencyCode: eventData.data.currencyCode,
+      currencyCode: currency,
       startedAt: eventData.data.startedAt,
       nextBilledAt: eventData.data.nextBilledAt,
       canceledAt: eventData.data.canceledAt,
       createdAt: eventData.data.createdAt,
       updatedAt: eventData.data.updatedAt,
-      userId: userId,
-      priceId: eventData.data.items?.[0]?.price?.id || "",
-      productId: eventData.data.items?.[0]?.product?.id || "",
+      productId: item?.product?.id || "",
+      productName: item?.product?.name || "",
+      priceId: item?.price?.id || "",
+      price: amount,
+      priceName: item.price?.name || "",
+      priceUnit: item.price?.unitPrice?.currencyCode || "",
+      billingCycleInterval: item.price?.billingCycle?.interval || "",
+      billingCycleFrequency: item.price?.billingCycle?.frequency || 1,
     };
+
     await upsertSubscription(userId, subscriptionData);
   } catch (error) {
     logger.error(error, "Error updating subscription data");

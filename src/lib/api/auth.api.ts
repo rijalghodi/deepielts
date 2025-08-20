@@ -2,6 +2,7 @@
 
 import { User } from "@/server/models";
 
+import { Subscription } from "./billing.api";
 import { apiDelete, apiGet, apiPost, apiPut } from "./utils";
 import { AUTH_CHANGED_KEY } from "../constants/brand";
 
@@ -27,7 +28,7 @@ export const verifyEmailCode = async (email: string, code: string) => {
 
 // get current user
 export const getCurrentUser = async () => {
-  return apiGet<ApiResponse<User>>({
+  return apiGet<ApiResponse<User & { subscription: Subscription }>>({
     endpoint: "/auth/me",
   });
 };

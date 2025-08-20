@@ -37,7 +37,12 @@ export async function upsertCustomerId(userId: string, customerId: string): Prom
 
 export async function getSubscriptionByUserId(userId: string): Promise<Subscription | null> {
   try {
-    const subscriptionsRef = db.collection("users").doc(userId).collection("subscriptions");
+    const subscriptionsRef = db
+      .collection("users")
+      .doc(userId)
+      .collection("subscriptions")
+      .orderBy("createdAt", "desc");
+
     const snapshot = await subscriptionsRef.limit(1).get();
 
     if (snapshot.empty) {

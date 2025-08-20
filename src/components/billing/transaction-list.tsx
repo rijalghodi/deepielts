@@ -63,7 +63,7 @@ export function TransactionList({ userId }: Props) {
                 {transactions.map((transaction) => (
                   <TableRow
                     key={transaction.id}
-                    className="cursor-pointer"
+                    className="cursor-pointer text-muted-foreground"
                     onClick={() => window.open(transaction.invoiceUrl, "_blank")}
                   >
                     <TableCell className="font-medium">
@@ -71,9 +71,6 @@ export function TransactionList({ userId }: Props) {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
-                        // hour: "2-digit",
-                        // minute: "2-digit",
-                        // hour12: false,
                       })}
                     </TableCell>
                     <TableCell>{formatAmount(transaction.amount, transaction.currencyCode || "USD")}</TableCell>

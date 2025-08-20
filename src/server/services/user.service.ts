@@ -1,8 +1,10 @@
 import { auth, db } from "@/lib/firebase";
 
+import { getSubscriptionByUserId } from "./subscription.repo";
 import { Role, User } from "../models";
+import { Subscription } from "../models/subscription";
 
-import { StringifyTimestamp } from "@/types";
+import { AppError, StringifyTimestamp } from "@/types";
 
 /**
  * Get a user by email from Firestore. Returns { id, ...data } or null if not found.
@@ -45,14 +47,20 @@ export async function createUserWithEmail(email: string): Promise<StringifyTimes
   };
 }
 
-export async function getUserById(id: string): Promise<StringifyTimestamp<User> | null> {
+export async function getUserById(
+  id: string,
+): Promise<StringifyTimestamp<User & { subscription: Subscription | null }> | null> {
   const userDoc = await db.collection("users").doc(id).get();
   if (!userDoc.exists) return null;
   const userData = userDoc.data();
   if (!userData) return null;
+
+  const subscription = await getSubscriptionByUserId(userDoc.id);
+
   return {
     id: userDoc.id,
     ...userData,
+    subscription,
     createdAt: userData.createdAt?.toDate().toISOString(),
     updatedAt: userData.updatedAt?.toDate().toISOString(),
   };
@@ -107,9 +115,11 @@ export async function deleteUserAccount(userId: string): Promise<void> {
     const sessionDeletions = sessionsQuery.docs.map((doc) => doc.ref.delete());
     await Promise.all(sessionDeletions);
 
-    console.log(`Successfully deleted account and all data for user: ${userId}`);
+    // Delete all user subscriptions
+    const subscriptionQuery = await db.collection("subscriptions").where("userId", "==", userId).get();
+    const subscriptionDeletions = subscriptionQuery.docs.map((doc) => doc.ref.delete());
+    await Promise.all(subscriptionDeletions);
   } catch (error) {
-    console.error(`Error deleting account for user ${userId}:`, error);
-    throw new Error(`Failed to delete account: ${error instanceof Error ? error.message : "Unknown error"}`);
+    throw new AppError({ message: (error as any).message, code: 500 });
   }
 }
