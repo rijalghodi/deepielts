@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
 
-import { deleteUserAccount } from "@/server/services/user.service";
 import { handleError } from "@/server/services";
+import { deleteUserAccount } from "@/server/services/user.service";
 
 import { authGetUser } from "../auth-middleware";
 

@@ -2,13 +2,12 @@ import * as Sentry from "@sentry/nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
 import logger from "@/lib/logger";
 
 import { handleError } from "@/server/services";
 
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
-
-import { AppError, AppResponse } from "@/types";
+import { AppResponse } from "@/types";
 
 export async function POST() {
   try {
