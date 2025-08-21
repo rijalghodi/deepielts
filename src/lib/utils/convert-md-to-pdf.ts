@@ -1,10 +1,5 @@
 import PDFDocument from "pdfkit";
 
-// import fs from "fs";
-// import path from "path";
-
-// export const runtime = "nodejs";
-
 export async function convertMarkdownToPDFBuffer(params: { markdown: string }): Promise<Buffer> {
   const { markdown } = params;
 
@@ -22,63 +17,61 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
       text
         // Remove metadata blocks (YAML-style with --- delimiters)
         .replace(/^---[\s\S]*?---/g, "")
-        // Convert HTML tags to markdown equivalents
-        .replace(/<strong[^>]*>(.*?)<\/strong>/g, "**$1**")
-        .replace(/<b[^>]*>(.*?)<\/b>/g, "**$1**")
-        .replace(/<em[^>]*>(.*?)<\/em>/g, "*$1*")
-        .replace(/<i[^>]*>(.*?)<\/i>/g, "*$1*")
-        .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/g, "$1")
-        .replace(/<div[^>]*>(.*?)<\/div>/g, "$1")
-        .replace(/<p[^>]*>(.*?)<\/p>/g, "$1")
-        .replace(/<br[^>]*>/g, "\n")
-        .replace(/<hr[^>]*>/g, "\n---\n")
-        // Remove any remaining HTML tags
+        // Remove HTML tags but preserve content
         .replace(/<[^>]*>/g, "")
-        // Remove markdown code blocks
-        .replace(/```[\s\S]*?```/g, "")
-        // Remove inline code
-        .replace(/`([^`]*)`/g, "$1")
         // Clean up extra whitespace
         .replace(/\n\s*\n/g, "\n\n")
         .trim()
     );
   };
 
-  // Helper function to process markdown headings
+  // Helper function to extract blockquote sections
+  const extractBlockquotes = (text: string): Array<{ section: string; content: string }> => {
+    const blockquoteRegex = /<blockquote data-section="([^"]*)">([\s\S]*?)<\/blockquote>/g;
+    const blockquotes: Array<{ section: string; content: string }> = [];
+    let match;
+
+    while ((match = blockquoteRegex.exec(text)) !== null) {
+      blockquotes.push({
+        section: match[1],
+        content: match[2].trim(),
+      });
+    }
+
+    return blockquotes;
+  };
+
+  // Helper function to process headings
   const processHeading = (text: string, level: number): void => {
-    const fontSize = Math.max(18 - level * 2, 12);
+    const fontSize = Math.max(20 - level * 2, 14);
     doc.fontSize(fontSize).font("Helvetica-Bold");
     doc.text(text, { align: "left" });
     doc.moveDown(0.5);
     doc.fontSize(12).font("Helvetica");
   };
 
+  // Helper function to process formatted text with bold and italic
   const processFormattedText = (
     text: string,
     options: { width?: number; align?: "left" | "right" | "center" | "justify" } = {},
   ): void => {
-    const { width = doc.page.width - 100, align = "justify" } = options;
+    const { width = doc.page.width - 100, align = "left" } = options;
 
-    // Regex matches either **bold** or *italic*
-    const regex = /(\*\*(.+?)\*\*|\*(.+?)\*)/g;
-
+    // Handle bold text (both **text** and <strong>text</strong>)
+    const boldRegex = /(\*\*([^*]+)\*\*|<strong[^>]*>([^<]+)<\/strong>)/g;
     let lastIndex = 0;
     let match: RegExpExecArray | null;
 
-    while ((match = regex.exec(text)) !== null) {
+    while ((match = boldRegex.exec(text)) !== null) {
       // Text before match
       if (match.index > lastIndex) {
         const plainText = text.slice(lastIndex, match.index);
         doc.font("Helvetica").text(plainText, { continued: true, width, align });
       }
 
-      if (match[0].startsWith("**")) {
-        // Bold text
-        doc.font("Helvetica-Bold").text(match[2], { continued: true, width, align });
-      } else {
-        // Italic text
-        doc.font("Helvetica-Oblique").text(match[3], { continued: true, width, align });
-      }
+      // Bold text (either **text** or <strong>text</strong>)
+      const boldText = match[2] || match[3];
+      doc.font("Helvetica-Bold").text(boldText, { continued: true, width, align });
 
       lastIndex = match.index + match[0].length;
     }
@@ -105,7 +98,7 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
       });
 
       // Process the item text with formatting
-      processFormattedText(cleanItem);
+      processFormattedText(cleanItem, { width: doc.page.width - 100 - 20, align: "left" });
       doc.moveDown(0.3);
     });
     doc.moveDown(0.5);
@@ -115,48 +108,82 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
   const processTable = (tableText: string): void => {
     const lines = tableText.split("\n").filter((line) => line.trim());
 
-    lines.forEach((line, index) => {
+    if (lines.length < 2) return;
+
+    // Find the separator line (contains only |, -, :, and spaces)
+    const separatorIndex = lines.findIndex((line) => line.match(/^[\s|:-\s]*$/));
+    if (separatorIndex === -1) return;
+
+    const headerLines = lines.slice(0, separatorIndex);
+    const dataLines = lines.slice(separatorIndex + 1);
+
+    // Process header
+    headerLines.forEach((line) => {
       if (line.includes("|")) {
         const cells = line
           .split("|")
           .map((cell) => cell.trim())
           .filter((cell) => cell);
 
-        // Skip separator lines (lines with only dashes and pipes)
-        if (line.match(/^[\s|:-\s]*$/)) {
-          return;
-        }
-
-        if (index === 0) {
-          // Header row
-          doc.fontSize(12).font("Helvetica-Bold");
-        } else {
-          doc.fontSize(11).font("Helvetica");
-        }
-
+        doc.fontSize(12).font("Helvetica-Bold");
         const cellWidth = (doc.page.width - 100) / cells.length;
         let currentX = 50;
-        const currentY = doc.y;
 
         cells.forEach((cell) => {
-          // Draw cell border
-          // doc
-          //   .strokeColor("#000000")
-          //   .rect(currentX, currentY, cellWidth - 5, 20)
-          //   .stroke();
-
-          doc.text(cell, currentX + 2, currentY + 2, { width: cellWidth - 5 });
+          doc.text(cell, currentX + 2, doc.y + 2, { width: cellWidth - 5 });
           currentX += cellWidth;
         });
 
         doc.moveDown(1);
-
-        if (index === 0) {
-          doc.fontSize(11).font("Helvetica");
-        }
       }
     });
+
+    // Process data rows
+    dataLines.forEach((line) => {
+      if (line.includes("|")) {
+        const cells = line
+          .split("|")
+          .map((cell) => cell.trim())
+          .filter((cell) => cell);
+
+        doc.fontSize(11).font("Helvetica");
+        const cellWidth = (doc.page.width - 100) / cells.length;
+        let currentX = 50;
+
+        cells.forEach((cell) => {
+          doc.text(cell, currentX + 2, doc.y + 2, { width: cellWidth - 5 });
+          currentX += cellWidth;
+        });
+
+        doc.moveDown(1);
+      }
+    });
+
     doc.moveDown(0.5);
+  };
+
+  // Helper function to process blockquote sections
+  const processBlockquoteSection = (section: string, content: string): void => {
+    // Process section title
+    doc.fontSize(14).font("Helvetica-Bold");
+    doc.text(section.replace(/-/g, " ").toUpperCase(), { align: "left" });
+    doc.moveDown(0.5);
+
+    // Process content based on type
+    if (content.includes("|") && content.includes("---")) {
+      // Table content
+      processTable(content);
+    } else if (content.includes("<strong")) {
+      // Content with strong tags
+      const cleanContent = content.replace(/<strong[^>]*>([^<]+)<\/strong>/g, "**$1**");
+      processFormattedText(cleanContent);
+      doc.moveDown(0.5);
+    } else {
+      // Regular content
+      doc.fontSize(12).font("Helvetica");
+      doc.text(content, { align: "left" });
+      doc.moveDown(0.5);
+    }
   };
 
   // Title
@@ -164,20 +191,46 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
   doc.moveDown(1);
   doc.fontSize(12).font("Helvetica").text("By Deep IELTS", { align: "center" });
   doc.text(`${new Date().toLocaleString()}`, { align: "center" });
-
   doc.moveDown(2);
 
-  // Process the cleaned feedback text
-  const cleanedText = cleanText(markdown);
-  console.log("cleanedText", cleanedText);
-  const paragraphs = cleanedText.split("\n\n").filter((p) => p.trim());
+  // Extract and process blockquotes first
+  const blockquotes = extractBlockquotes(markdown);
 
-  console.log("paragraphs", paragraphs);
+  // Process overall score and criteria scores first
+  const scoreBlockquotes = blockquotes.filter(
+    (bq) => bq.section === "overall-score" || bq.section === "criteria-score",
+  );
+
+  scoreBlockquotes.forEach((blockquote) => {
+    processBlockquoteSection(blockquote.section, blockquote.content);
+    doc.moveDown(1);
+  });
+
+  // Process criteria details
+  const criteriaBlockquotes = blockquotes.filter((bq) => bq.section === "criteria-detail");
+  criteriaBlockquotes.forEach((blockquote) => {
+    processBlockquoteSection(blockquote.section, blockquote.content);
+    doc.moveDown(1);
+  });
+
+  // Process the remaining markdown content
+  const cleanedText = cleanText(markdown);
+  const paragraphs = cleanedText.split("\n\n").filter((p) => p.trim());
 
   paragraphs.forEach((paragraph) => {
     const trimmedParagraph = paragraph.trim();
-
     if (!trimmedParagraph) return;
+
+    // Skip if this content was already processed in blockquotes
+    if (
+      trimmedParagraph.includes("Overall Band Score") ||
+      trimmedParagraph.includes("Task Response") ||
+      trimmedParagraph.includes("Coherence & Cohesion") ||
+      trimmedParagraph.includes("Grammatical Range") ||
+      trimmedParagraph.includes("Lexical Resource")
+    ) {
+      return;
+    }
 
     // Check for headings
     if (trimmedParagraph.startsWith("#")) {
@@ -200,16 +253,14 @@ export async function convertMarkdownToPDFBuffer(params: { markdown: string }): 
     // Check for lists
     if (trimmedParagraph.match(/^[-*•]\s/)) {
       const items = trimmedParagraph.split("\n").filter((item) => item.trim());
-      const listItems = items.map((item) => item.replace(/^[-*•]\s/, ""));
-      processList(listItems);
+      processList(items);
       return;
     }
 
     // Check for numbered lists
     if (trimmedParagraph.match(/^\d+\.\s/)) {
       const items = trimmedParagraph.split("\n").filter((item) => item.trim());
-      const listItems = items.map((item) => item.replace(/^\d+\.\s/, ""));
-      processList(listItems);
+      processList(items);
       return;
     }
 
