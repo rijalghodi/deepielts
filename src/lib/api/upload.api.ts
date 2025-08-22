@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { apiGet, apiPost } from "@/lib/api";
 
-import { compressImage } from "../utils/compress-image";
+import { compressImage } from "../files/compress-image";
 
 import { ApiResponse } from "@/types";
 

@@ -64,7 +64,7 @@ function ThinkingState() {
     <div className="flex flex-col items-center justify-center flex-1 gap-6 py-12">
       <Bot className="w-8 h-8 text-primary" />
       <div className="flex flex-col items-center justify-center gap-2">
-        <p className="text-base font-semibold text-center">AI is Thinking...</p>
+        <p className="text-base font-semibold text-center">Assistant is Thinking...</p>
         <p className="text-base text-muted-foreground text-center">This may take a while, please wait a moment</p>
       </div>
       <Loader className="w-5 h-5 text-primary animate-spin" />
@@ -97,8 +97,6 @@ function ErrorState({ message, name }: { message?: string; name?: string }) {
 function AIOutput() {
   const { analysis, generating, error } = useAIAnalysisStore();
 
-  if (error) return <ErrorState message={error.message} name={error.name} />;
-
   if (!analysis) {
     if (generating) return <ThinkingState />;
 
@@ -112,6 +110,7 @@ function AIOutput() {
   return (
     <div className="relative ai-output">
       <MarkdownRenderer markdownContent={analysis} />
+      {error && <ErrorState message={error.message} name={error.name} />}
     </div>
   );
 }
@@ -147,7 +146,7 @@ export function AIAside() {
     <Aside variant="floating" className="shadow-lg">
       <AsideHeader>
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">AI Analysis</h2>
+          <h2 className="text-lg font-semibold">Analysis</h2>
           <AsideTrigger asChild>
             <Button variant="ghost" size="icon-sm">
               <XIcon className="w-4 h-4" />

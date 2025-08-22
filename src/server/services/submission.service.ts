@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore";
 
+import { mdToPdfBuffer } from "@/lib/files/md-to-pdfbuffer";
 import { db } from "@/lib/firebase/firebase-admin";
 import { openai } from "@/lib/openai/openai";
 import {
@@ -9,7 +10,6 @@ import {
   getScoreParsePrompt,
   getScorePrompt,
 } from "@/lib/prompts/utils";
-import { convertMarkdownToPDFBuffer } from "@/lib/utils/convert-md-to-pdf";
 
 import { QuestionType } from "@/server/models/submission";
 
@@ -218,7 +218,9 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     };
   }
 
-  const pdfBuffer = await convertMarkdownToPDFBuffer({ markdown: submission.feedback });
+  // const pdfBuffer = await convertMarkdownToPDFBuffer({ markdown: submission.feedback });
+
+  const pdfBuffer = await mdToPdfBuffer(submission.feedback);
 
   const uploadedFile = await uploadFileToStorage({
     file: pdfBuffer,

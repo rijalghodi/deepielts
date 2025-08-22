@@ -70,97 +70,115 @@
 }
 
 /* Overall Score */
-.ai-output *[data-section="overall-score"] {
+.ai-output .overall-score {
   @apply bg-primary/10 p-4 rounded-xl text-center space-y-3 text-foreground mb-4;
 }
 
-.ai-output *[data-section="overall-score"] p:first-of-type {
+.ai-output .overall-score p:first-of-type {
   @apply text-base font-semibold text-foreground;
 }
 
-.ai-output *[data-section="overall-score"] p:nth-of-type(2) {
+.ai-output .overall-score p:nth-of-type(2) {
   @apply text-4xl font-bold text-primary;
 }
 
-.ai-output *[data-section="overall-score"] p:last-of-type {
+.ai-output .overall-score p:last-of-type {
   @apply text-sm;
 }
 
 /* Criteria Score */
 
-.ai-output *[data-section="criteria-score"] table {
+.ai-output .criteria-score table {
   @apply w-full table-fixed text-base text-center border-spacing-x-6 border-separate border-none;
 }
 
-.ai-output *[data-section="criteria-score"] table th {
+.ai-output .criteria-score table th {
   @apply font-semibold py-3 border-none bg-inherit;
 }
 
-.ai-output *[data-section="criteria-score"] table td {
+.ai-output .criteria-score table td {
   @apply text-primary font-bold text-2xl pb-3 border-0 border-b border-accent bg-inherit;
 }
 
-.ai-output *[data-section="criteria-score"] table th,
-.ai-output *[data-section="criteria-score"] table td {
+.ai-output .criteria-score table th,
+.ai-output .criteria-score table td {
   @apply w-1/2 mx-2;
 }
 
-.ai-output *[data-section="criteria-score"] table:last-of-type {
+.ai-output .criteria-score table:last-of-type {
   @apply mb-4;
 }
 
 /* Criteria Score Detail */
 
-.ai-output *[data-section="criteria-detail"] {
+.ai-output .criteria-detail {
   @apply border p-4 rounded-xl mb-2;
 }
 
-.ai-output *[data-section="criteria-detail"] p:first-of-type {
+.ai-output .criteria-detail p:first-of-type {
   @apply text-base font-semibold;
 }
 
-.ai-output *[data-section="criteria-detail"] p {
+.ai-output .criteria-detail p {
   @apply mb-3;
 }
-.ai-output *[data-section="criteria-detail"] ul {
+.ai-output .criteria-detail ul {
   @apply space-y-1 list-none pl-0;
 }
 
-.ai-output *[data-section="criteria-detail"] li {
+.ai-output .criteria-detail li {
   @apply font-semibold mb-2;
 }
 
-.ai-output *[data-section="criteria-detail"] li strong {
-  @apply text-xs mr-1 font-semibold h-5 w-5 rounded-xs inline-flex items-center justify-center border text-primary bg-primary/10 border-primary/50;
+.ai-output .criteria-detail li strong {
+  @apply text-xs mr-1 font-semibold h-5 w-5 rounded-xs inline-flex items-center justify-center border;
 }
 
-.ai-output *[data-section="criteria-detail"] li strong[data-score="0"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="0.5"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="1"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="1.5"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="2"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="2.5"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="3"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="3.5"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="4"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="4.5"] {
+.ai-output .criteria-detail li strong[data-score="0"],
+.ai-output .criteria-detail li strong[data-score="0.0"],
+.ai-output .criteria-detail li strong[data-score="0.5"],
+.ai-output .criteria-detail li strong[data-score="1"],
+.ai-output .criteria-detail li strong[data-score="1.0"],
+.ai-output .criteria-detail li strong[data-score="1.5"],
+.ai-output .criteria-detail li strong[data-score="2"],
+.ai-output .criteria-detail li strong[data-score="2.0"],
+.ai-output .criteria-detail li strong[data-score="2.5"],
+.ai-output .criteria-detail li strong[data-score="3"],
+.ai-output .criteria-detail li strong[data-score="3.0"],
+.ai-output .criteria-detail li strong[data-score="3.5"],
+.ai-output .criteria-detail li strong[data-score="4"],
+.ai-output .criteria-detail li strong[data-score="4.0"],
+.ai-output .criteria-detail li strong[data-score="4.5"],
+.ai-output .criteria-detail li strong[data-score="beginner"] {
   @apply text-red-500 bg-red-50 border-red-400 dark:bg-red-900/20 dark:border-red-400 dark:text-red-400;
 }
 
-.ai-output *[data-section="criteria-detail"] li strong[data-score="5"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="5.5"] {
+.ai-output .criteria-detail li strong[data-score="5"],
+.ai-output .criteria-detail li strong[data-score="5.0"],
+.ai-output .criteria-detail li strong[data-score="5.5"],
+.ai-output .criteria-detail li strong[data-score="basic"] {
   @apply text-yellow-600 bg-yellow-50 border-yellow-400 dark:bg-yellow-900/20 dark:border-yellow-400 dark:text-yellow-400;
 }
 
-.ai-output *[data-section="criteria-detail"] li strong[data-score="6"] {
+.ai-output .criteria-detail li strong[data-score="6"],
+.ai-output .criteria-detail li strong[data-score="6.0"],
+.ai-output .criteria-detail li strong[data-score="6.5"],
+.ai-output .criteria-detail li strong[data-score="intermediate"] {
   @apply text-green-700 bg-green-50 border-green-600 dark:bg-green-900/20 dark:border-green-400 dark:text-green-400;
 }
 
-.ai-output *[data-section="criteria-detail"] li strong[data-score="7"] {
+.ai-output .criteria-detail li strong[data-score="7"],
+.ai-output .criteria-detail li strong[data-score="7.0"],
+.ai-output .criteria-detail li strong[data-score="7.5"],
+.ai-output .criteria-detail li strong[data-score="advanced"] {
   @apply text-blue-500 bg-blue-50 border-blue-400 dark:bg-blue-900/20 dark:border-blue-300 dark:text-blue-300;
 }
 
-.ai-output *[data-section="criteria-detail"] li strong[data-score="8"],
-.ai-output *[data-section="criteria-detail"] li strong[data-score="9"] {
+.ai-output .criteria-detail li strong[data-score="8"],
+.ai-output .criteria-detail li strong[data-score="8.0"],
+.ai-output .criteria-detail li strong[data-score="8.5"],
+.ai-output .criteria-detail li strong[data-score="9"],
+.ai-output .criteria-detail li strong[data-score="9.0"],
+.ai-output .criteria-detail li strong[data-score="expert"] {
   @apply text-purple-500 bg-purple-50 border-purple-400 dark:bg-purple-900/20 dark:border-purple-300 dark:text-purple-300;
 }
