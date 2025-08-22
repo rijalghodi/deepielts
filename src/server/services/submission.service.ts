@@ -218,8 +218,6 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     };
   }
 
-  // const pdfBuffer = await convertMarkdownToPDFBuffer({ markdown: submission.feedback });
-
   const pdfBuffer = await mdToPdfBuffer(submission.feedback);
 
   const uploadedFile = await uploadFileToStorage({

@@ -27,9 +27,6 @@ const GUEST_MAX_SUBMISSIONS_PER_DAY = 1;
 const PRO_MAX_SUBMISSIONS_PER_DAY = 20;
 
 export async function POST(req: NextRequest) {
-  const headers = Object.fromEntries(req.headers.entries());
-  console.log(headers);
-
   try {
     const user = await authGetUser();
     const isAuthenticated = !!user?.uid;
