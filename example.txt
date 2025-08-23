@@ -1,0 +1,169 @@
+---
+submissionId: temp
+---
+
+<blockquote data-section="overall-score">
+
+Est. Overall Band Score
+
+1.0
+
+(+/- 0.5)
+
+</blockquote>
+
+<blockquote data-section="criteria-score">
+
+| TR     | CC     |
+| ------ | ------ |
+| 1      | 1      |
+
+| LR     | GRA     |
+| ------ | ------- |
+| 1      | 1      |
+
+</blockquote>
+
+<blockquote data-section="criteria-detail">
+
+Task Response (TR): 1
+
+[[TR-0]]
+
+- <strong data-score="[[TR-1]]">[[TR-1]]</strong> Relevance to Prompt
+- <strong data-score="[[TR-2]]">[[TR-2]]</strong> Clarity of Position
+- <strong data-score="[[TR-3]]">[[TR-3]]</strong> Depth of Ideas
+- <strong data-score="[[TR-4]]">[[TR-4]]</strong> Appropriateness of Format
+- <strong data-score="[[TR-5]]">[[TR-5]]</strong> Relevant & Specific Examples
+- <strong data-score="[[TR-6]]">[[TR-6]]</strong> Appropriate Word Count
+
+</blockquote>
+
+<blockquote data-section="criteria-detail">
+
+Coherence & Cohesion (CC): 1
+
+[[CC-0]]
+
+- <strong data-score="[[CC-1]]">[[CC-1]]</strong> Logical Organization
+- <strong data-score="[[CC-2]]">[[CC-2]]</strong> Effective Introduction & Conclusion
+- <strong data-score="[[CC-3]]">[[CC-3]]</strong> Supported Main Points
+- <strong data-score="[[CC-4]]">[[CC-4]]</strong> Cohesive Devices Usage
+- <strong data-score="[[CC-5]]">[[CC-5]]</strong> Paragraphing
+
+</blockquote>
+
+<blockquote data-section="criteria-detail">
+
+Grammatical Range & Accuracy (GRA): 1
+
+[[GRA-0]]
+
+- <strong data-score="[[GRA-1]]">[[GRA-1]]</strong> Sentence Structure Variety
+- <strong data-score="[[GRA-2]]">[[GRA-2]]</strong> Grammar Accuracy
+- <strong data-score="[[GRA-3]]">[[GRA-3]]</strong> Punctuation Usage
+
+</blockquote>
+
+<blockquote data-section="criteria-detail">
+
+Lexical Resource (LR): 1
+
+[[LR-0]]
+
+- <strong data-score="[[LR-1]]">[[LR-1]]</strong> Vocabulary Range
+- <strong data-score="[[LR-2]]">[[LR-2]]</strong> Lexical Accuracy
+- <strong data-score="[[LR-3]]">[[LR-3]]</strong> Spelling and Word Formation
+
+</blockquote>
+
+
+## Detailed Feedback
+
+### Improve Each Paragraphs
+
+#### SALUTATION
+
+_"Hello."_
+
+##### Comments
+
+- **Task Response/Task Achievement:** While the salutation serves its purpose, it lacks depth and relevance to the task prompt. For a more engaging and context-rich salutation, consider addressing the recipient by their name or including a polite inquiry regarding their well-being, which could create a more personal connection.
+- **Coherence & Cohesion:** The salutation, while appropriate, is too vague. Adding context would help enhance the flow into the subsequent paragraphs. Consider transitioning smoothly into the main content of your response by using a greeting that reflects the topic of discussion.
+- **Grammatical Range & Accuracy:** There are no grammatical issues present in the salutation; however, adding formal elements could elevate it. You might want to include an exclamation mark for added enthusiasm, e.g., “Hello!”
+- **Lexical Resource:** The term "Hello" is sufficient but quite basic. Using alternatives like "Greetings" or "Dear" could demonstrate a broader vocabulary range. 
+
+##### Revised Version
+
+_"Greetings!"_
+
+<hr></hr>
+
+// Continue with the next paragraph, and to the last paragraph, using the same format & structure.
+
+### Improve Structure & Argument
+
+#### TASK TYPE
+
+- Formal Letter: Requesting Information or Action
+
+#### KEY TIPS
+
+- Start with a friendly salutation to establish rapport.
+- Clearly outline your request early in the letter to ensure it captures attention.
+- Conclude politely, reiterating your main points for clarity.
+
+#### RECOMMENDED ESSAY OUTLINE/STRUCTURE
+
+- **Introduction:** Introduce yourself and state the purpose of your letter, e.g. "I am writing to inquire about..."
+- **Body Paragraph 1:** Detail your first request or question, providing any necessary information.
+- **Body Paragraph 2:** Include additional requests or questions, ensuring clear separation between different points.
+- **Conclusion:** Politely summarise your requests and express gratitude, e.g. "Thank you for your assistance."
+
+### Relevant Vocabulary
+
+| New Word     | Word Type | Definition                      |
+| ------------ | --------- | ------------------------------- |
+| Inquiry      | Noun      | A questioning or requesting action |
+| Acknowledge  | Verb      | To recognise the receipt of something |
+| Appreciate   | Verb      | To express gratitude              |
+| Clarification| Noun      | The act of making something clear  |
+| Response     | Noun      | A reply to a question or request   |
+| Communicate  | Verb      | To share or exchange information   |
+| Essential    | Adjective | Absolutely necessary                |
+| Promptly     | Adverb    | Done quickly or without delay      |
+| Assistance   | Noun      | Help or support                    |
+| Regards      | Noun      | Best wishes or considerations       |
+
+### Diversify Sentence Structures
+
+| Grammar Structure                                | Original Sentence | Rephrased Sentence                      |
+| ------------------------------------------------ | ----------------- | --------------------------------------- |
+| **Complex Sentence:** Main clause + dependent clause | "I am writing."   | "I am writing to seek your assistance." |
+| **Request Formulation:** Could you + base verb   | "Please send."    | "Could you kindly send me the information?" |
+| **Passive Voice:** Subject + be + past participle  | "This document is available." | "This document can be accessed upon request." |
+| **Conditional Sentence (Type 1):** If + present simple, will + verb  | "If you can help." | "If you could assist, it would be appreciated." |
+| **Infinitive Phrase:** To + base verb             | "I hope to understand." | "I hope to gain clarity on the matter." |
+
+### Improve Cohesion
+
+| Original Text                                         | Improved Text                                        | Explanation                                         |
+| -----------------------------------------------------| ----------------------------------------------------| ---------------------------------------------------|
+| "...I have several questions. **Also**, I’d like to know more about..." | "...I have several questions. **Furthermore**, I would also like to know more about..." | "Furthermore" provides a stronger connection than "also," enhancing cohesion. |
+| "...I look forward to your prompt reply. **So** I appreciate your help." | "...I look forward to your prompt reply. **Thus**, I appreciate your help." | "Thus" conveys causality more effectively than "so". |
+| "...This information is necessary. **Moreover**, it would help me immensely." | "...This information is necessary. **In addition**, it would help me immensely." | "In addition" adds more depth to the connection between the sentences. |
+| "...I hope to hear from you soon. **Therefore**, I expect your response." | "...I hope to hear from you soon. **Consequently**, I expect your response." | "Consequently" ensures a clearer logical flow than "therefore." |
+| "...I am grateful for your assistance. **Also**, I hope to collaborate more in the future." | "...I am grateful for your assistance. **Additionally**, I hope to collaborate more in the future." | "Additionally" enhances the formal tone and strengthens the connection. |
+
+
+## Model Essay
+
+### Revised Essay
+
+In today's world, communication plays a crucial role in connecting people. When we greet each other with a simple "hello," it opens the door to various interactions and relationships. A friendly greeting can make someone's day better and create a positive atmosphere. It shows that we acknowledge one another, regardless of the context. In a society where digital communication is prevalent, the importance of a genuine, face-to-face greeting should not be underestimated. Thus, "hello" is more than just a word; it's a bridge that connects us all.
+
+### Band 8.0 - 9.0 Sample Essay
+
+Effective communication is a cornerstone of human interaction. The simple act of saying "hello" not only initiates a conversation but also sets the tone for the ensuing dialogue. It is a universally recognized greeting that transcends cultural differences, demonstrating our shared humanity. The warm exchange of "hello" fosters connections, making individuals feel acknowledged and valued. 
+
+In an increasingly digital world, where messages can often lack warmth and individuality, the significance of a personal greeting becomes even more important. A heartfelt "hello" can brighten someone's day, foster goodwill, and strengthen relationships. Therefore, this seemingly insignificant word carries weight, symbolizing the beginning of countless interactions and the potential for meaningful connections in our lives.

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import ms, { StringValue } from "ms";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(new AppResponse({ data: true }));
   } catch (error: any) {
     logger.error(error, "POST /auth/google");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }

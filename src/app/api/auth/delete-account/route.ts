@@ -1,15 +1,21 @@
+import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
+import logger from "@/lib/logger";
+
+import { handleError } from "@/server/services";
 import { deleteUserAccount } from "@/server/services/user.service";
 
 import { authGetUser } from "../auth-middleware";
+
+import { AppError, AppResponse } from "@/types";
 
 export async function DELETE(_request: NextRequest) {
   try {
     // Authenticate the user
     const authResult = await authGetUser();
     if (!authResult) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw new AppError({ message: "Unauthorized", code: 401 });
     }
 
     const userId = authResult.uid;
@@ -17,9 +23,10 @@ export async function DELETE(_request: NextRequest) {
     // Delete the user account and all associated data
     await deleteUserAccount(userId);
 
-    return NextResponse.json({ message: "Account deleted successfully" }, { status: 200 });
-  } catch (error) {
-    console.error("Error deleting account:", error);
-    return NextResponse.json({ error: "Failed to delete account" }, { status: 500 });
+    return NextResponse.json(new AppResponse({ data: null, message: "Account deleted successfully" }));
+  } catch (error: any) {
+    logger.error(error, "DELETE /auth/delete-account");
+    Sentry.captureException(error);
+    return handleError(error);
   }
 }

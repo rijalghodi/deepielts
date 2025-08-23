@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import ms, { StringValue } from "ms";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,16 +14,30 @@ import { VerifyCodeEmail } from "@/components/emails/verify-code.email";
 
 import { handleError } from "@/server/services";
 import { isCodeValid, removeCode } from "@/server/services";
+import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
 import { createUserWithEmail, getUserByEmail } from "@/server/services/user.service";
 import { generateCode, storeCode } from "@/server/services/verify-code.service";
 
 import { AppError, AppResponse } from "@/types";
 
 const resend = new Resend(env.RESEND_API_KEY);
+const MAX_REQUEST_LOGIN_CODE = 5;
+const TTL_REQUEST_LOGIN_CODE = 2 * 60; // 2 minutes
 
 export async function GET(req: NextRequest) {
   try {
     const email = z.string().email().parse(req.nextUrl.searchParams.get("email"));
+
+    // Check hourly limit
+    const hourlyAttemptId = `request-login-code:${req.headers.get("x-forwarded-for")}`;
+    const allowed = await isBelowLimit(hourlyAttemptId, MAX_REQUEST_LOGIN_CODE);
+
+    if (!allowed) {
+      throw new AppError({
+        message: `Max ${MAX_REQUEST_LOGIN_CODE} requests per ${TTL_REQUEST_LOGIN_CODE / 60} minutes.`,
+        code: 429,
+      });
+    }
 
     // Generate a 6-digit code
     const code = generateCode();
@@ -41,9 +56,13 @@ export async function GET(req: NextRequest) {
       throw new AppError({ message: error.message, code: 500 });
     }
 
+    // Increment usage after successful email send
+    await incrementUsage(hourlyAttemptId, 1, TTL_REQUEST_LOGIN_CODE);
+
     return NextResponse.json(new AppResponse({ data: null, message: "Code sent" }));
   } catch (error: any) {
     logger.error(error, "GET /auth/code");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }
@@ -118,6 +137,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(new AppResponse({ data: userData, message: "Code verified" }));
   } catch (error: any) {
     logger.error(error, "POST /auth/code");
+    Sentry.captureException(error);
     return handleError(error);
   }
 }

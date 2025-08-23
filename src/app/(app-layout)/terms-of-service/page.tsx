@@ -54,9 +54,9 @@ export default function TermsOfServicePage() {
           <li>
             <strong>Monthly:</strong> $4
           </li>
-          <li>
+          {/* <li>
             <strong>3-Month:</strong> $8
-          </li>
+          </li> */}
         </ul>
 
         <h2>Payment Terms</h2>

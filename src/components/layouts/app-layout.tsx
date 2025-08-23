@@ -7,14 +7,15 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
+import { AuthDialog } from "@/components/auth/auth-dialog";
+import { CheckoutDialog } from "@/components/home/checkout-dialog";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
+import { SettingsDialog } from "@/components/settings/settings-dialog";
 import { SidebarInset, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AIAside } from "./ai-aside";
 import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
-import { PaymentDialog } from "../home/payment-dialog";
-import { SettingsDialog } from "../features/settings/settings-dialog";
 import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 
@@ -37,7 +38,7 @@ const AsideTriggerButton = () => {
             <X className="h-4 w-4" />
           ) : (
             <>
-              <Bot className="h-4 w-4" /> AI Assitant{" "}
+              <Bot className="h-4 w-4" /> Analysis
             </>
           )}
         </Button>
@@ -88,19 +89,22 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <AsideInset>
           <AppHeader />
           <main
-            className={cn("relative transition-[padding-left] duration-200 ease-linear overflow-hidden")}
+            className={cn(
+              "flex flex-col relative transition-[padding-left] duration-200 ease-linear overflow-hidden min-h-screen",
+            )}
             style={{
               paddingTop: 60,
             }}
           >
-            {children}
+            <div className="flex-1">{children}</div>
             <AppFooter />
           </main>
         </AsideInset>
       </SidebarInset>
       {isDashboard && <AIAside />}
       <SettingsDialog />
-      <PaymentDialog />
+      <CheckoutDialog />
+      <AuthDialog />
     </>
   );
 }

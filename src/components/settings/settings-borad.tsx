@@ -19,9 +19,16 @@ import { SettingPreferences } from "./preferences/setting-preferences";
 
 export function SettingsBoard({ defaultTab = "account" }: { defaultTab?: "account" | "personalization" }) {
   const isMobile = useIsMobile();
+
+  // return (
+  //   <div className="flex flex-col gap-8">
+  //     <SettingAccount />
+  //     <SettingPreferences />
+  //   </div>
+  // );
   return (
-    <Tabs defaultValue={defaultTab} orientation={isMobile ? "horizontal" : "vertical"} className="md:gap-0">
-      <TabsList className={cn("mx-5")}>
+    <Tabs defaultValue={defaultTab} orientation={isMobile ? "horizontal" : "vertical"}>
+      <TabsList>
         <TabsTrigger value="account">
           <User className="w-4 h-4" />
           Account
@@ -31,10 +38,10 @@ export function SettingsBoard({ defaultTab = "account" }: { defaultTab?: "accoun
           Preferences
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="account" className="h-[440px] overflow-auto px-5">
+      <TabsContent value="account" className="h-[440px] overflow-auto">
         <SettingAccount />
       </TabsContent>
-      <TabsContent value="personalization" className="h-[440px] overflow-auto px-5">
+      <TabsContent value="personalization" className="h-[440px] overflow-auto">
         <SettingPreferences />
       </TabsContent>
     </Tabs>

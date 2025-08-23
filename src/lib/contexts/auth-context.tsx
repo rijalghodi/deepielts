@@ -7,7 +7,14 @@ import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
 
 import { UserSettings } from "@/server/models/user";
 
-type User = { id: string; name: string; email: string; role: string; settings?: UserSettings } | null;
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  settings?: UserSettings;
+  activeSubscription?: boolean;
+} | null;
 
 const AuthContext = createContext<{
   user: User;
@@ -35,7 +42,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const res = await getCurrentUser();
       const data = res?.data;
       if (data?.id && data?.name && data?.email && data?.role) {
-        setUser({ id: data.id, name: data.name, email: data.email, role: data.role, settings: data.settings });
+        setUser({
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          role: data.role,
+          settings: data.settings,
+          activeSubscription: data.subscription?.status === "active",
+        });
       } else {
         setUser(null);
       }

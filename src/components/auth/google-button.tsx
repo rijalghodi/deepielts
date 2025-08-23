@@ -13,9 +13,11 @@ import { clientAuth } from "@/lib/firebase/firebase-client";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { IconGoogle } from "@/components/ui/icon-google";
 
-type Props = ButtonProps;
+type Props = ButtonProps & {
+  onSuccess?: () => void;
+};
 
-export function GoogleButton(props: Props) {
+export function GoogleButton({ onSuccess, ...props }: Props) {
   const router = useRouter();
   const { loadUser } = useAuth();
   const { isPending, mutateAsync: googleLoginMutate } = useMutation({
@@ -35,6 +37,7 @@ export function GoogleButton(props: Props) {
       await loadUser();
       localStorage.setItem(AUTH_CHANGED_KEY, Date.now().toString());
       router.refresh();
+      onSuccess?.();
     },
   });
 

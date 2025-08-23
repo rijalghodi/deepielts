@@ -1,16 +1,15 @@
 "use client";
 
 import { Crown, Sparkles } from "lucide-react";
-import { motion } from "motion/react";
 import Link from "next/link";
 import React, { Suspense, useEffect, useState } from "react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
 
-import { AuthDialog } from "@/components/auth/auth-dialog";
+import { useAuthDialog } from "@/components/auth/auth-dialog";
 
-import { usePaymentDialog } from "../home/payment-dialog";
+import { useCheckoutDialog } from "../home/checkout-dialog";
 import { ASIDE_WIDTH, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";
@@ -19,7 +18,8 @@ import { ThemeToggle } from "../ui/theme-toggle";
 
 export function AppHeader() {
   const { user } = useAuth();
-  const { onOpenChange: setOpenPaymentDialog } = usePaymentDialog();
+  const { onOpenChange: toggleAuthDialog } = useAuthDialog();
+  const { onOpenChange: setOpenCheckoutDialog } = useCheckoutDialog();
   const { open: sidebarOpen, isMobile: isSidebarMobile } = useSidebar();
   const { open: asideOpen, isMobile: isAsideMobile } = useAside();
 
@@ -36,11 +36,7 @@ export function AppHeader() {
   }, []);
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3 }}
+    <header
       className="fixed inset-x-0 top-2 z-50 transition-all duration-200 ease-linear px-5"
       style={{
         left: isSidebarMobile ? "0" : sidebarOpen && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0",
@@ -63,10 +59,12 @@ export function AppHeader() {
           <div className="flex gap-2 items-center">
             <div>
               {user ? (
-                <Button onClick={() => setOpenPaymentDialog(true)}>
-                  <Crown />
-                  Upgrade to Pro
-                </Button>
+                !user.activeSubscription && (
+                  <Button onClick={() => setOpenCheckoutDialog(true)}>
+                    <Crown />
+                    Upgrade to Pro
+                  </Button>
+                )
               ) : (
                 <Suspense
                   fallback={
@@ -75,11 +73,9 @@ export function AppHeader() {
                     </Button>
                   }
                 >
-                  <AuthDialog>
-                    <Button>
-                      Login <Sparkles />
-                    </Button>
-                  </AuthDialog>
+                  <Button onClick={() => toggleAuthDialog(true)}>
+                    Login <Sparkles />
+                  </Button>
                 </Suspense>
               )}
             </div>
@@ -87,6 +83,6 @@ export function AppHeader() {
           </div>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 }

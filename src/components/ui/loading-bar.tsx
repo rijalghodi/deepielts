@@ -9,9 +9,10 @@ import { Button } from "./button";
 interface LoadingBarProps {
   isVisible?: boolean;
   onStop?: () => void;
+  title?: string;
 }
 
-export function LoadingBar({ isVisible, onStop }: LoadingBarProps) {
+export function LoadingBar({ isVisible, onStop, title }: LoadingBarProps) {
   if (!isVisible) return null;
 
   return (
@@ -20,7 +21,7 @@ export function LoadingBar({ isVisible, onStop }: LoadingBarProps) {
         <div className="bg-card border shadow-xl rounded-lg px-3 py-2 flex items-center gap-5">
           <span className="font-semibold text-sm flex items-center gap-2">
             <Loader className="animate-spin w-4 h-4 inline" />
-            Generating Analysis
+            {title || "Generating Analysis"}
           </span>
 
           <Button variant="accent" size="sm" title="Stop Generation" onClick={onStop}>

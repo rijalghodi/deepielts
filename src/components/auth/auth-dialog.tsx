@@ -7,14 +7,7 @@ import { create } from "zustand";
 import { APP_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { GoogleButton } from "./google-button";
 import { LoginForm } from "./login-form";
@@ -30,23 +23,17 @@ export const useAuthDialog = create<State>((set) => ({
   onOpenChange: (open) => set({ open }),
 }));
 
-type Props = {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  children?: React.ReactNode;
-};
-
-export function AuthDialog({ children }: Props) {
+export function AuthDialog() {
   const { open, onOpenChange } = useAuthDialog();
   const [email, setEmail] = useState<string>("");
 
-  const [step, setStep] = useState<"login" | "code">("code");
+  const [step, setStep] = useState<"login" | "code">("login");
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       onOpenChange?.(false);
-    } else {
       setStep("login");
+    } else {
       onOpenChange?.(true);
     }
   };
@@ -54,12 +41,18 @@ export function AuthDialog({ children }: Props) {
   function LoginSection() {
     return (
       <>
-        <DialogHeader className="">
+        <DialogHeader>
           <DialogTitle> Welcome to {APP_NAME}</DialogTitle>
           <DialogDescription>Please log in to continue</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6">
-          <GoogleButton variant="accent" />
+          <GoogleButton
+            variant="accent"
+            onSuccess={() => {
+              onOpenChange?.(false);
+              setStep("login");
+            }}
+          />
 
           <div className="flex items-center gap-4 text-muted-foreground">
             <div className="flex-1 border-t" />
@@ -88,7 +81,7 @@ export function AuthDialog({ children }: Props) {
             that the code is valid for 5 minutes
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-4 items-stretch">
+        <div className="flex flex-col gap-4 items-stretch mt-6">
           <VerifyCodeForm email={email} />
 
           <div className="flex justify-center">
@@ -96,7 +89,7 @@ export function AuthDialog({ children }: Props) {
               onClick={() => {
                 setStep("login");
               }}
-              className="text-muted-foreground text-xs flex items-center gap-2 hover:underline underline-offset-4"
+              className="text-sm flex items-center gap-2 hover:underline underline-offset-4"
             >
               <ArrowLeft className="size-3" /> Back to Login
             </button>
@@ -108,7 +101,6 @@ export function AuthDialog({ children }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent className="max-w-md">
         <div className={cn("hidden", step === "login" && "block")}>
           <LoginSection />

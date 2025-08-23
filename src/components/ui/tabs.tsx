@@ -45,7 +45,7 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
       data-slot="tabs-list"
       className={cn(
         "bg-accent inline-flex h-10 w-fit items-center justify-center rounded-sm p-[3px]",
-        orientation === "vertical" && "flex-col justify-start items-start rounded-none bg-transparent p-0",
+        orientation === "vertical" && "flex-col gap-1.5 justify-start items-start rounded-none bg-transparent p-0",
         className,
       )}
       {...props}

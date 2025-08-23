@@ -3,8 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import matter from "gray-matter";
 import { Sparkles } from "lucide-react";
-import { motion } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -54,6 +53,8 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
   const { setOpen, setOpenMobile } = useAside();
   const { user } = useAuth();
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [generatingPdf, setGeneratingPdf] = useState(false);
 
   // Get stored form data on first render
   const getStoredFormData = (): z.infer<typeof schema> | null => {
@@ -186,8 +187,10 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       const submissionId = data?.submissionId?.trim();
 
       if (submissionId && submissionId !== "temp" && user?.id) {
+        setGeneratingPdf(true);
         const pdf = await submissionGeneratePDF(submissionId);
         setPdfUrl(pdf?.data?.url || null);
+        setGeneratingPdf(false);
       }
 
       setGenerating(false);
@@ -221,12 +224,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-    >
+    <div>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-5 w-full relative">
         <div className="hidden sm:block absolute top-0 right-0 -rotate-10 text-foreground">
           <div className="font-bold text-lg">{submissionData ? "Retry this test" : "Try this out"}</div>
@@ -277,7 +275,11 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
         </Form>
       </form>
       {/* Loading Bar */}
-      <LoadingBar isVisible={generating} onStop={stopGeneration} />
-    </motion.div>
+      <LoadingBar
+        isVisible={generating}
+        onStop={stopGeneration}
+        title={generatingPdf ? "Generating PDF..." : "Generating Analysis..."}
+      />
+    </div>
   );
 }

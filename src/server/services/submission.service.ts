@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore";
 
+import { mdToPdfBuffer } from "@/lib/files/md-to-pdfbuffer";
 import { db } from "@/lib/firebase/firebase-admin";
 import { openai } from "@/lib/openai/openai";
 import {
@@ -9,7 +10,6 @@ import {
   getScoreParsePrompt,
   getScorePrompt,
 } from "@/lib/prompts/utils";
-import { convertMarkdownToPDFBuffer } from "@/lib/utils/convert-md-to-pdf";
 
 import { QuestionType } from "@/server/models/submission";
 
@@ -31,7 +31,7 @@ export async function generateChartDataIfNeeded(params: {
   }
 
   if (signal?.aborted) {
-    throw new Error("Request cancelled");
+    throw new AppError({ message: "Request cancelled", name: "AbortError", code: 499 });
   }
 
   const chartDataPrompt = getChartDataPrompt();
@@ -78,7 +78,7 @@ export async function generateScore(params: {
   });
 
   if (signal?.aborted) {
-    throw new Error("Request cancelled");
+    throw new AppError({ message: "Request cancelled", name: "AbortError", code: 499 });
   }
 
   const generatedScore = await openai.chat.completions.create({
@@ -135,7 +135,7 @@ export function createFeedbackReadableStream(params: {
 
       const streamOpenAI = async (prompt: string) => {
         if (signal?.aborted) {
-          throw new Error("Request cancelled");
+          throw new AppError({ message: "Request cancelled", name: "AbortError", code: 499 });
         }
 
         const stream = await openai.chat.completions.create({
@@ -149,7 +149,7 @@ export function createFeedbackReadableStream(params: {
 
         for await (const chunk of stream) {
           if (signal?.aborted) {
-            throw new Error("Request cancelled");
+            throw new AppError({ message: "Request cancelled", name: "AbortError", code: 499 });
           }
 
           const content = chunk.choices?.[0]?.delta?.content;
@@ -218,7 +218,7 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     };
   }
 
-  const pdfBuffer = await convertMarkdownToPDFBuffer({ markdown: submission.feedback });
+  const pdfBuffer = await mdToPdfBuffer(submission.feedback);
 
   const uploadedFile = await uploadFileToStorage({
     file: pdfBuffer,

@@ -10,7 +10,7 @@ const logger = pino({
       }
     : undefined,
   serializers: {
-    err: (e) => e, // full error objects
+    err: pino.stdSerializers.err,
   },
 });
 

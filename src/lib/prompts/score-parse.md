@@ -1,9 +1,10 @@
 ## TASK:
 
-Extract **relevant values** from JSON (number or text) and insert them into the markdown template
+Extract **relevant values** from JSON (number or text) and insert them into the markdown template.
 
-- Fill in the placeholders marked by square brackets ([[LIKE_THIS]]).
-- **Ignore** the fields: `PC-1`, `PC-2`, `PC-3`.
+- **Every placeholder in `[[LIKE_THIS]]` MUST be replaced** with the correct value from JSON.
+- **Do NOT leave any `[[FIELD]]` unfilled.**
+- **Completely ignore** the fields: `PC-1`, `PC-2`, `PC-3`.
 
 ## INPUT JSON:
 
@@ -18,7 +19,7 @@ Extract **relevant values** from JSON (number or text) and insert them into the 
 
 ## OUTPUT FORMAT:
 
-<blockquote data-section="overall-score">
+<div class="overall-score">
 
 Est. Overall Band Score
 
@@ -26,9 +27,9 @@ Est. Overall Band Score
 
 (+/- 0.5)
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-score">
+<div class="criteria-score">
 
 | TR     | CC     |
 | ------ | ------ |
@@ -38,9 +39,9 @@ Est. Overall Band Score
 | ------ | ------- |
 | [[LR]] | [[GRA]] |
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
 Task Response (TR): [[TR]]
 
@@ -53,9 +54,9 @@ Task Response (TR): [[TR]]
 - <strong data-score="[[TR-5]]">[[TR-5]]</strong> Relevant & Specific Examples
 - <strong data-score="[[TR-6]]">[[TR-6]]</strong> Appropriate Word Count
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
 Coherence & Cohesion (CC): [[CC]]
 
@@ -67,9 +68,9 @@ Coherence & Cohesion (CC): [[CC]]
 - <strong data-score="[[CC-4]]">[[CC-4]]</strong> Cohesive Devices Usage
 - <strong data-score="[[CC-5]]">[[CC-5]]</strong> Paragraphing
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
 Grammatical Range & Accuracy (GRA): [[GRA]]
 
@@ -79,9 +80,9 @@ Grammatical Range & Accuracy (GRA): [[GRA]]
 - <strong data-score="[[GRA-2]]">[[GRA-2]]</strong> Grammar Accuracy
 - <strong data-score="[[GRA-3]]">[[GRA-3]]</strong> Punctuation Usage
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
 Lexical Resource (LR): [[LR]]
 
@@ -91,11 +92,11 @@ Lexical Resource (LR): [[LR]]
 - <strong data-score="[[LR-2]]">[[LR-2]]</strong> Lexical Accuracy
 - <strong data-score="[[LR-3]]">[[LR-3]]</strong> Spelling and Word Formation
 
-</blockquote>
+</div>
 
 ## Example Output
 
-<blockquote data-section="overall-score">
+<div class="overall-score">
 
 ## Est. Overall Band Score
 
@@ -103,9 +104,9 @@ Lexical Resource (LR): [[LR]]
 
 (+/- 0.5)
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-score">
+<div class="criteria-score">
 
 | TR  | CC  |
 | --- | --- |
@@ -115,9 +116,9 @@ Lexical Resource (LR): [[LR]]
 | --- | --- |
 | 5   | 5   |
 
-</blockquote>
+</div>
 
-<blockquote data-section="tr-detail">
+<div class="tr-detail">
 
 ## Task Response (TR): 6
 
@@ -130,6 +131,6 @@ The essay addresses the prompt by discussing unethical advertising methods...
 - <strong data="5">5</strong> Relevant & Specific Examples
 - <strong data="9">9</strong> Appropriate Word Count
 
-</blockquote>
+</div>
 
 // ... Continue

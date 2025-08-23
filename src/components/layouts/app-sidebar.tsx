@@ -1,9 +1,18 @@
-import { Edit, History, LogOut, Palette, PieChart, Settings } from "lucide-react";
+import { CreditCard, Edit, History, LogOut, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useLogout } from "@/lib/api/auth.api";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { useIsMobile } from "@/hooks";
 
+import { useSettingsDialog } from "@/components/settings/settings-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -18,18 +27,8 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 
-import { useSettingsDialog } from "../features/settings/settings-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuItemDiv,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { Badge } from "../ui/badge";
 
 const QUICK_MENU = [
   {
@@ -55,9 +54,11 @@ type AppSidebarProps = {
 
 export function AppSidebar(props: AppSidebarProps) {
   const { logout } = useLogout();
+  const { user } = useAuth();
   const settingsDialog = useSettingsDialog();
   const isMobile = useIsMobile();
   const { setOpenMobile } = useSidebar();
+  const router = useRouter();
   return (
     <Sidebar collapsible="icon" className="shadow-md bg-sidebar">
       <SidebarHeader className="">
@@ -66,13 +67,17 @@ export function AppSidebar(props: AppSidebarProps) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg" className="flex-1">
-                  {/* <Avatar className="h-7 w-7 shrink-0">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar> */}
                   <div className="space-y-1 flex-1">
                     <p className="truncate text-left font-medium">{props.userName ?? "User"}</p>
-                    <p className="text-xs text-muted-foreground">Free Plan</p>
+                    {user?.activeSubscription ? (
+                      <Badge variant="light" className="text-success bg-success/10">
+                        Pro Plan
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-neutral bg-neutral/10">
+                        Free Plan
+                      </Badge>
+                    )}
                   </div>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -82,14 +87,19 @@ export function AppSidebar(props: AppSidebarProps) {
                 side={isMobile ? "bottom" : "right"}
                 sideOffset={10}
               >
-                {/* <DropdownMenuSeparator /> */}
-                <DropdownMenuItemDiv className="h-9">
+                {/* <DropdownMenuItemDiv className="h-9">
                   <Palette /> Theme
                   <DropdownMenuShortcut>
                     <ThemeToggle variant="horizontal" />
                   </DropdownMenuShortcut>
                 </DropdownMenuItemDiv>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator /> */}
+                <DropdownMenuItem onClick={() => settingsDialog.open()}>
+                  <Settings /> Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/billing")}>
+                  <CreditCard /> Billing
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => logout()}>
                   <LogOut /> Log out
                 </DropdownMenuItem>
@@ -124,18 +134,6 @@ export function AppSidebar(props: AppSidebarProps) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => {
-                    if (isMobile) {
-                      setOpenMobile(false);
-                    }
-                    settingsDialog.open();
-                  }}
-                >
-                  <Settings /> Settings
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
