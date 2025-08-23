@@ -1,10 +1,12 @@
 import { ImageUp, Loader, X } from "lucide-react";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { uploadFile } from "@/lib/api";
 import { cn } from "@/lib/utils";
+
+import { ShimmeringBackground } from "./shimering-background";
 
 export type InputImageProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {
   name?: string;
@@ -155,33 +157,6 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
       </label>
     );
 
-    // Render preview
-    const renderPreview = (url: string) => (
-      <div className="relative group w-full h-full">
-        <Image src={url} alt="Uploaded image" fill className="rounded-md object-cover" />
-        {value && (
-          <button
-            onClick={handleRemove}
-            type="button"
-            title="Remove image"
-            className="absolute z-[2] top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        )}
-        {value && (
-          <button
-            onClick={handleTriggerEdit}
-            type="button"
-            title="Change image"
-            className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center"
-          >
-            <span className="text-white text-sm">Click to change</span>
-          </button>
-        )}
-      </div>
-    );
-
     // Render empty file input
     if (isUploading) {
       return renderUploadLabel(
@@ -203,8 +178,53 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
     }
 
     // Render single file input with preview
-    return renderUploadLabel(renderPreview(value!));
+    return renderUploadLabel(<ImagePreview url={value!} onRemove={handleRemove} onEdit={handleTriggerEdit} />);
   },
 );
 
 InputImage.displayName = "InputImage";
+
+// Render preview
+const ImagePreview = ({ url, onRemove, onEdit }: { url: string; onRemove: () => void; onEdit: () => void }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Reset loading state when URL changes
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [url]);
+
+  return (
+    <div className="relative group w-full h-full">
+      <Image
+        src={url}
+        alt="Uploaded image"
+        fill
+        className="rounded-md object-cover"
+        onLoad={() => {
+          setIsLoaded(true);
+        }}
+      />
+      {!isLoaded && <ShimmeringBackground />}
+      {url && (
+        <button
+          onClick={onRemove}
+          type="button"
+          title="Remove image"
+          className="absolute z-[2] top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
+      {url && (
+        <button
+          onClick={onEdit}
+          type="button"
+          title="Change image"
+          className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center"
+        >
+          <span className="text-white text-sm">Click to change</span>
+        </button>
+      )}
+    </div>
+  );
+};
