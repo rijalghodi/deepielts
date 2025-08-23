@@ -64,9 +64,9 @@ REDIS_URL=
 # -----------------------------------------------------------
 # Paddle Configuration
 # -----------------------------------------------------------
-NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=
-NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID=
+NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=  # Developer Tools > Authentication > Client-side token
+NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID= 
 NEXT_PUBLIC_PADDLE_PRO_QUARTER_PRICE_ID=
 NEXT_PUBLIC_PADDLE_ENV=sandbox # or production
-PADDLE_API_KEY=
-PADDLE_WEBHOOK_SECRET=
+PADDLE_API_KEY= # Developer Tools > Authentication > API keys
+PADDLE_WEBHOOK_SECRET= # Developer Tools > Notifications > create webhook
