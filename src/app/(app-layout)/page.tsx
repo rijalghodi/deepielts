@@ -6,6 +6,7 @@ import { FeaturesSection } from "@/components/home/features-section";
 import { HeroSection } from "@/components/home/hero-section";
 import { PricingSection } from "@/components/home/pricing-section";
 import { SubmissionSection } from "@/components/home/submission-section";
+import { SubmissionSectionSkeleton } from "@/components/home/submission-section/submission-section-skeleton";
 import { TestimonialSection } from "@/components/home/testimonial-section";
 import { VsTraditionalSection } from "@/components/home/vs-traditional-section";
 import { FallingStarsBackground } from "@/components/ui/falling-stars-bg";
@@ -47,7 +48,7 @@ export default function Home() {
             id="submission-section"
             className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden"
           >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<SubmissionSectionSkeleton />}>
               <SubmissionSection />
             </Suspense>
           </section>
