@@ -74,11 +74,11 @@
   @apply bg-primary/10 p-4 rounded-xl text-center space-y-3 text-foreground mb-4;
 }
 
-.ai-output .overall-score p:first-of-type {
+.ai-output .overall-score h2 {
   @apply text-base font-semibold text-foreground;
 }
 
-.ai-output .overall-score p:nth-of-type(2) {
+.ai-output .overall-score p:first-of-type {
   @apply text-4xl font-bold text-primary;
 }
 

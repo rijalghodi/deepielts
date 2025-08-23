@@ -1,16 +1,16 @@
+import { Eraser } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
 import { cn } from "@/lib/utils";
 
+import { Button } from "@/components/ui/button";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { inputVariants } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
-import { Button } from "@/components/ui/button";
-import { Eraser } from "lucide-react";
 
 export function AnswerInput() {
   const [wordCount, setWordCount] = useState(0);
