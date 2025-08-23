@@ -16,7 +16,7 @@ function NoAnalysis() {
   return (
     <div className="ai-output">
       <div className="overall-score">
-        <p>Est. Overall Band Score</p>
+        <h2>Est. Overall Band Score</h2>
         <p>0</p>
         <p>(+/- 0.5)</p>
       </div>
