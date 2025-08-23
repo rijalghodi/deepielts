@@ -1,6 +1,6 @@
 "use client";
 
-import { WandSparkles } from "lucide-react";
+import { Eraser, WandSparkles } from "lucide-react";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
@@ -85,10 +85,15 @@ export function QuestionInput({ taskType }: Props) {
                     className="text-base"
                   />
                   {/* TOOL */}
-                  <div className="flex flex-wrap items-center justify-center w-full gap-2">
+                  <div className="flex flex-wrap items-center justify-end w-full gap-2">
                     {taskType !== QuestionType.TASK_1_ACADEMIC && !field.value && (
                       <Button variant="outline" size="sm" onClick={handleGenerateQuestion}>
                         <WandSparkles /> Generate Question
+                      </Button>
+                    )}
+                    {field.value && (
+                      <Button variant="outline" size="xs" onClick={() => field.onChange("")}>
+                        <Eraser /> Clear Question
                       </Button>
                     )}
                   </div>

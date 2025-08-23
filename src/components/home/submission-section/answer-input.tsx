@@ -9,6 +9,8 @@ import { inputVariants } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
+import { Button } from "@/components/ui/button";
+import { Eraser } from "lucide-react";
 
 export function AnswerInput() {
   const [wordCount, setWordCount] = useState(0);
@@ -40,8 +42,13 @@ export function AnswerInput() {
             />
 
             {/* TOOL */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between w-full gap-2">
               <span className="text-xs text-muted-foreground">{wordCount} words</span>
+              {field.value && (
+                <Button variant="outline" size="xs" onClick={() => field.onChange("")}>
+                  <Eraser /> Clear Answer
+                </Button>
+              )}
             </div>
           </div>
           <FormMessage />
