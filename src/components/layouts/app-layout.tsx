@@ -38,7 +38,7 @@ const AsideTriggerButton = () => {
             <X className="h-4 w-4" />
           ) : (
             <>
-              <Bot className="h-4 w-4" /> AI Assitant{" "}
+              <Bot className="h-4 w-4" /> Analysis
             </>
           )}
         </Button>
