@@ -2,168 +2,203 @@
 submissionId: temp
 ---
 
-<blockquote data-section="overall-score">
+<div class="overall-score">
 
-Est. Overall Band Score
+## Est. Overall Band Score
 
-1.0
+6.0
 
 (+/- 0.5)
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-score">
+<div class="criteria-score">
 
 | TR     | CC     |
 | ------ | ------ |
-| 1      | 1      |
+| 6      | 6      |
 
 | LR     | GRA     |
 | ------ | ------- |
-| 1      | 1      |
+| 6      | 6      |
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
-Task Response (TR): 1
+Task Response (TR): 6
 
-[[TR-0]]
+The response addresses the prompt well, discussing both views regarding the teaching of cooking and gardening at school. The position is clearly stated, though the depth of examples could improve. The format is appropriate, but additional development would enhance clarity and persuasiveness.
 
-- <strong data-score="[[TR-1]]">[[TR-1]]</strong> Relevance to Prompt
-- <strong data-score="[[TR-2]]">[[TR-2]]</strong> Clarity of Position
-- <strong data-score="[[TR-3]]">[[TR-3]]</strong> Depth of Ideas
-- <strong data-score="[[TR-4]]">[[TR-4]]</strong> Appropriateness of Format
-- <strong data-score="[[TR-5]]">[[TR-5]]</strong> Relevant & Specific Examples
-- <strong data-score="[[TR-6]]">[[TR-6]]</strong> Appropriate Word Count
+- <strong data-score="6">6</strong> Relevance to Prompt
+- <strong data-score="6">6</strong> Clarity of Position
+- <strong data-score="6">6</strong> Depth of Ideas
+- <strong data-score="6">6</strong> Appropriateness of Format
+- <strong data-score="6">6</strong> Relevant & Specific Examples
+- <strong data-score="7">7</strong> Appropriate Word Count
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
-Coherence & Cohesion (CC): 1
+Coherence & Cohesion (CC): 6
 
-[[CC-0]]
+The organization of ideas is logical, and there is a clear introduction and conclusion. Each point is supported but could benefit from more detailed examples. The cohesive devices used are effective but limited, and paragraphing is maintained well.
 
-- <strong data-score="[[CC-1]]">[[CC-1]]</strong> Logical Organization
-- <strong data-score="[[CC-2]]">[[CC-2]]</strong> Effective Introduction & Conclusion
-- <strong data-score="[[CC-3]]">[[CC-3]]</strong> Supported Main Points
-- <strong data-score="[[CC-4]]">[[CC-4]]</strong> Cohesive Devices Usage
-- <strong data-score="[[CC-5]]">[[CC-5]]</strong> Paragraphing
+- <strong data-score="6">6</strong> Logical Organization
+- <strong data-score="6">6</strong> Effective Introduction & Conclusion
+- <strong data-score="6">6</strong> Supported Main Points
+- <strong data-score="6">6</strong> Cohesive Devices Usage
+- <strong data-score="6">6</strong> Paragraphing
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
-Grammatical Range & Accuracy (GRA): 1
+Grammatical Range & Accuracy (GRA): 6
 
-[[GRA-0]]
+The sentence structures used are varied but could be more complex to showcase a wider range. Grammar is accurate, with few minor errors. Punctuation is consistently used, but variations in structure could enhance the overall score.
 
-- <strong data-score="[[GRA-1]]">[[GRA-1]]</strong> Sentence Structure Variety
-- <strong data-score="[[GRA-2]]">[[GRA-2]]</strong> Grammar Accuracy
-- <strong data-score="[[GRA-3]]">[[GRA-3]]</strong> Punctuation Usage
+- <strong data-score="6">6</strong> Sentence Structure Variety
+- <strong data-score="6">6</strong> Grammar Accuracy
+- <strong data-score="6">6</strong> Punctuation Usage
 
-</blockquote>
+</div>
 
-<blockquote data-section="criteria-detail">
+<div class="criteria-detail">
 
-Lexical Resource (LR): 1
+Lexical Resource (LR): 6
 
-[[LR-0]]
+The vocabulary used is appropriate and demonstrates a reasonable range, though there are occasional repetitions. Word choice fits the context well, with only minor errors in usage. Spelling is generally accurate, though careful proofreading would help polish the response further.
 
-- <strong data-score="[[LR-1]]">[[LR-1]]</strong> Vocabulary Range
-- <strong data-score="[[LR-2]]">[[LR-2]]</strong> Lexical Accuracy
-- <strong data-score="[[LR-3]]">[[LR-3]]</strong> Spelling and Word Formation
+- <strong data-score="6">6</strong> Vocabulary Range
+- <strong data-score="6">6</strong> Lexical Accuracy
+- <strong data-score="6">6</strong> Spelling and Word Formation
 
-</blockquote>
+</div>
 
 
 ## Detailed Feedback
 
 ### Improve Each Paragraphs
 
-#### SALUTATION
-
-_"Hello."_
+#### INTRODUCTION
+_"Learning practical skills such as growing food and cooking can benefit students in many ways. Firstly, these skills promote independence and healthier lifestyles. For example, students who understand nutrition and food preparation may avoid fast food and eat more balanced meals. Furthermore, gardening classes can raise awareness of environmental issues, such as sustainability and food waste."_
 
 ##### Comments
 
-- **Task Response/Task Achievement:** While the salutation serves its purpose, it lacks depth and relevance to the task prompt. For a more engaging and context-rich salutation, consider addressing the recipient by their name or including a polite inquiry regarding their well-being, which could create a more personal connection.
-- **Coherence & Cohesion:** The salutation, while appropriate, is too vague. Adding context would help enhance the flow into the subsequent paragraphs. Consider transitioning smoothly into the main content of your response by using a greeting that reflects the topic of discussion.
-- **Grammatical Range & Accuracy:** There are no grammatical issues present in the salutation; however, adding formal elements could elevate it. You might want to include an exclamation mark for added enthusiasm, e.g., “Hello!”
-- **Lexical Resource:** The term "Hello" is sufficient but quite basic. Using alternatives like "Greetings" or "Dear" could demonstrate a broader vocabulary range. 
+- **Task Response/Task Achievement:** Your introduction presents a clear argument in favour of teaching practical skills, but it could be strengthened by explicitly reflecting the contrasting view as well. Including the opposing perspective would provide more depth to your response right from the start. For example, referencing that some believe these skills are unnecessary would give a rounder introduction.
+- **Coherence & Cohesion:** Ensure that your ideas flow logically. While you present benefits well, consider introducing a clearer transitional phrase that indicates the shift from the benefits to the opposing view. This helps the reader anticipate the contrasting discussion.
+- **Grammatical Range & Accuracy:** The use of “Firstly” suggests a list; however, consider using varied transitional phrases such as “To begin with” or “In addition” to improve diversity in your sentence structure. Also, you might consider rephrasing "students who understand nutrition and food preparation may avoid fast food" to engage a more active voice.
+- **Lexical Resource:** While the vocabulary is appropriate, enhancing it with synonyms or more precise terms could amplify your argument. For instance, instead of saying “healthier lifestyles,” consider “more nutritious dietary habits” for specificity.
 
 ##### Revised Version
-
-_"Greetings!"_
+_"The acquisition of practical skills such as growing food and cooking can yield significant benefits for students. To begin with, these skills foster independence and encourage more nutritious dietary habits. For instance, students who grasp the principles of nutrition and food preparation are likely to avoid fast food and consume more balanced meals. Additionally, gardening classes can cultivate awareness of environmental issues such as sustainability and food waste."_
 
 <hr></hr>
 
-// Continue with the next paragraph, and to the last paragraph, using the same format & structure.
+#### BODY PARAGRAPH 1
+_"On the other hand, opponents argue that school time should focus on academic subjects like mathematics and science, which are more important for future careers. They believe that cooking and gardening are responsibilities parents should teach at home, not teachers at school."_
+
+##### Comments
+
+- **Task Response/Task Achievement:** This paragraph effectively presents the counterargument, which is essential for a balanced discussion. However, you might want to elaborate on why opponents believe academic subjects are more critical and provide specific examples or data supporting their views to enhance the depth of your ideas.
+- **Coherence & Cohesion:** The use of “On the other hand” properly signals a contrast. To improve clarity and coherence, interlink the sentences with phrases like “support their claims” when explaining what opponents argue about parental responsibility.
+- **Grammatical Range & Accuracy:** The sentence structures are simple but could benefit from more complex forms. For instance, you could use relative clauses to provide additional context: “...which they argue are more important...” instead of “which are more important”.
+- **Lexical Resource:** The phrase “future careers” is commonly used; consider a less predictable phrase such as “professional development” to enhance your lexical variety.
+
+##### Revised Version
+_"Conversely, critics assert that academic subjects such as mathematics and science should take precedence during school hours, as they are deemed more vital for professional development. Moreover, they contend that the onus of teaching cooking and gardening lies with parents at home, rather than educators in schools."_
+
+<hr></hr>
+
+#### BODY PARAGRAPH 2
+_"In my opinion, schools should include these skills as optional courses. While academic knowledge is crucial, practical life skills help young people become well-rounded and responsible adults. Therefore, a balance between academic and practical subjects is the best solution."_
+
+##### Comments
+
+- **Task Response/Task Achievement:** You clearly state your opinion, making your position explicit, which is a strength. However, consider bolstering your argument with specific advantages of practical skills that go beyond merely being "well-rounded." For instance, you could reference how these skills prepare students for real-world challenges.
+- **Coherence & Cohesion:** The link between the need for practical skills and the proposition of them being optional could be stronger. Adding a transitional phrase like “For instance” could improve the flow by connecting your ideas better.
+- **Grammatical Range & Accuracy:** The phrase "should include these skills" might be strengthened by varying the modality. You might say "ought to incorporate these skills" for a more sophisticated expression.
+- **Lexical Resource:** Phrases like "balance between academic and practical subjects" can be made more vivid. Instead of "practical subjects," specific examples like “life skills education” may add clarity.
+
+##### Revised Version
+_"In my view, schools ought to incorporate practical skills such as growing food and cooking as optional courses. While academic knowledge remains essential, such life skills equip young people to tackle real-world challenges and emerge as responsible adults. Hence, a well-rounded education that balances both academic subjects and practical skills would be the most advantageous approach."_
+
+<hr></hr>
 
 ### Improve Structure & Argument
 
 #### TASK TYPE
-
-- Formal Letter: Requesting Information or Action
+**Opinion: Agree or Disagree**
 
 #### KEY TIPS
-
-- Start with a friendly salutation to establish rapport.
-- Clearly outline your request early in the letter to ensure it captures attention.
-- Conclude politely, reiterating your main points for clarity.
+- **Address both views clearly:** Ensure to outline both the opposing and supporting perspectives equally.
+- **Support opinions with examples:** Use relevant examples to strengthen your arguments in favour of your stance.
+- **Maintain a clear structure:** Follow a logical progression from introduction to conclusion, ensuring each paragraph transitions smoothly.
 
 #### RECOMMENDED ESSAY OUTLINE/STRUCTURE
-
-- **Introduction:** Introduce yourself and state the purpose of your letter, e.g. "I am writing to inquire about..."
-- **Body Paragraph 1:** Detail your first request or question, providing any necessary information.
-- **Body Paragraph 2:** Include additional requests or questions, ensuring clear separation between different points.
-- **Conclusion:** Politely summarise your requests and express gratitude, e.g. "Thank you for your assistance."
+- **Introduction**
+  - Present the topic and both views, leading to your thesis statement.
+- **Body Paragraph 1**
+  - Discuss the benefits of teaching practical skills and include specific examples.
+- **Body Paragraph 2**
+  - Present the counterargument regarding academic focus with relevant examples.
+- **Body Paragraph 3**
+  - Provide your opinion with support on why a balance is needed, along with further examples.
+- **Conclusion**
+  - Summarise the main points and reinforce your opinion clearly.
 
 ### Relevant Vocabulary
 
-| New Word     | Word Type | Definition                      |
-| ------------ | --------- | ------------------------------- |
-| Inquiry      | Noun      | A questioning or requesting action |
-| Acknowledge  | Verb      | To recognise the receipt of something |
-| Appreciate   | Verb      | To express gratitude              |
-| Clarification| Noun      | The act of making something clear  |
-| Response     | Noun      | A reply to a question or request   |
-| Communicate  | Verb      | To share or exchange information   |
-| Essential    | Adjective | Absolutely necessary                |
-| Promptly     | Adverb    | Done quickly or without delay      |
-| Assistance   | Noun      | Help or support                    |
-| Regards      | Noun      | Best wishes or considerations       |
+| New Word      | Word Type | Definition                               |
+|---------------|-----------|------------------------------------------|
+| Culinary      | Adjective | Pertaining to cooking or the kitchen.   |
+| Autonomy      | Noun      | Independence or freedom in decision-making. |
+| Nutritional   | Adjective | Related to the process of obtaining food. |
+| Sustainable   | Adjective | Capable of being maintained over the long term. |
+| Endeavour     | Verb      | To make an effort or attempt.           |
+| Proficient    | Adjective | Competent or skilled in doing something. |
+| Holistic      | Adjective | Considering the whole rather than just parts. |
+| Enrichment    | Noun      | The act of enhancing the quality of something. |
+| Allocate      | Verb      | To distribute resources or duties for a specific purpose. |
+| Empower       | Verb      | To give someone the authority or power to do something. |
 
 ### Diversify Sentence Structures
 
-| Grammar Structure                                | Original Sentence | Rephrased Sentence                      |
-| ------------------------------------------------ | ----------------- | --------------------------------------- |
-| **Complex Sentence:** Main clause + dependent clause | "I am writing."   | "I am writing to seek your assistance." |
-| **Request Formulation:** Could you + base verb   | "Please send."    | "Could you kindly send me the information?" |
-| **Passive Voice:** Subject + be + past participle  | "This document is available." | "This document can be accessed upon request." |
-| **Conditional Sentence (Type 1):** If + present simple, will + verb  | "If you can help." | "If you could assist, it would be appreciated." |
-| **Infinitive Phrase:** To + base verb             | "I hope to understand." | "I hope to gain clarity on the matter." |
+| Grammar Structure                                   | Original Sentence                                        | Rephrased Sentence                                     |
+|-----------------------------------------------------|---------------------------------------------------------|-------------------------------------------------------|
+| **Complex Sentence**: Independent clause + dependent clause | "Learning practical skills such as growing food..."    | "Learning practical skills, such as growing food, is beneficial..." |
+| **Passive Voice**: be + past participle              | "Students who understand nutrition..."                  | "Nutrition is better understood by students who..."    |
+| **Conditional Sentence (Type 1)**: If + present simple, will + verb | "These skills promote independence and healthier lifestyles."| "If these skills are taught, they will promote independence and healthier lifestyles." |
+| **Inversion Structure**: Had I known, I would have...| "Cooking and gardening are responsibilities parents..." | "Responsibilities such as cooking and gardening lie with parents, not teachers." |
+| **Relative Clause**: Noun + relative pronoun + verb | "Practical life skills help young people..."            | "Practical life skills, which foster responsibility, help young people..." |
 
 ### Improve Cohesion
 
-| Original Text                                         | Improved Text                                        | Explanation                                         |
-| -----------------------------------------------------| ----------------------------------------------------| ---------------------------------------------------|
-| "...I have several questions. **Also**, I’d like to know more about..." | "...I have several questions. **Furthermore**, I would also like to know more about..." | "Furthermore" provides a stronger connection than "also," enhancing cohesion. |
-| "...I look forward to your prompt reply. **So** I appreciate your help." | "...I look forward to your prompt reply. **Thus**, I appreciate your help." | "Thus" conveys causality more effectively than "so". |
-| "...This information is necessary. **Moreover**, it would help me immensely." | "...This information is necessary. **In addition**, it would help me immensely." | "In addition" adds more depth to the connection between the sentences. |
-| "...I hope to hear from you soon. **Therefore**, I expect your response." | "...I hope to hear from you soon. **Consequently**, I expect your response." | "Consequently" ensures a clearer logical flow than "therefore." |
-| "...I am grateful for your assistance. **Also**, I hope to collaborate more in the future." | "...I am grateful for your assistance. **Additionally**, I hope to collaborate more in the future." | "Additionally" enhances the formal tone and strengthens the connection. |
+| Original Text                                                                  | Improved Text                                                            | Explanation                                                                                                   |
+|-------------------------------------------------------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| "Firstly, these skills promote independence and healthier lifestyles."       | "To begin with, these skills not only promote independence but also foster healthier lifestyles." | Enhances cohesion by using “not only... but also” as an effective linking phrase, showcasing multiple benefits.  |
+| "On the other hand, opponents argue that school time should focus..."        | "Conversely, opponents assert that educational time must be prioritized for..."                     | “Conversely” provides a clearer connection to contrast, enhancing the flow of ideas.                          |
+| "Furthermore, gardening classes can raise awareness of environmental issues..." | "Moreover, participating in gardening classes can significantly enhance awareness of environmental issues..." | The use of “Moreover” smooths the transition to additional information and emphasizes the importance of gardening.  |
+| "In my opinion, schools should include these skills as optional courses."    | "In my view, educational institutions ought to offer these skills as optional courses."        | “In my view” transitions well into your opinion while using “ought to” improves the formulation of your statement. |
+| "While academic knowledge is crucial, practical life skills help young people..." | "Although academic knowledge is undoubtedly vital, practical life skills empower young individuals..." | “Although” enhances the contrast and the use of “empower” adds depth to the argument.                            |
 
 
 ## Model Essay
 
 ### Revised Essay
 
-In today's world, communication plays a crucial role in connecting people. When we greet each other with a simple "hello," it opens the door to various interactions and relationships. A friendly greeting can make someone's day better and create a positive atmosphere. It shows that we acknowledge one another, regardless of the context. In a society where digital communication is prevalent, the importance of a genuine, face-to-face greeting should not be underestimated. Thus, "hello" is more than just a word; it's a bridge that connects us all.
+Learning practical skills such as growing food and cooking can greatly benefit students in many ways. Firstly, these skills promote independence and foster healthier lifestyles. For example, students who understand nutrition and food preparation are more likely to avoid fast food and consume balanced meals. Furthermore, gardening classes can enhance awareness of environmental issues such as sustainability and food waste. 
+
+On the other hand, opponents argue that school time should be dedicated to academic subjects like mathematics and science, which they deem more essential for future careers. They believe that cooking and gardening are responsibilities that should fall to parents, rather than educators. 
+
+In my opinion, schools should offer these skills as optional courses. While academic knowledge is undeniably essential, practical life skills help young people to become well-rounded and responsible adults. Therefore, a balance between academic and practical subjects is the best solution.
 
 ### Band 8.0 - 9.0 Sample Essay
 
-Effective communication is a cornerstone of human interaction. The simple act of saying "hello" not only initiates a conversation but also sets the tone for the ensuing dialogue. It is a universally recognized greeting that transcends cultural differences, demonstrating our shared humanity. The warm exchange of "hello" fosters connections, making individuals feel acknowledged and valued. 
+The debate on whether students should learn to grow food and cook at school has gained prominence in recent years. Proponents emphasize the myriad advantages of these practical skills, including enhanced self-sufficiency and the promotion of healthier dietary habits. Students who grasp concepts of nutrition and culinary skills are less inclined to rely on fast food, opting instead for wholesome, home-cooked meals. Moreover, engaging with gardening allows learners to appreciate environmental concerns, including issues like sustainability and reducing food waste.
 
-In an increasingly digital world, where messages can often lack warmth and individuality, the significance of a personal greeting becomes even more important. A heartfelt "hello" can brighten someone's day, foster goodwill, and strengthen relationships. Therefore, this seemingly insignificant word carries weight, symbolizing the beginning of countless interactions and the potential for meaningful connections in our lives.
+Conversely, dissenters contend that the academic curriculum should take precedence, focusing on subjects such as mathematics and science, which are crucial for future employment opportunities. They argue that cooking and gardening are life skills that families should teach at home, limiting the school's role in this regard. 
+
+In my opinion, integrating these practical skills into the school curriculum as elective courses would be beneficial. While a solid foundation in academic subjects is vital for career success, equipping students with essential life skills ensures they develop into well-rounded individuals. Thus, striking a balance between academic rigor and practical training presents the most effective approach for preparing students for adulthood.
