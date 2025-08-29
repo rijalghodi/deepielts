@@ -8,6 +8,7 @@ import { PricingSection } from "@/components/home/pricing-section";
 import { SubmissionSection } from "@/components/home/submission-section";
 import { VsTraditionalSection } from "@/components/home/vs-traditional-section";
 import { FallingStarsBackground } from "@/components/ui/falling-stars-bg";
+import { SubmissionSectionSkeleton } from "@/components/home/submission-section/submission-section-skeleton";
 
 export default function Home() {
   return (
@@ -46,7 +47,7 @@ export default function Home() {
             id="submission-section"
             className="relative max-w-screen-lg mx-auto w-full px-5 md:px-6 pt-6 pb-32 lg:pb-36 overflow-hidden"
           >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<SubmissionSectionSkeleton />}>
               <SubmissionSection />
             </Suspense>
           </section>

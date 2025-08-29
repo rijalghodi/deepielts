@@ -1,9 +1,11 @@
+import { Eraser } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
 import { cn } from "@/lib/utils";
 
+import { Button } from "@/components/ui/button";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { inputVariants } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,8 +42,13 @@ export function AnswerInput() {
             />
 
             {/* TOOL */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between w-full gap-2">
               <span className="text-xs text-muted-foreground">{wordCount} words</span>
+              {field.value && (
+                <Button variant="outline" size="xs" onClick={() => field.onChange("")}>
+                  <Eraser /> Clear Answer
+                </Button>
+              )}
             </div>
           </div>
           <FormMessage />

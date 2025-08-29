@@ -1,7 +1,6 @@
 "use client";
 
 import { Sparkles } from "lucide-react";
-import { motion } from "motion/react";
 import React from "react";
 
 import { APP_NAME } from "@/lib/constants";
@@ -13,13 +12,7 @@ import { Badge } from "@/components/ui/badge";
 export function HeroSection() {
   const { user } = useAuth();
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className={cn("space-y-6 lg:space-y-8 items-center")}
-    >
+    <div className={cn("space-y-6 lg:space-y-8 items-center")}>
       <div className="flex justify-center">
         <Badge variant="light" size="lg">
           <Sparkles className="w-4 h-4 text-primary" />
@@ -41,6 +34,6 @@ export function HeroSection() {
           Instant feedback. Band 9 insights. Improve fast.
         </p>
       )}
-    </motion.div>
+    </div>
   );
 }

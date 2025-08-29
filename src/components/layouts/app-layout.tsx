@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
+import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { AuthDialog } from "@/components/auth/auth-dialog";
 import { CheckoutDialog } from "@/components/home/checkout-dialog";
@@ -18,9 +19,11 @@ import AppFooter from "./app-footer";
 import { AppHeader } from "./app-header";
 import { AsideInset, AsideTrigger, useAside } from "../ui/aside";
 import { Button } from "../ui/button";
+import { ShimmeringBackground } from "../ui/shimering-background";
 
 const AsideTriggerButton = () => {
   const { isMobile, open, openMobile } = useAside();
+  const { generating } = useAIAnalysisStore();
   const isOpen = (!isMobile && open) || (isMobile && openMobile);
   return (
     <div className="fixed top-1/2 -translate-y-1/2 right-0 z-50">
@@ -29,16 +32,17 @@ const AsideTriggerButton = () => {
           variant="contrast"
           size="lg"
           className={cn(
-            "rounded-none rounded-l-full w-36 transition-all duration-200 shadow-xl",
+            "relative overflow-hidden rounded-none rounded-l-full w-36 transition-all duration-200 shadow-xl",
             isOpen && !isMobile && "w-12",
             isMobile && "-rotate-90 origin-right mr-5 rounded-none rounded-t-lg",
           )}
         >
+          {generating && <ShimmeringBackground />}
           {isOpen ? (
             <X className="h-4 w-4" />
           ) : (
             <>
-              <Bot className="h-4 w-4" /> AI Assitant{" "}
+              <Bot className="h-4 w-4" /> Analysis
             </>
           )}
         </Button>

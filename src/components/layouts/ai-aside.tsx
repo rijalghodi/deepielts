@@ -15,12 +15,12 @@ import { MarkdownRenderer } from "../ui/markdown-renderer";
 function NoAnalysis() {
   return (
     <div className="ai-output">
-      <blockquote data-section="overall-score">
-        <p>Est. Overall Band Score</p>
+      <div className="overall-score">
+        <h2>Est. Overall Band Score</h2>
         <p>0</p>
         <p>(+/- 0.5)</p>
-      </blockquote>
-      <blockquote data-section="criteria-score">
+      </div>
+      <div className="criteria-score">
         <table>
           <thead>
             <tr>
@@ -49,7 +49,7 @@ function NoAnalysis() {
             </tr>
           </tbody>
         </table>
-      </blockquote>
+      </div>
       <div className="text-sm text-muted-foreground text-center py-12">
         <FileText className="w-5 h-5 text-muted-foreground mx-auto" />
         <p>No analysis data available</p>

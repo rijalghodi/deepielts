@@ -1,7 +1,6 @@
 "use client";
 
 import { Crown, Sparkles } from "lucide-react";
-import { motion } from "motion/react";
 import Link from "next/link";
 import React, { Suspense, useEffect, useState } from "react";
 
@@ -37,11 +36,7 @@ export function AppHeader() {
   }, []);
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3 }}
+    <header
       className="fixed inset-x-0 top-2 z-50 transition-all duration-200 ease-linear px-5"
       style={{
         left: isSidebarMobile ? "0" : sidebarOpen && user ? SIDEBAR_WIDTH : user ? SIDEBAR_WIDTH_ICON : "0",
@@ -88,6 +83,6 @@ export function AppHeader() {
           </div>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 }

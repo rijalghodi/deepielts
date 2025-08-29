@@ -12,7 +12,8 @@ import { authGetUser } from "../auth/auth-middleware";
 import { AppError, AppResponse } from "@/types";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
-const MAX_FILE_UPLOAD_PER_DAY = 1;
+const MAX_FILE_UPLOAD_PER_DAY = 20;
+const GUEST_MAX_FILE_UPLOAD_PER_DAY = 5;
 
 export async function POST(req: Request) {
   try {
@@ -34,7 +35,10 @@ export async function POST(req: Request) {
     const dailyAttemptId = isAuthenticated
       ? `file-upload:${user.uid}`
       : `file-upload:${req.headers.get("x-forwarded-for")}`;
-    const allowed = await isBelowLimit(dailyAttemptId, MAX_FILE_UPLOAD_PER_DAY);
+    const allowed = await isBelowLimit(
+      dailyAttemptId,
+      isAuthenticated ? MAX_FILE_UPLOAD_PER_DAY : GUEST_MAX_FILE_UPLOAD_PER_DAY,
+    );
 
     if (!allowed) {
       throw new AppError({
