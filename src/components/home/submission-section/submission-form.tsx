@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { submissionCreateStream, submissionGeneratePDF } from "@/lib/api/submission.api";
+import { submissionCreateStream } from "@/lib/api/submission.api";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
@@ -184,15 +184,15 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
         }
       }
 
-      const { data } = matter(localAnalysis || "");
-      const submissionId = data?.submissionId?.trim();
+      const { data: _data } = matter(localAnalysis || "");
+      // const submissionId = data?.submissionId?.trim();
 
-      if (submissionId && submissionId !== "temp" && user?.id) {
-        setGeneratingPdf(true);
-        const pdf = await submissionGeneratePDF(submissionId);
-        setPdfUrl(pdf?.data?.url || null);
-        setGeneratingPdf(false);
-      }
+      // if (submissionId && submissionId !== "temp" && user?.id) {
+      //   setGeneratingPdf(true);
+      //   const pdf = await submissionGeneratePDF(submissionId);
+      //   setPdfUrl(pdf?.data?.url || null);
+      //   setGeneratingPdf(false);
+      // }
 
       setGenerating(false);
       setAbortController(null);

@@ -6,7 +6,6 @@ import { FeaturesSection } from "@/components/home/features-section";
 import { HeroSection } from "@/components/home/hero-section";
 import { PricingSection } from "@/components/home/pricing-section";
 import { SubmissionSection } from "@/components/home/submission-section";
-import { TestimonialSection } from "@/components/home/testimonial-section";
 import { VsTraditionalSection } from "@/components/home/vs-traditional-section";
 import { FallingStarsBackground } from "@/components/ui/falling-stars-bg";
 
@@ -64,12 +63,12 @@ export default function Home() {
             <VsTraditionalSection />
           </div>
         </section>
-
+        {/* 
         <section id="testimonial-section" className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-xl w-fit mx-auto">
             <TestimonialSection />
           </div>
-        </section>
+        </section> */}
 
         <section id="pricing-section" className="bg-background w-full px-5 sm:px-6 py-24 lg:py-32">
           <div className="max-w-screen-lg mx-auto">
