@@ -81,6 +81,13 @@ export const submissionListKey = (practiceId?: string, userId?: string) => ["sub
 /**
  * Generate PDF from submission feedback
  */
+// export const submissionGeneratePDF = async (submissionId: string): Promise<ApiResponse<UploadedFile> | undefined> => {
+//   return apiPost({
+//     endpoint: `/submissions/${submissionId}/pdf`,
+//     pathParams: { submissionId },
+//   });
+// };
+
 export const submissionGeneratePDF = async (submissionId: string): Promise<ApiResponse<UploadedFile> | undefined> => {
   return apiPost({
     endpoint: `/submissions/${submissionId}/pdf`,

@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore";
 
-import { mdToPdfBuffer } from "@/lib/files/md-to-pdfbuffer";
+import { mdToPdfBufferViaAPI } from "@/lib/files/md-to-pdf-api";
 import { db } from "@/lib/firebase/firebase-admin";
 import { openai } from "@/lib/openai/openai";
 import {
@@ -158,7 +158,7 @@ export function createFeedbackReadableStream(params: {
             fullFeedback += content;
             chunkCount++;
 
-            if (chunkCount >= 4) {
+            if (chunkCount >= 1) {
               enqueue(buffer);
               buffer = "";
               chunkCount = 0;
@@ -218,7 +218,7 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     };
   }
 
-  const pdfBuffer = await mdToPdfBuffer(submission.feedback);
+  const pdfBuffer = await mdToPdfBufferViaAPI(submission.feedback);
 
   const uploadedFile = await uploadFileToStorage({
     file: pdfBuffer,
