@@ -2,18 +2,18 @@ import { env } from "../env";
 
 export async function mdToPdfBufferViaAPI(markdownText: string): Promise<Buffer> {
   try {
-    const response = await fetch("http://localhost:3000/export", {
+    const response = await fetch("https://api.deepielts.com/export", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${env.JWT_ACCESS_SECRET}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         text: markdownText,
+        apiKey: env.JWT_ACCESS_SECRET,
       }),
     });
 
-    console.log(response);
+    // console.log(response);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

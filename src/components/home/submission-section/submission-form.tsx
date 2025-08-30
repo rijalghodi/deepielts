@@ -186,17 +186,12 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       const { data } = matter(localAnalysis || "");
       const submissionId = data?.submissionId?.trim() as string;
 
-      setGeneratingPdf(true);
-      const pdf = await submissionGeneratePDF(submissionId);
-      setPdfUrl(pdf?.data?.url || null);
-      setGeneratingPdf(false);
-
-      // if (submissionId && submissionId !== "temp" && user?.id) {
-      //   setGeneratingPdf(true);
-      //   const pdf = await submissionGeneratePDF(submissionId);
-      //   setPdfUrl(pdf?.data?.url || null);
-      //   setGeneratingPdf(false);
-      // }
+      if (submissionId && submissionId !== "temp" && user?.id) {
+        setGeneratingPdf(true);
+        const pdf = await submissionGeneratePDF(submissionId);
+        setPdfUrl(pdf?.data?.url || null);
+        setGeneratingPdf(false);
+      }
 
       setGenerating(false);
       setAbortController(null);
