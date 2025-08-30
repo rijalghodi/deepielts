@@ -6,9 +6,9 @@ import { FeaturesSection } from "@/components/home/features-section";
 import { HeroSection } from "@/components/home/hero-section";
 import { PricingSection } from "@/components/home/pricing-section";
 import { SubmissionSection } from "@/components/home/submission-section";
+import { SubmissionSectionSkeleton } from "@/components/home/submission-section/submission-section-skeleton";
 import { VsTraditionalSection } from "@/components/home/vs-traditional-section";
 import { FallingStarsBackground } from "@/components/ui/falling-stars-bg";
-import { SubmissionSectionSkeleton } from "@/components/home/submission-section/submission-section-skeleton";
 
 export default function Home() {
   return (

@@ -1,8 +1,6 @@
 import * as Sentry from "@sentry/nextjs";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-import { ACCESS_TOKEN_KEY } from "@/lib/constants";
 import logger from "@/lib/logger";
 
 import { authMiddleware } from "@/app/api/auth/auth-middleware";
