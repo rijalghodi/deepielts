@@ -41,7 +41,7 @@ function SheetContent({
   side = "right",
   variant = "default",
   withClose = true,
-  containerClassName,
+  // containerClassName,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
@@ -55,7 +55,7 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-container"
         className={cn(
-          "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 transition ease-in-out duration-300",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 transition ease-out duration-300",
           side === "right" &&
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0",
           side === "left" &&
@@ -72,7 +72,7 @@ function SheetContent({
       >
         <div
           className={cn(
-            "relative flex flex-col h-full shadow-lg bg-background overflow-hidden w-screen sm:w-full",
+            "relative flex flex-col h-full shadow-lg bg-background overflow-hidden w-screen",
             side === "right" && "border-l",
             side === "left" && "border-r",
             side === "top" && "border-b",

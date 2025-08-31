@@ -135,6 +135,8 @@ export default function HistorySection({ className }: Props) {
     setCurrentPage(page);
   };
 
+  console.log(submissions);
+
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex flex-wrap gap-5 justify-between">
@@ -221,6 +223,7 @@ export default function HistorySection({ className }: Props) {
           }
           feedback={selectedSubmission.feedback || ""}
           id={selectedSubmission.id}
+          pdfUrl={selectedSubmission.pdfUrl || undefined}
         />
       )}
     </div>

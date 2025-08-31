@@ -20,23 +20,29 @@ type Props = {
   answer: string;
   date: string;
   feedback: string;
+  pdfUrl?: string;
   id: string;
 };
 
-export default function SubmissionView({ isOpen, onClose, question, answer, date, feedback, id }: Props) {
+export default function SubmissionView({ isOpen, onClose, question, answer, date, feedback, pdfUrl, id }: Props) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [hasExistingPDF, setHasExistingPDF] = useState(false);
+  const [pdfUrlState, setPdfUrlState] = useState<string | undefined>(undefined);
 
   // Check if PDF already exists when component mounts
   React.useEffect(() => {
-    if (isOpen && feedback) {
-      setHasExistingPDF(false);
+    if (pdfUrl) {
+      setPdfUrlState(pdfUrl);
     }
-  }, [isOpen, feedback]);
+  }, [pdfUrl]);
 
   const handleGeneratePDF = async () => {
     if (!feedback) {
       toast.error("No feedback available to generate PDF");
+      return;
+    }
+
+    if (pdfUrl) {
+      window.open(pdfUrl, "_blank");
       return;
     }
 
@@ -48,7 +54,7 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
         // Open the PDF in a new tab
         window.open(response.data.url, "_blank");
 
-        setHasExistingPDF(true);
+        setPdfUrlState(response.data.url);
         toast.success("PDF generated successfully!");
       } else {
         toast.error("Failed to generate PDF");
@@ -63,7 +69,7 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="right" containerClassName="w-full sm:w-[600px]">
+      <SheetContent side="right" className="sm:w-[600px]">
         <SheetHeader>
           <SheetTitle>Submission Details</SheetTitle>
         </SheetHeader>
@@ -101,7 +107,7 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
                     <FileText className="h-4 w-4 animate-pulse" />
                     Generating...
                   </>
-                ) : hasExistingPDF ? (
+                ) : pdfUrlState ? (
                   <>
                     <Download className="h-4 w-4" />
                     Download PDF
@@ -130,9 +136,9 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
           </div>
         </SheetBody>
         <SheetFooter className="flex flex-row gap-2 justify-center">
-          <Button variant="outline" onClick={onClose}>
+          {/* <Button variant="outline" onClick={onClose} className="w-20">
             Close
-          </Button>
+          </Button> */}
           <Button variant="contrast" asChild>
             <Link href={`/?submissionId=${id}`}>Retry the Test</Link>
           </Button>
