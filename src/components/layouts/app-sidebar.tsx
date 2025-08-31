@@ -1,4 +1,4 @@
-import { CreditCard, Edit, History, LogOut, PieChart, Settings } from "lucide-react";
+import { CreditCard, Edit, LogOut, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -40,11 +40,6 @@ const QUICK_MENU = [
     title: "Progress",
     icon: () => <PieChart />,
     href: "/dashboard",
-  },
-  {
-    title: "History",
-    icon: () => <History />,
-    href: "/dashboard#history",
   },
 ];
 
