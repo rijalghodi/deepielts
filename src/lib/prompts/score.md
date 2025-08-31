@@ -1,8 +1,6 @@
 ## TASK:
 
-Evaluate my {{taskType}} IELTS answer using the latest **IELTS Writing Band Descriptors**. Assign band scores for each criterion based on its specific band descriptors.
-
-For each criterion (TR, CC, GRA, LR), refer to the respective band descriptor table to determine the appropriate score for each sub-criterion.
+Evaluate my {{taskType}} IELTS answer. Assign scores for each criterion (TR, CC, GRA, LR) by following the band descriptor tables for each sub-criterion. Provide short feedback and calculate overall band score.
 
 ## INPUTS:
 
