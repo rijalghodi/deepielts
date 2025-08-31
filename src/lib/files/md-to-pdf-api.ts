@@ -13,16 +13,12 @@ export async function mdToPdfBufferViaAPI(markdownText: string): Promise<Buffer>
       }),
     });
 
-    // console.log(response);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    console.log(response);
 
     const arrayBuffer = await response.arrayBuffer();
     return Buffer.from(arrayBuffer);
   } catch (error) {
     console.error("Error converting markdown to PDF:", error);
-    throw new Error("Failed to convert markdown to PDF");
+    throw error;
   }
 }

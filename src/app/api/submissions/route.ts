@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
+import { TEMP_USER_ID } from "@/lib/constants/database";
 import logger from "@/lib/logger";
 
 import { createSubmissionBodySchema, listSubmissionsQuerySchema } from "@/server/dto/submission.dto";
@@ -22,8 +23,8 @@ import { authGetUser, authMiddleware } from "../auth/auth-middleware";
 import { AppError, AppPaginatedResponse } from "@/types/global";
 export const runtime = "nodejs";
 
-const MAX_SUBMISSIONS_PER_DAY = 3;
-const GUEST_MAX_SUBMISSIONS_PER_DAY = 1;
+const MAX_SUBMISSIONS_PER_DAY = 4;
+const GUEST_MAX_SUBMISSIONS_PER_DAY = 2;
 const PRO_MAX_SUBMISSIONS_PER_DAY = 20;
 
 export async function POST(req: NextRequest) {
@@ -46,8 +47,8 @@ export async function POST(req: NextRequest) {
     if (!allowed) {
       throw new AppError({
         message: isAuthenticated
-          ? "Daily limit reached. Free users can submit up to 3 times per day. Upgrade to get more submissions."
-          : "Daily limit reached. Guests can submit only once per day. Login to get more submissions.",
+          ? `Daily limit reached. Free users can submit up to ${maxSubmissions} times per day. Upgrade to get more submissions.`
+          : `Daily limit reached. Guests can submit only ${GUEST_MAX_SUBMISSIONS_PER_DAY} times per day. Login to get more submissions.`,
         code: 429,
         name: isAuthenticated ? "FreeUserDailyLimitReached" : "GuestDailyLimitReached",
       });
@@ -76,20 +77,20 @@ export async function POST(req: NextRequest) {
     });
 
     let submission: Submission | null = null;
-    if (user?.uid) {
-      const parsedScore = parseScoreJson(score);
-      submission = await createSubmission({
-        userId: user.uid,
-        question,
-        answer,
-        attachment: attachment || undefined,
-        questionType: questionType as QuestionType,
-        score: parsedScore,
-      });
+    const userId = user?.uid || TEMP_USER_ID;
 
-      if (!submission) {
-        throw new AppError({ message: "Failed to persist submission", code: 500 });
-      }
+    const parsedScore = parseScoreJson(score);
+    submission = await createSubmission({
+      userId,
+      question,
+      answer,
+      attachment: attachment || undefined,
+      questionType: questionType as QuestionType,
+      score: parsedScore,
+    });
+
+    if (!submission) {
+      throw new AppError({ message: "Failed to persist submission", code: 500 });
     }
 
     let onCompleteResolve: () => void;
@@ -107,10 +108,10 @@ export async function POST(req: NextRequest) {
       submissionId: submission?.id || "temp",
       onComplete: async (fullFeedback: string) => {
         try {
-          if (!(req as any).signal?.aborted && user?.uid && submission) {
+          if (!(req as any).signal?.aborted && submission) {
             // Insert the generated feedback to the submission
             await insertFeedbackToSubmission({
-              userId: user.uid,
+              userId,
               submissionId: submission.id,
               feedback: fullFeedback,
             });

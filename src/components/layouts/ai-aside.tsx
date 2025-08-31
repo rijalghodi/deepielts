@@ -11,8 +11,9 @@ import { useAuthDialog } from "../auth/auth-dialog";
 import { useCheckoutDialog } from "../home/checkout-dialog";
 import { Button } from "../ui/button";
 import { MarkdownRenderer } from "../ui/markdown-renderer";
+import { State } from "../ui/states";
 
-function NoAnalysis() {
+function NoAnalysisDummy() {
   return (
     <div className="ai-output">
       <div className="overall-score">
@@ -50,11 +51,6 @@ function NoAnalysis() {
           </tbody>
         </table>
       </div>
-      <div className="text-sm text-muted-foreground text-center py-12">
-        <FileText className="w-5 h-5 text-muted-foreground mx-auto" />
-        <p>No analysis data available</p>
-        <p>Please insert your essay to get started</p>
-      </div>
     </div>
   );
 }
@@ -76,10 +72,10 @@ function ErrorState({ message, name }: { message?: string; name?: string }) {
   const { onOpenChange: toggleAuthDialog } = useAuthDialog();
   const { onOpenChange: toggleCheckoutDialog } = useCheckoutDialog();
   return (
-    <div className="flex flex-col items-center justify-center flex-1 gap-4 py-8">
+    <div className="flex flex-col items-center justify-center flex-1 gap-1 py-8">
       <AlertCircle className="w-5 h-5 text-destructive" />
-      <p className="text-base font-semibold text-destructive text-center mt-2">Error occurred</p>
-      <p className="text-base text-muted-foreground text-center">{message}</p>
+      <p className="text-base font-semibold text-destructive text-center">Error occurred</p>
+      <p className="text-sm text-muted-foreground text-center">{message}</p>
       {name === "FreeUserDailyLimitReached" && (
         <Button variant="default" onClick={() => toggleCheckoutDialog(true)}>
           Upgrade to Pro
@@ -102,7 +98,16 @@ function AIOutput() {
 
     return (
       <div className="relative ai-output">
-        <NoAnalysis />
+        <NoAnalysisDummy />
+        {error ? (
+          <ErrorState message={error.message} name={error.name} />
+        ) : (
+          <State
+            title="No analysis data available"
+            description="Please insert your essay to get started"
+            icon={<FileText className="w-5 h-5 text-muted-foreground mx-auto" />}
+          />
+        )}
       </div>
     );
   }

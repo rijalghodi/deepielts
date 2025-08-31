@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { submissionCreateStream, submissionGeneratePDF } from "@/lib/api/submission.api";
-import { useAuth } from "@/lib/contexts/auth-context";
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { useAside } from "@/components/ui/aside";
@@ -51,7 +50,6 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
     setPdfUrl,
   } = useAIAnalysisStore();
   const { setOpen, setOpenMobile } = useAside();
-  const { user } = useAuth();
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [generatingPdf, setGeneratingPdf] = useState(false);
@@ -186,15 +184,10 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       const { data } = matter(localAnalysis || "");
       const submissionId = data?.submissionId?.trim() as string;
 
-      if (submissionId && submissionId !== "temp" && user?.id) {
-        setGeneratingPdf(true);
-        const pdf = await submissionGeneratePDF(submissionId);
-        setPdfUrl(pdf?.data?.url || null);
-        setGeneratingPdf(false);
-      }
-
-      setGenerating(false);
-      setAbortController(null);
+      setGeneratingPdf(true);
+      const pdf = await submissionGeneratePDF(submissionId);
+      setPdfUrl(pdf?.data?.url || null);
+      setGeneratingPdf(false);
 
       onSuccess?.({ success: true });
     } catch (error: any) {
@@ -209,10 +202,11 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
           name: error?.name || "SubmissionError",
         });
       }
-
+    } finally {
+      setGeneratingPdf(false);
       setGenerating(false);
       setAbortController(null);
-    } finally {
+
       if (reader) {
         try {
           reader.releaseLock();

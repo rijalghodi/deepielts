@@ -12,7 +12,7 @@ import { authGetUser } from "../auth/auth-middleware";
 import { AppError, AppResponse } from "@/types";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
-const MAX_FILE_UPLOAD_PER_DAY = 20;
+const MAX_FILE_UPLOAD_PER_DAY = 30;
 const GUEST_MAX_FILE_UPLOAD_PER_DAY = 5;
 
 export async function POST(req: Request) {
