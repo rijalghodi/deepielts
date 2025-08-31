@@ -1,7 +1,7 @@
 export const APP_NAME = "Deep IELTS";
 export const APP_TAGLINE = "IELTS Writing Checker Powered by AI";
 export const APP_DESCRIPTION =
-  "Deep IELTS is a free AI-powered IELTS Writing Checker, trained on over 10,000 real essays. It gives accurate score predictions and practical feedback—just like a real examiner.";
+  "Deep IELTS is a free AI-powered IELTS Writing Checker, trained on over hundreds of real essays. It gives accurate score predictions and practical feedback, just like a real examiner.";
 export const APP_KEYWORDS = [
   "IELTS",
   "AI IELTS",

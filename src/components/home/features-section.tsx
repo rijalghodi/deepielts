@@ -1,7 +1,7 @@
 import { Sparkles } from "lucide-react";
 import React from "react";
 
-import { APP_NAME } from "@/lib/constants";
+import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
 
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -12,7 +12,7 @@ const features = [
     badge: "Academic",
     description:
       "Upload or write your Academic Task 1 essay. Our AI explains your score, highlights strengths and weaknesses, and even helps you describe charts, graphs, and diagrams like a Band 9 candidate.",
-    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
+    video: "https://www.youtube.com/embed/dc4OBUMeMTs",
     details: [
       "Band score breakdown (Task Achievement, Coherence, Lexical Resource, Grammar)",
       "AI-generated sample answers and chart explanations",
@@ -24,7 +24,7 @@ const features = [
     badge: "General",
     description:
       "Submit your General Training Task 1 letter. The AI will score your letter, check for tone and format, and suggest ways to make your writing more effective.",
-    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
+    video: "https://www.youtube.com/embed/dihifQMlCDc",
     details: [
       "Checks for correct letter format and tone",
       "Band score with actionable feedback",
@@ -36,7 +36,7 @@ const features = [
     badge: "Essay",
     description:
       "Get your Task 2 essays scored instantly. The AI analyzes your argument, structure, vocabulary, and grammar, and gives you a Band score with detailed suggestions.",
-    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
+    video: "https://www.youtube.com/embed/cKUkRfN2nPM",
     details: [
       "Band score for each criterion",
       "AI feedback on argument and structure",
@@ -44,12 +44,12 @@ const features = [
     ],
   },
   {
-    title: "Unlimited Question Practice",
-    badge: "Practice",
+    title: "Progress Tracking",
+    badge: "Progress",
     description:
-      "Practice as many IELTS questions as you want, across a wide variety of real exam topics. Get instant feedback and never run out of material.",
-    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
-    details: ["Covers all major IELTS writing topics", "No daily or monthly limits", "Practice anytime, anywhere"],
+      "Review your progress over time. See how your scores have improved and identify areas for improvement.",
+    video: "https://www.youtube.com/embed/Z0bjuKkUpb8",
+    details: ["See how your scores have improved", "Identify areas for improvement", "Track your progress over time"],
   },
 ];
 
@@ -64,10 +64,7 @@ export function FeaturesSection() {
         <h2 className="section-title">
           {APP_NAME} <br /> A Free <span className="text-primary">IELTS Writing</span> Checker
         </h2>
-        <p className="section-desc">
-          {APP_NAME} is a free IELTS Writing checker powered by AI, trained on over 10,000 real essays. It predicts your
-          score and gives feedback similar to real examiners.
-        </p>
+        <p className="section-desc">{APP_DESCRIPTION}</p>
       </div>
 
       <div className="flex flex-col gap-24">
