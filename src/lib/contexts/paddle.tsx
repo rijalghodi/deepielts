@@ -22,7 +22,6 @@ interface PaddleContextType {
   error: string | null;
   checkoutData: CheckoutEventsData | null;
   initializePaddle: () => Promise<void>;
-  openCheckout: (priceId: string, userEmail?: string) => void;
   getPrice: (priceId: string) => Promise<PaddlePrice | null>;
 }
 
@@ -57,16 +56,6 @@ export function PaddleProvider({ children }: PaddleProviderProps) {
               handleCheckoutEvents(event.data);
             }
           },
-          checkout: {
-            settings: {
-              variant: "one-page",
-              displayMode: "inline",
-              frameTarget: "paddle-checkout-frame",
-              frameInitialHeight: 450,
-              theme: "light",
-              successUrl: "/checkout/success",
-            },
-          },
         });
 
         if (paddleInstance) {
@@ -81,21 +70,6 @@ export function PaddleProvider({ children }: PaddleProviderProps) {
       }
     }
   }, [paddle?.Initialized, handleCheckoutEvents]);
-
-  const openCheckout = useCallback(
-    (priceId: string, userEmail?: string) => {
-      if (!paddle?.Initialized) {
-        console.error("Paddle not initialized");
-        return;
-      }
-
-      paddle.Checkout.open({
-        ...(userEmail && { customer: { email: userEmail } }),
-        items: [{ priceId, quantity: 1 }],
-      });
-    },
-    [paddle],
-  );
 
   const getPrice = useCallback(
     async (priceId: string): Promise<PaddlePrice | null> => {
@@ -147,7 +121,6 @@ export function PaddleProvider({ children }: PaddleProviderProps) {
     error,
     checkoutData,
     initializePaddle: initializePaddleInstance,
-    openCheckout,
     getPrice,
   };
 
