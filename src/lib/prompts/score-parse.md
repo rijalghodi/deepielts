@@ -49,10 +49,9 @@ Task Response (TR): [[TR]]
 
 - <strong data-score="[[TR-1]]">[[TR-1]]</strong> Relevance to Prompt
 - <strong data-score="[[TR-2]]">[[TR-2]]</strong> Clarity of Position
-- <strong data-score="[[TR-3]]">[[TR-3]]</strong> Depth of Ideas
-- <strong data-score="[[TR-4]]">[[TR-4]]</strong> Appropriateness of Format
-- <strong data-score="[[TR-5]]">[[TR-5]]</strong> Relevant & Specific Examples
-- <strong data-score="[[TR-6]]">[[TR-6]]</strong> Appropriate Word Count
+- <strong data-score="[[TR-3]]">[[TR-3]]</strong> Format Appropriateness
+- <strong data-score="[[TR-4]]">[[TR-4]]</strong> Introduction & Conclusion effectiveness
+- <strong data-score="[[TR-5]]">[[TR-5]]</strong> Idea Development
 
 </div>
 
@@ -63,11 +62,10 @@ Coherence & Cohesion (CC): [[CC]]
 [[CC-0]]
 
 - <strong data-score="[[CC-1]]">[[CC-1]]</strong> Logical Organization
-- <strong data-score="[[CC-2]]">[[CC-2]]</strong> Effective Introduction & Conclusion
-- <strong data-score="[[CC-3]]">[[CC-3]]</strong> Supported Main Points
-- <strong data-score="[[CC-4]]">[[CC-4]]</strong> Cohesive Devices Usage
-- <strong data-score="[[CC-5]]">[[CC-5]]</strong> Paragraphing
-
+- <strong data-score="[[CC-2]]">[[CC-2]]</strong> Paragraphing
+- <strong data-score="[[CC-3]]">[[CC-3]]</strong> Idea sequencing
+- <strong data-score="[[CC-4]]">[[CC-4]]</strong> Referencing & Substitution
+- <strong data-score="[[CC-5]]">[[CC-5]]</strong> Cohesive Devices Usage
 </div>
 
 <div class="criteria-detail">
@@ -76,7 +74,7 @@ Grammatical Range & Accuracy (GRA): [[GRA]]
 
 [[GRA-0]]
 
-- <strong data-score="[[GRA-1]]">[[GRA-1]]</strong> Sentence Structure Variety
+- <strong data-score="[[GRA-1]]">[[GRA-1]]</strong> Sentence Variety
 - <strong data-score="[[GRA-2]]">[[GRA-2]]</strong> Grammar Accuracy
 - <strong data-score="[[GRA-3]]">[[GRA-3]]</strong> Punctuation Usage
 
@@ -89,7 +87,8 @@ Lexical Resource (LR): [[LR]]
 [[LR-0]]
 
 - <strong data-score="[[LR-1]]">[[LR-1]]</strong> Vocabulary Range
-- <strong data-score="[[LR-2]]">[[LR-2]]</strong> Lexical Accuracy
+- <strong data-score="[[LR-2]]">[[LR-2]]</strong> Accuracy of Word Choice
+- <strong data-score="[[LR-3]]">[[LR-3]]</strong> Collocation & Idiomatic Use
 - <strong data-score="[[LR-3]]">[[LR-3]]</strong> Spelling and Word Formation
 
 </div>
@@ -126,10 +125,9 @@ The essay addresses the prompt by discussing unethical advertising methods...
 
 - <strong data="6">6</strong> Relevance to Prompt
 - <strong data="6">6</strong> Clarity of Position
-- <strong data="5">5</strong> Depth of Ideas
-- <strong data="6">6</strong> Appropriateness of Format
-- <strong data="5">5</strong> Relevant & Specific Examples
-- <strong data="9">9</strong> Appropriate Word Count
+- <strong data="5">5</strong> Format Appropriateness
+- <strong data="6">6</strong> Introduction & Conclusion Effectiveness
+- <strong data="5">5</strong> Idea Development
 
 </div>
 
