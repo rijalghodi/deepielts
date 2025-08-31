@@ -28,11 +28,9 @@ export async function POST(req: NextRequest) {
 
     if (!userData) {
       // Create new user
-
-      // Create user document in Firestore
       const newUser = {
         email: decodedToken.email as string,
-        name: decodedToken.email?.split("@")[0] ?? "Google User", // Use email prefix as default name
+        name: decodedToken?.name ?? decodedToken.email?.split("@")[0] ?? "User",
         role: "user",
         isVerified: true,
         createdAt: new Date(),
