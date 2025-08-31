@@ -1,23 +1,19 @@
 "use client";
 
-import { type Environments, initializePaddle, type Paddle, PricePreviewParams, Theme } from "@paddle/paddle-js";
+import { type Environments, initializePaddle, type Paddle, PricePreviewParams } from "@paddle/paddle-js";
 import type { CheckoutEventsData } from "@paddle/paddle-js/types/checkout/events";
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
-import { PRICING_PLANS } from "@/lib/constants/pricing";
-
-export type PaddlePrices = Record<
-  string,
-  {
-    id: string;
-    price: string;
-    currency: string;
-    formattedPrice: string;
-    name: string; // pro
-    description: string;
-    frequency: string; // month, quarter
-  }
->;
+export type PaddlePrice = {
+  id: string;
+  price: string;
+  formattedPrice: string;
+  currency: string;
+  name: string;
+  description: string;
+  interval?: string;
+  frequency?: number;
+};
 
 interface PaddleContextType {
   paddle: Paddle | null;
@@ -25,16 +21,15 @@ interface PaddleContextType {
   isLoading: boolean;
   error: string | null;
   checkoutData: CheckoutEventsData | null;
-  initializePaddle: (eventCallback?: (event: any) => void) => Promise<void>;
-  openCheckout: (options: { priceId: string; userEmail?: string; theme?: Theme }) => void;
-  getPrices: (country?: string) => Promise<PaddlePrices>;
+  initializePaddle: () => Promise<void>;
+  openCheckout: (priceId: string, userEmail?: string) => void;
+  getPrice: (priceId: string) => Promise<PaddlePrice | null>;
 }
 
 const PaddleContext = createContext<PaddleContextType | undefined>(undefined);
 
 interface PaddleProviderProps {
   children: ReactNode;
-  defaultEventCallback?: (event: any) => void;
 }
 
 export function PaddleProvider({ children }: PaddleProviderProps) {
@@ -48,56 +43,47 @@ export function PaddleProvider({ children }: PaddleProviderProps) {
     setCheckoutData(event);
   }, []);
 
-  const initializePaddleInstance = useCallback(
-    async (eventCallback?: (event: any) => void) => {
-      if (!paddle?.Initialized && process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
-        setIsLoading(true);
-        setError(null);
+  const initializePaddleInstance = useCallback(async () => {
+    if (!paddle?.Initialized && process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
+      setIsLoading(true);
+      setError(null);
 
-        try {
-          const paddleInstance = await initializePaddle({
-            token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-            environment: process.env.NEXT_PUBLIC_PADDLE_ENV as Environments,
-            eventCallback: (event) => {
-              if (event.data && event.name) {
-                handleCheckoutEvents(event.data);
-              }
-              if (eventCallback) {
-                eventCallback(event);
-              }
+      try {
+        const paddleInstance = await initializePaddle({
+          token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
+          environment: process.env.NEXT_PUBLIC_PADDLE_ENV as Environments,
+          eventCallback: (event) => {
+            if (event.data && event.name) {
+              handleCheckoutEvents(event.data);
+            }
+          },
+          checkout: {
+            settings: {
+              variant: "one-page",
+              displayMode: "inline",
+              frameTarget: "paddle-checkout-frame",
+              frameInitialHeight: 450,
+              theme: "light",
+              successUrl: "/checkout/success",
             },
-            checkout: {
-              settings: {
-                variant: "one-page",
-                displayMode: "inline",
-                allowLogout: true,
-                frameTarget: "paddle-checkout-frame",
-                frameInitialHeight: 450,
-                frameStyle:
-                  "width: 100%; background-color: transparent; border: none; padding:20px; border-radius: 10px;",
-                theme: "light",
-                successUrl: "/checkout/success",
-              },
-            },
-          });
+          },
+        });
 
-          if (paddleInstance) {
-            setPaddle(paddleInstance);
-            setIsInitialized(true);
-          }
-        } catch (err) {
-          setError(err instanceof Error ? err.message : "Failed to initialize Paddle");
-          console.error("Paddle initialization error:", err);
-        } finally {
-          setIsLoading(false);
+        if (paddleInstance) {
+          setPaddle(paddleInstance);
+          setIsInitialized(true);
         }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to initialize Paddle");
+        console.error("Paddle initialization error:", err);
+      } finally {
+        setIsLoading(false);
       }
-    },
-    [paddle?.Initialized, handleCheckoutEvents],
-  );
+    }
+  }, [paddle?.Initialized, handleCheckoutEvents]);
 
   const openCheckout = useCallback(
-    ({ priceId, userEmail, theme }: { priceId: string; userEmail?: string; theme?: Theme }) => {
+    (priceId: string, userEmail?: string) => {
       if (!paddle?.Initialized) {
         console.error("Paddle not initialized");
         return;
@@ -106,55 +92,50 @@ export function PaddleProvider({ children }: PaddleProviderProps) {
       paddle.Checkout.open({
         ...(userEmail && { customer: { email: userEmail } }),
         items: [{ priceId, quantity: 1 }],
-        settings: {
-          showAddDiscounts: false,
-          ...(theme && { theme }),
-        },
       });
     },
     [paddle],
   );
 
-  const getPrices = useCallback(
-    async (country: string = "US"): Promise<PaddlePrices> => {
+  const getPrice = useCallback(
+    async (priceId: string): Promise<PaddlePrice | null> => {
       if (!paddle?.Initialized) {
         throw new Error("Paddle not initialized");
       }
 
       try {
-        const lineItems = PRICING_PLANS.map((tier) => [tier.priceIds?.month, tier.priceIds?.quarter])
-          .flat()
-          .filter(Boolean)
-          .map((priceId) => ({ priceId: priceId as string, quantity: 1 }));
-
         const pricePreviewRequest: Partial<PricePreviewParams> = {
-          items: lineItems,
-          ...(country !== "OTHERS" && { address: { countryCode: country } }),
+          items: [{ priceId, quantity: 1 }],
         };
 
         const prices = await paddle.PricePreview(pricePreviewRequest as PricePreviewParams);
 
-        return prices.data.details.lineItems.reduce((acc, item) => {
-          acc[item.price.id] = {
+        if (prices.data.details.lineItems.length > 0) {
+          const item = prices.data.details.lineItems[0];
+
+          if (!item) return null;
+
+          return {
             id: item.price.id,
-            price: item.formattedTotals.total,
-            frequency: item.price.customData?.frequency as string,
+            price: item.formattedTotals.total as string,
+            formattedPrice: item.formattedTotals.total as string,
             currency: "USD",
-            formattedPrice: item.formattedTotals.total,
-            name: (item.price.customData?.name as string) || "Unknown Product",
-            description: item.price.description || "No description available",
+            name: (item.product.name as string) || "Unknown Product",
+            description: item.product.description || "No description available",
+            interval: item.price.billingCycle?.interval || "month",
+            frequency: item.price.billingCycle?.frequency,
           };
-          return acc;
-        }, {} as PaddlePrices);
+        } else {
+          throw new Error("Price not found");
+        }
       } catch (error) {
-        console.error("Failed to get prices:", error);
+        console.error("Failed to get price:", error);
         throw error;
       }
     },
     [paddle],
   );
 
-  // Auto-initialize Paddle when the provider mounts
   useEffect(() => {
     initializePaddleInstance();
   }, [initializePaddleInstance]);
@@ -167,7 +148,7 @@ export function PaddleProvider({ children }: PaddleProviderProps) {
     checkoutData,
     initializePaddle: initializePaddleInstance,
     openCheckout,
-    getPrices,
+    getPrice,
   };
 
   return <PaddleContext.Provider value={value}>{children}</PaddleContext.Provider>;
@@ -181,34 +162,11 @@ export function usePaddle() {
   return context;
 }
 
-// Hook for components that need to get product prices with state management
-export function usePaddlePrices(country: string = "US") {
-  const { getPrices, isInitialized } = usePaddle();
-  const [prices, setPrices] = useState<PaddlePrices>({} as PaddlePrices);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchPrices = useCallback(async () => {
-    if (!isInitialized) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const priceData = await getPrices(country);
-      setPrices(priceData);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch prices");
-      console.error("Price fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [getPrices, country, isInitialized]);
-
-  // Auto-fetch prices when component mounts or dependencies change
+export function usePaddlePrice(priceId: string) {
+  const { getPrice, isLoading, isInitialized } = usePaddle();
+  const [price, setPrice] = useState<PaddlePrice | null>(null);
   useEffect(() => {
-    fetchPrices();
-  }, [fetchPrices]);
-
-  return { prices, loading, error, refetch: fetchPrices };
+    getPrice(priceId).then(setPrice);
+  }, [getPrice, priceId]);
+  return { price, isLoading, isInitialized };
 }

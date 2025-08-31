@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { create } from "zustand";
 
-import { PRICING_PLANS } from "@/lib/constants/pricing";
 import { useAuth } from "@/lib/contexts/auth-context";
-import { usePaddlePrices } from "@/lib/contexts/paddle";
+import { usePaddlePrice } from "@/lib/contexts/paddle";
+import { env } from "@/lib/env";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -26,24 +26,13 @@ export function CheckoutDialog() {
   const { open, onOpenChange } = useCheckoutDialog();
   const router = useRouter();
   const { user } = useAuth();
-  const { prices, loading } = usePaddlePrices();
+  const { price, isLoading } = usePaddlePrice(env.NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID);
 
-  const handleCheckout = (frequency: "month" | "quarter") => {
-    const proPlan = PRICING_PLANS.find((plan) => plan.title === "Pro");
-    if (proPlan?.priceIds?.[frequency]) {
-      router.push(`/checkout/${proPlan.priceIds[frequency]}`);
-      onOpenChange(false);
-    }
-  };
-
-  const getPrice = (frequency: "month" | "quarter") => {
-    const proPlan = PRICING_PLANS.find((plan) => plan.title === "Pro");
-    const priceId = proPlan?.priceIds?.[frequency];
-    if (priceId && prices[priceId]) {
-      return prices[priceId].formattedPrice;
-    }
-    // Fallback prices if Paddle prices aren't loaded yet
-    return frequency === "month" ? "$12" : "$30";
+  const handleCheckout = () => {
+    const url = new URL(env.NEXT_PUBLIC_PADDLE_PRO_MONTH_CHECKOUT_URL);
+    url.searchParams.set("user_email", user?.email ?? "");
+    router.push(url.toString());
+    onOpenChange(false);
   };
 
   return (
@@ -112,8 +101,8 @@ export function CheckoutDialog() {
               Quarterly Plan - {getPrice("quarter")}/3 months
             </Button> */}
 
-                <Button variant="default" className="w-full" onClick={() => handleCheckout("month")} disabled={loading}>
-                  Upgrade to Pro - {getPrice("month")}/month
+                <Button variant="default" className="w-full" onClick={handleCheckout} disabled={isLoading}>
+                  Upgrade to Pro - {price?.formattedPrice}/month
                 </Button>
               </div>
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 
-import { usePaddle } from "@/lib/contexts/paddle";
+import { usePaddle } from "@/lib/contexts/paddle-archived";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 

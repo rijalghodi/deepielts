@@ -5,7 +5,8 @@ import React from "react";
 
 import { PRICING_PLANS } from "@/lib/constants/pricing";
 import { useAuth } from "@/lib/contexts/auth-context";
-import { usePaddlePrices } from "@/lib/contexts/paddle";
+import { usePaddlePrice } from "@/lib/contexts/paddle";
+import { env } from "@/lib/env";
 
 import { useAuthDialog } from "@/components/auth/auth-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +22,7 @@ export function PricingSection() {
   const { onOpenChange: toggleAuthDialog } = useAuthDialog();
   const { onOpenChange: toggleCheckoutDialog } = useCheckoutDialog();
   // const [frequency, setFrequency] = useState<BillingFrequency>(BILLING_FREQUENCY[0]);
-  const { prices, loading } = usePaddlePrices("US");
+  const { price, isLoading } = usePaddlePrice(env.NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID);
 
   return (
     <div className="w-full">
@@ -38,7 +39,7 @@ export function PricingSection() {
       {/* <ToggleFrequency frequency={frequency} setFrequency={setFrequency} /> */}
 
       <div className="flex flex-col items-center md:items-start md:flex-row gap-4 justify-center">
-        {loading ? (
+        {isLoading ? (
           <>
             {Array.from({ length: 2 }).map((_, index) => (
               <Skeleton key={index} className="w-full max-w-sm h-[400px] rounded-xl" />
@@ -48,8 +49,7 @@ export function PricingSection() {
           <>
             {PRICING_PLANS.map((plan) => {
               const priceId = plan.priceIds?.month;
-              // const priceId = plan.priceIds?.[frequency.value];
-              const price = priceId ? prices?.[priceId]?.formattedPrice : null;
+              const resolvedPrice = priceId ? price?.formattedPrice : null;
               return (
                 <PricingCard
                   key={plan.title}
@@ -62,8 +62,7 @@ export function PricingSection() {
 
                     toggleAuthDialog(true);
                   }}
-                  price={priceId === null ? "0" : price}
-                  // suffixPrice={frequency.suffix}
+                  price={priceId === null ? "0" : resolvedPrice}
                   suffixPrice="/month"
                   free={priceId === null}
                 />

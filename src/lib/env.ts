@@ -21,6 +21,7 @@ export const clientEnv = createEnv({
 
     // Paddle Configuration
     NEXT_PUBLIC_PADDLE_CLIENT_TOKEN: z.string(),
+    NEXT_PUBLIC_PADDLE_PRO_MONTH_CHECKOUT_URL: z.string(),
     NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID: z.string(),
     NEXT_PUBLIC_PADDLE_PRO_QUARTER_PRICE_ID: z.string().optional(),
     NEXT_PUBLIC_PADDLE_ENV: z.enum(["sandbox", "production"]).optional(),
@@ -44,6 +45,7 @@ export const clientEnv = createEnv({
 
     // Paddle Configuration
     NEXT_PUBLIC_PADDLE_CLIENT_TOKEN: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
+    NEXT_PUBLIC_PADDLE_PRO_MONTH_CHECKOUT_URL: process.env.NEXT_PUBLIC_PADDLE_PRO_MONTH_CHECKOUT_URL,
     NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID: process.env.NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID,
     NEXT_PUBLIC_PADDLE_PRO_QUARTER_PRICE_ID: process.env.NEXT_PUBLIC_PADDLE_PRO_QUARTER_PRICE_ID,
     NEXT_PUBLIC_PADDLE_ENV: process.env.NEXT_PUBLIC_PADDLE_ENV ?? "sandbox",
