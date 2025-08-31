@@ -223,7 +223,7 @@ export default function HistorySection({ className }: Props) {
           }
           feedback={selectedSubmission.feedback || ""}
           id={selectedSubmission.id}
-          pdfUrl={selectedSubmission.pdfUrl || undefined}
+          pdfUrl={selectedSubmission.pdf?.url || undefined}
         />
       )}
     </div>

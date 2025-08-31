@@ -7,14 +7,14 @@ export interface Submission {
   questionType: QuestionType;
   question: string;
   answer: string;
-  attachment: string | null;
-  score: IELTSScore | null;
-  feedback: string | null;
-  pdfUrl: string | null;
+  attachment?: string;
+  score?: IELTSScore;
+  feedback?: string;
+  pdf?: string;
   readonly createdAt?: Timestamp;
   readonly updatedAt?: Timestamp;
   readonly deletedAt?: Timestamp;
-  user?: User | null;
+  user?: User;
 }
 
 export enum QuestionType {

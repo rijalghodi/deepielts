@@ -1,6 +1,7 @@
 import { Query, Timestamp } from "firebase-admin/firestore";
 
 import { HTTP_CODE } from "@/lib/constants";
+import { getSignedImageUrl } from "@/lib/files/assign";
 import { db } from "@/lib/firebase/firebase-admin";
 
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
@@ -17,20 +18,11 @@ export async function createSubmission(
     userId: string;
     score?: Submission["score"];
     feedback?: string;
-    pdfUrl?: string;
+    pdf?: string;
   },
 ): Promise<Submission> {
   try {
-    const {
-      userId,
-      question,
-      answer,
-      attachment = null,
-      questionType,
-      score = null,
-      feedback = null,
-      pdfUrl = null,
-    } = params;
+    const { userId, question, answer, attachment, questionType, score, feedback, pdf } = params;
 
     const submissionRef = db.collection("users").doc(userId).collection("submissions").doc();
 
@@ -42,7 +34,7 @@ export async function createSubmission(
       questionType,
       score,
       feedback,
-      pdfUrl,
+      pdf,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     };
@@ -67,10 +59,18 @@ export async function getSubmission(userId: string, submissionId: string): Promi
 
     const doc = snapshot.data() as Submission;
 
+    let pdfUrl: string | undefined = undefined;
+
+    if (doc.pdf) {
+      const signedUrl = await getSignedImageUrl(doc.pdf);
+      pdfUrl = signedUrl;
+    }
+
     return {
       ...doc,
       createdAt: doc.createdAt?.toDate().toISOString(),
       updatedAt: doc.updatedAt?.toDate().toISOString(),
+      pdf: pdfUrl ? { url: pdfUrl, path: doc.pdf } : undefined,
     };
   } catch (error) {
     throw new AppError({ message: (error as any).message, code: HTTP_CODE.INTERNAL_SERVER_ERROR });
@@ -117,14 +117,24 @@ export async function listUserSubmissions(params: {
       totalCount = countSnapshot.size;
     }
 
-    const submissions = submissionsSnapshot.docs.map((doc: any) => {
-      const data = doc.data();
-      return {
-        ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt,
-        updatedAt: data.updatedAt?.toDate?.()?.toISOString() || data.updatedAt,
-      } as GetSubmissionResult;
-    });
+    const submissions = await Promise.all(
+      submissionsSnapshot.docs.map(async (doc: any) => {
+        const data = doc.data();
+
+        let pdfUrl: string | undefined = undefined;
+        if (data.pdf) {
+          const signedUrl = await getSignedImageUrl(data.pdf);
+          pdfUrl = signedUrl;
+        }
+
+        return {
+          ...data,
+          pdf: pdfUrl ? { url: pdfUrl, path: data.pdf } : undefined,
+          createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt,
+          updatedAt: data.updatedAt?.toDate?.()?.toISOString() || data.updatedAt,
+        } as GetSubmissionResult;
+      }),
+    );
 
     return { submissions, totalCount };
   } catch (error) {

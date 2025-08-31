@@ -12,6 +12,7 @@ if (!admin.apps.length) {
       privateKey: env.FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/g, "\n"),
       projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     }),
+    storageBucket: env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   });
 
   db = admin.firestore();

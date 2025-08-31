@@ -151,7 +151,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       setAbortController(abortController);
 
       if (values.questionType !== QuestionType.TASK_1_ACADEMIC) {
-        values.attachment = null;
+        values.attachment = undefined;
       }
 
       const stream = await submissionCreateStream(values, abortController.signal);

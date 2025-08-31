@@ -76,7 +76,7 @@ export const submissionList = async (q?: {
   });
 };
 
-export const submissionListKey = (practiceId?: string, userId?: string) => ["submission-list", practiceId, userId];
+export const submissionListKey = () => ["submission-list"];
 
 /**
  * Generate PDF from submission feedback

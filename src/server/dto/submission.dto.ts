@@ -1,12 +1,13 @@
 import { z } from "zod";
 
+import { UploadedFile } from "../models";
 import { QuestionType, Submission } from "../models/submission";
 
 export const createSubmissionBodySchema = z
   .object({
     answer: z.string().min(1, "Answer must be at least 1 characters"),
     question: z.string().min(1, "Question must be at least 1 characters"),
-    attachment: z.string().nullable().optional(),
+    attachment: z.string().optional(),
     questionType: z.enum(Object.values(QuestionType) as [string, ...string[]]),
   })
   .refine(
@@ -23,9 +24,10 @@ export const createSubmissionBodySchema = z
   );
 
 export type CreateSubmissionBody = z.infer<typeof createSubmissionBodySchema>;
-export type GetSubmissionResult = Omit<Submission, "createdAt" | "updatedAt"> & {
+export type GetSubmissionResult = Omit<Submission, "createdAt" | "updatedAt" | "pdf"> & {
   createdAt?: string;
   updatedAt?: string;
+  pdf?: UploadedFile;
 };
 
 export const listSubmissionsQuerySchema = z.object({

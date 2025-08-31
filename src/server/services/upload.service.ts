@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { GUEST_USER_ID } from "@/lib/constants/database";
+import { getSignedImageUrl } from "@/lib/files/assign";
 import { storage } from "@/lib/firebase";
 
 import { UploadedFile } from "../models/upload";
@@ -37,15 +38,12 @@ export async function uploadFileToStorage(params: {
     },
   });
 
-  const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(
-    newFile.name,
-  )}?alt=media`;
+  const signedUrl = await getSignedImageUrl(path);
 
   return {
-    url: publicUrl,
+    url: signedUrl,
     originalFileName: fileName || "",
     path: newFile.name,
-    folder,
   };
 }
 

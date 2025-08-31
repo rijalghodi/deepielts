@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Loader, Square } from "lucide-react";
 import React from "react";
 
@@ -30,7 +29,7 @@ export function LoadingBar({ isVisible, onStop, title }: LoadingBarProps) {
         </div>
       </div>
 
-      <div className="w-full h-1.5 overflow-hidden z-50 bg-primary/20">
+      {/* <div className="w-full h-1.5 overflow-hidden z-50 bg-primary/20">
         <motion.div
           className="h-full w-full bg-primary/70"
           animate={{ x: ["-100%", "100%"] }}
@@ -41,7 +40,7 @@ export function LoadingBar({ isVisible, onStop, title }: LoadingBarProps) {
           }}
           style={{ position: "absolute", left: 0 }}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

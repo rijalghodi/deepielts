@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 import { GUEST_USER_ID } from "@/lib/constants/database";
+import { getSignedImageUrl } from "@/lib/files/assign";
 import logger from "@/lib/logger";
 
 import { createSubmissionBodySchema, listSubmissionsQuerySchema } from "@/server/dto/submission.dto";
@@ -58,9 +59,11 @@ export async function POST(req: NextRequest) {
     const data = createSubmissionBodySchema.parse(body);
     const { question, answer, attachment, questionType } = data;
 
+    const attachmentUrl = attachment ? await getSignedImageUrl(attachment) : undefined;
+
     const attachmentInsight = await generateChartDataIfNeeded({
       questionType: questionType as QuestionType,
-      attachment,
+      attachment: attachmentUrl,
       signal: (req as any).signal,
     });
 

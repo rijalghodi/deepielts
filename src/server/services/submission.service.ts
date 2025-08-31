@@ -212,10 +212,8 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     throw new AppError({ message: "No feedback available for this submission", code: 400 });
   }
 
-  if (submission.pdfUrl) {
-    return {
-      url: submission.pdfUrl,
-    };
+  if (submission.pdf) {
+    return submission.pdf;
   }
 
   const pdfInput = `## Question\n\n${submission.question}\n\n ## Your Answer\n\n${submission.answer}\n\n## Feedback\n\n${submission.feedback}`;
@@ -232,10 +230,14 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     },
   });
 
+  if (!uploadedFile.path) {
+    throw new AppError({ message: "Failed to upload pdf", code: 500 });
+  }
+
   await insertPdfUrlToSubmission({
     userId,
     submissionId,
-    pdfUrl: uploadedFile.url,
+    pdf: uploadedFile.path,
   });
 
   return uploadedFile;
@@ -247,20 +249,20 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
 export async function insertPdfUrlToSubmission(params: {
   userId: string;
   submissionId: string;
-  pdfUrl: string;
+  pdf: string;
 }): Promise<void> {
-  const { userId, submissionId, pdfUrl } = params;
+  const { userId, submissionId, pdf } = params;
 
   try {
     const submissionRef = db.collection("users").doc(userId).collection("submissions").doc(submissionId);
 
     await submissionRef.update({
-      pdfUrl,
+      pdf,
       updatedAt: Timestamp.now(),
     });
   } catch (error) {
     throw new AppError({
-      message: `Failed to update submission pdfUrl: ${error instanceof Error ? error.message : "Unknown error"}`,
+      message: `Failed to update submission pdf: ${error instanceof Error ? error.message : "Unknown error"}`,
       code: 500,
     });
   }

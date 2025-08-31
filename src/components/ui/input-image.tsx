@@ -12,6 +12,7 @@ export type InputImageProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 
   name?: string;
   label?: string;
   value?: string | null;
+  defaultUrl?: string;
   error?: boolean;
   maxFileSizeMB?: number;
   onResetFile?: () => void;
@@ -32,6 +33,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
       onChange,
       name,
       value,
+      defaultUrl,
       error,
       onResetFile,
       disabled,
@@ -44,9 +46,17 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
     ref,
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    const [localUrl, setLocalUrl] = useState<string | undefined>(defaultUrl);
+
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+
+    useEffect(() => {
+      if (defaultUrl) {
+        setLocalUrl(defaultUrl);
+      }
+    }, [defaultUrl]);
 
     const handleDrop = async (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
@@ -85,8 +95,10 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
         });
 
         const url = res?.data?.url;
+        const path = res?.data?.path;
         if (url) {
-          onChange?.(url);
+          onChange?.(path);
+          setLocalUrl(url);
         }
       } catch (err) {
         toast.error("Failed to upload image", { description: String((err as any)?.message) });
@@ -108,6 +120,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
 
     const handleRemove = () => {
       onChange?.(undefined);
+      setLocalUrl(undefined);
       onResetFile?.();
     };
 
@@ -168,7 +181,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
     }
 
     // Render empty file input
-    if (!value) {
+    if (!localUrl) {
       return renderUploadLabel(
         <div className="flex flex-col items-center justify-center gap-3 p-4">
           <ImageUp className="text-primary/90 h-7 w-7" strokeWidth={1.5} />
@@ -178,7 +191,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, InputImageProps>(
     }
 
     // Render single file input with preview
-    return renderUploadLabel(<ImagePreview url={value!} onRemove={handleRemove} onEdit={handleTriggerEdit} />);
+    return renderUploadLabel(<ImagePreview url={localUrl!} onRemove={handleRemove} onEdit={handleTriggerEdit} />);
   },
 );
 
@@ -205,26 +218,24 @@ const ImagePreview = ({ url, onRemove, onEdit }: { url: string; onRemove: () => 
         }}
       />
       {!isLoaded && <ShimmeringBackground />}
-      {url && (
-        <button
-          onClick={onRemove}
-          type="button"
-          title="Remove image"
-          className="absolute z-[2] top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      )}
-      {url && (
-        <button
-          onClick={onEdit}
-          type="button"
-          title="Change image"
-          className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center"
-        >
-          <span className="text-white text-sm">Click to change</span>
-        </button>
-      )}
+
+      <button
+        onClick={onRemove}
+        type="button"
+        title="Remove image"
+        className="absolute z-[2] top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <X className="h-4 w-4" />
+      </button>
+
+      <button
+        onClick={onEdit}
+        type="button"
+        title="Change image"
+        className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center"
+      >
+        <span className="text-white text-sm">Click to change</span>
+      </button>
     </div>
   );
 };
