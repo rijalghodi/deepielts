@@ -1,17 +1,21 @@
 import { v4 as uuidv4 } from "uuid";
 
+import { TEMP_USER_ID } from "@/lib/constants/database";
 import { storage } from "@/lib/firebase";
 
 import { UploadedFile } from "../models/upload";
 
 export async function uploadFileToStorage(params: {
+  userId?: string;
   file: Buffer;
   folder?: string;
   fileName?: string;
   contentType?: string;
   metadata?: Record<string, string>;
 }): Promise<UploadedFile> {
-  const { file, folder, fileName, contentType, metadata } = params;
+  const { userId, file, folder, fileName, contentType, metadata } = params;
+
+  const resolvedUserId = userId || TEMP_USER_ID;
 
   const bucket = storage.bucket("gs://deep-ielts-7f8fa.firebasestorage.app");
 
@@ -22,7 +26,7 @@ export async function uploadFileToStorage(params: {
   const baseName = originalName.replace(/\.[^/.]+$/, "");
   const uniqueFileName = `${baseName || "file"}_${uuidv4()}.${extension}`;
 
-  const path = folder ? `${folder}/${uniqueFileName}` : uniqueFileName;
+  const path = folder ? `${resolvedUserId}/${folder}/${uniqueFileName}` : uniqueFileName;
   const newFile = bucket.file(path);
 
   await newFile.save(file, {

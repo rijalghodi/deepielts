@@ -48,6 +48,7 @@ export async function POST(req: Request) {
     }
 
     const uploadedFile = await uploadFileToStorage({
+      userId: user?.uid,
       file: Buffer.from(await file.arrayBuffer()),
       folder,
       contentType: file.type,
