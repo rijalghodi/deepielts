@@ -218,7 +218,9 @@ export async function generateFeedbackPDF(params: { userId: string; submissionId
     };
   }
 
-  const pdfBuffer = await mdToPdfBufferViaAPI(submission.feedback);
+  const pdfInput = `## Question\n\n${submission.question}\n\n ## Your Answer\n\n${submission.answer}\n\n## Feedback\n\n${submission.feedback}`;
+
+  const pdfBuffer = await mdToPdfBufferViaAPI(pdfInput);
 
   const uploadedFile = await uploadFileToStorage({
     file: pdfBuffer,

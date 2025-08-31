@@ -1,3 +1,5 @@
+import { env } from "@/lib/env";
+
 export interface PricingPlan {
   title: string;
   description: string;
@@ -26,7 +28,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     description: "Unlimited essay evaluation ",
     highlighted: true,
     priceIds: {
-      month: "pri_01k2jwa6k408c4gp8z55kgcet9",
+      month: env.NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID,
       // quarter: "pri_01k2jw96cd3dn513rar0r7rsrc",
     },
     features: [
