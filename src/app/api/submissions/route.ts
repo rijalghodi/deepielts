@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
-import { TEMP_USER_ID } from "@/lib/constants/database";
+import { GUEST_USER_ID } from "@/lib/constants/database";
 import logger from "@/lib/logger";
 
 import { createSubmissionBodySchema, listSubmissionsQuerySchema } from "@/server/dto/submission.dto";
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
     });
 
     let submission: Submission | null = null;
-    const userId = user?.uid || TEMP_USER_ID;
+    const userId = user?.uid || GUEST_USER_ID;
 
     const parsedScore = parseScoreJson(score);
     submission = await createSubmission({

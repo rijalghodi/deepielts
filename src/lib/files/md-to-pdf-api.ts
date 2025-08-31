@@ -13,8 +13,6 @@ export async function mdToPdfBufferViaAPI(markdownText: string): Promise<Buffer>
       }),
     });
 
-    console.log(response);
-
     const arrayBuffer = await response.arrayBuffer();
     return Buffer.from(arrayBuffer);
   } catch (error) {

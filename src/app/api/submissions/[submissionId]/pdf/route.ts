@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
-import { TEMP_USER_ID } from "@/lib/constants/database";
+import { GUEST_USER_ID } from "@/lib/constants/database";
 import logger from "@/lib/logger";
 
 import { authGetUser } from "@/app/api/auth/auth-middleware";
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ submis
       throw new AppError({ message: "Submission ID is required", code: 400 });
     }
 
-    const userId = user?.uid || TEMP_USER_ID;
+    const userId = user?.uid || GUEST_USER_ID;
     const generatedFile = await generateFeedbackPDF({ userId, submissionId });
 
     await incrementUsage(dailyAttemptId);

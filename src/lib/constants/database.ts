@@ -1,1 +1,1 @@
-export const TEMP_USER_ID = "temp";
+export const GUEST_USER_ID = "public";
