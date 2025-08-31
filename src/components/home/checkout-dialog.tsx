@@ -2,7 +2,6 @@
 
 import { Brain, Crown, FileDown, FileText, MessageSquare } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { create } from "zustand";
 
 import { useAuth } from "@/lib/contexts/auth-context";
@@ -24,14 +23,13 @@ export const useCheckoutDialog = create<State>((set) => ({
 
 export function CheckoutDialog() {
   const { open, onOpenChange } = useCheckoutDialog();
-  const router = useRouter();
   const { user } = useAuth();
   const { price, isLoading } = usePaddlePrice(env.NEXT_PUBLIC_PADDLE_PRO_MONTH_PRICE_ID);
 
   const handleCheckout = () => {
     const url = new URL(env.NEXT_PUBLIC_PADDLE_PRO_MONTH_CHECKOUT_URL);
     url.searchParams.set("user_email", user?.email ?? "");
-    router.push(url.toString());
+    window.open(url.toString(), "_blank");
     onOpenChange(false);
   };
 
