@@ -37,7 +37,7 @@ export async function generateChartDataIfNeeded(params: {
   const chartDataPrompt = getChartDataPrompt();
 
   const generatedChartData = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-5-mini",
     stream: false,
     messages: [
       {
@@ -82,7 +82,7 @@ export async function generateScore(params: {
   }
 
   const generatedScore = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-5-mini",
     stream: false,
     messages: [{ role: "user", content: scorePrompt }],
   });
@@ -139,7 +139,7 @@ export function createFeedbackReadableStream(params: {
         }
 
         const stream = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
+          model: "gpt-5-mini",
           stream: true,
           messages: [{ role: "system", content: prompt }],
         });
