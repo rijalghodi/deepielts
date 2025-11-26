@@ -2,7 +2,7 @@ import { env } from "../env";
 
 export async function mdToPdfBufferViaAPI(markdownText: string): Promise<Buffer> {
   try {
-    const response = await fetch("https://api.deepielts.com/export", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_PDF_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
