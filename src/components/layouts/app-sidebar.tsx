@@ -23,7 +23,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -82,13 +81,6 @@ export function AppSidebar(props: AppSidebarProps) {
                 side={isMobile ? "bottom" : "right"}
                 sideOffset={10}
               >
-                {/* <DropdownMenuItemDiv className="h-9">
-                  <Palette /> Theme
-                  <DropdownMenuShortcut>
-                    <ThemeToggle variant="horizontal" />
-                  </DropdownMenuShortcut>
-                </DropdownMenuItemDiv>
-                <DropdownMenuSeparator /> */}
                 <DropdownMenuItem onClick={() => settingsDialog.open()}>
                   <Settings /> Settings
                 </DropdownMenuItem>
@@ -107,14 +99,14 @@ export function AppSidebar(props: AppSidebarProps) {
           <SidebarMenuItem></SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarRail />
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {QUICK_MENU.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild className="h-11">
                     <Link
                       href={item.href}
                       onClick={() => {
