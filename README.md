@@ -1,40 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Deep IELTS
 
-## Getting Started
+AI-powered IELTS writing checker.
 
-First, run the development server:
+Deep IELTS is a free AI-powered IELTS writing checker, trained on over hundreds of real essays. It gives accurate score predictions and practical feedback, just like a real examiner.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Task 1 Academic & General Scoring** - Get band score breakdowns with AI-generated feedback and sample answers
+- **Task 2 Scoring** - Instant essay analysis with detailed feedback on argument, structure, vocabulary, and grammar
+- **Progress Tracking** - Monitor your improvement over time with performance analytics
+- **Instant AI Feedback** - Receive examiner-like feedback within seconds
+- **PDF Export** - Download feedback as formatted PDFs for offline study
+- **Image Upload** - Upload charts and diagrams for Task 1 with automatic data extraction
+- **Flexible Submissions** - Upload files, paste text, or write directly in the editor
+- **User Accounts** - Save submissions, track progress, and access premium features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Frontend
 
-## Learn More
+- **Next.js 15.3.5** - React framework with App Router
+- **React 19** - UI library
+- **TypeScript** - Type-safe development
+- **Tailwind CSS 4 + Shadcn UI** - Utility-first CSS framework
+- **React Hook Form** - Form management
+- **Zod** - Schema validation
+- **TanStack Query** - Data fetching and caching
+- **Zustand** - State management
+- **Recharts** - Data visualization
 
-To learn more about Next.js, take a look at the following resources:
+### Backend & Services
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Firebase** - Authentication, Firestore database, and Cloud Storage
+- **OpenAI API** - AI-powered essay analysis and feedback generation
+- **Redis (ioredis)** - Rate limiting and caching
+- **Resend** - Email service for verification codes
+- **Paddle** - Payment processing and subscription management
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Infrastructure & Tools
 
-## Deploy on Vercel
+- **Vercel** - Hosting and deployment
+- **Sentry** - Error monitoring and performance tracking
+- **Pino** - Structured logging
+- **Sharp** - Image processing
+- **md-to-pdf** - PDF generation from Markdown
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Development Tools
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Turbopack** - Fast bundler for development
 
-3 + 4 + 14 + 3 = 0.0024 dollar = 40 rupiah
+## Installation
 
-1000 pengumpulan = 2.4 dollar = 40.000
+### Prerequisites
+
+- Node.js 20+ and Yarn
+- Firebase project with Authentication, Firestore, and Storage enabled
+- Redis instance (local or cloud)
+- OpenAI API key
+- Paddle account (for payment processing)
+- Resend API key (for email verification)
+- Sentry account (optional, for error monitoring)
+
+### Setup Steps
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd deepielts
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   yarn install
+   ```
+
+3. **Set up environment variables**
+
+   Copy the example environment file:
+
+   ```bash
+   cp env-example .env.local
+   ```
+
+   Fill in all required environment variables in `.env.local`:
+
+   - **App Configuration**: `NEXT_PUBLIC_BASE_URL`, `NEXT_PUBLIC_API_BASE_URL`
+   - **Firebase**: All `NEXT_PUBLIC_FIREBASE_*` and `FIREBASE_ADMIN_*` variables
+   - **JWT**: `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`
+   - **Resend**: `RESEND_API_KEY`
+   - **OpenAI**: `OPENAI_API_KEY`
+   - **Redis**: `REDIS_URL`
+   - **Paddle**: All `NEXT_PUBLIC_PADDLE_*` and `PADDLE_*` variables
+   - **Sentry**: All `SENTRY_*` variables (optional)
+
+4. **Run the development server**
+
+   ```bash
+   yarn dev
+   ```
+
+   The app will be available at `http://localhost:3003`
+
+5. **Build for production**
+   ```bash
+   yarn build
+   yarn start
+   ```
+
+### Additional Setup
+
+- **Firebase**: Configure Firebase Authentication (Email/Password or Google), set up Firestore security rules, and configure Cloud Storage buckets.
+- **Redis**: Ensure Redis is running and accessible at the `REDIS_URL` you configured.
+- **Paddle**: Set up products and pricing in your Paddle dashboard and configure webhooks.
