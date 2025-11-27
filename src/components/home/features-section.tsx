@@ -1,23 +1,23 @@
-import { Sparkles } from "lucide-react";
+import { BarChart, FileText, Mail, Sparkles, TrendingUp } from "lucide-react";
 import React from "react";
 
 import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
 
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 
 const features = [
   {
     title: "Task 1 Academic IELTS Scoring",
     badge: "Academic",
     description:
-      "Upload or write your Academic Task 1 essay. Our AI explains your score, highlights strengths and weaknesses, and even helps you describe charts, graphs, and diagrams like a Band 9 candidate.",
+      "Upload or write your Academic Task 1 essay. Our AI explains your score, highlights strengths and weaknesses, and helps you describe diagrams like a Band 9 candidate.",
     video: "https://www.youtube.com/embed/dc4OBUMeMTs",
     details: [
       "Band score breakdown (Task Achievement, Coherence, Lexical Resource, Grammar)",
       "AI-generated sample answers and chart explanations",
       "Personalized tips for improvement",
     ],
+    icon: BarChart,
   },
   {
     title: "Task 1 General IELTS Scoring",
@@ -30,6 +30,7 @@ const features = [
       "Band score with actionable feedback",
       "Highlights common mistakes",
     ],
+    icon: Mail,
   },
   {
     title: "Task 2 Scoring",
@@ -42,6 +43,7 @@ const features = [
       "AI feedback on argument and structure",
       "See how to boost your score with real examples",
     ],
+    icon: FileText,
   },
   {
     title: "Progress Tracking",
@@ -50,8 +52,11 @@ const features = [
       "Review your progress over time. See how your scores have improved and identify areas for improvement.",
     video: "https://www.youtube.com/embed/Z0bjuKkUpb8",
     details: ["See how your scores have improved", "Identify areas for improvement", "Track your progress over time"],
+    icon: TrendingUp,
   },
 ];
+
+const demoVideo = "https://www.youtube.com/embed/dc4OBUMeMTs";
 
 export function FeaturesSection() {
   return (
@@ -67,43 +72,39 @@ export function FeaturesSection() {
         <p className="section-desc">{APP_DESCRIPTION}</p>
       </div>
 
-      <div className="flex flex-col gap-24">
-        {features.map((feature, idx) => (
-          <div
-            key={idx}
-            className={`flex flex-col lg:flex-row gap-8 items-center ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}
-          >
-            {/* Content Side */}
-            <div className="flex-1 space-y-4">
-              <h3 className="text-2xl md:text-3xl font-semibold">{feature.title}</h3>
-              <Separator className="w-16 h-0.5 bg-primary/70" />
-              <p className="text-lg text-muted-foreground leading-relaxed">{feature.description}</p>
-              <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-                {feature.details.map((d, i) => (
-                  <li key={i} className="text-base">
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Video Side */}
-            <div className="flex-1 w-full">
-              <div className="rounded-xl overflow-hidden border border-muted shadow-lg">
-                <div className="aspect-video bg-muted">
-                  <iframe
-                    src={feature.video}
-                    title={feature.title + " demo"}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {features.map((feature, idx) => {
+          const Icon = feature.icon;
+          return (
+            <div key={idx} className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="rounded-lg bg-primary/10 p-3">
+                  <Icon className="h-6 w-6 text-primary" />
                 </div>
               </div>
+              <div className="flex-1 space-y-2">
+                <h3 className="text-xl font-semibold">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+              </div>
             </div>
+          );
+        })}
+      </div>
+
+      {/* Single Big Video at Bottom */}
+      <div className="w-full">
+        <div className="rounded-xl overflow-hidden border border-muted shadow-lg">
+          <div className="aspect-video bg-muted">
+            <iframe
+              src={demoVideo}
+              title="Demo Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
