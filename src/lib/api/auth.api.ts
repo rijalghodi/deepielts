@@ -1,12 +1,11 @@
 "use client";
 
 import { User } from "@/server/models";
+import { ApiResponse } from "@/types";
 
+import { AUTH_CHANGED_KEY } from "../constants/brand";
 import { Subscription } from "./billing.api";
 import { apiDelete, apiGet, apiPost, apiPut } from "./utils";
-import { AUTH_CHANGED_KEY } from "../constants/brand";
-
-import { ApiResponse } from "@/types";
 
 export const AUTH_ME_QUERY_KEY = ["auth-me"] as const;
 

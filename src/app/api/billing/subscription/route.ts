@@ -2,13 +2,11 @@ import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services/interceptor";
 import { getSubscriptionByUserId } from "@/server/services/subscription.repo";
+import { AppError, AppResponse } from "@/types";
 
 import { authGetUser } from "../../auth/auth-middleware";
-
-import { AppError, AppResponse } from "@/types";
 
 export async function GET(_request: NextRequest) {
   try {

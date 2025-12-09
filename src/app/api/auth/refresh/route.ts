@@ -7,9 +7,7 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "@/lib/jwt";
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services";
-
 import { AppError, AppResponse } from "@/types";
 
 export async function POST(_: Request) {

@@ -2,15 +2,13 @@ import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
-
 import { getPerformanceQuerySchema } from "@/server/dto/performance.dto";
 import { QuestionType } from "@/server/models/submission";
 import { handleError } from "@/server/services/interceptor";
 import { getPerformance } from "@/server/services/performance.repo";
+import { AppResponse } from "@/types/global";
 
 import { authMiddleware } from "../auth/auth-middleware";
-
-import { AppResponse } from "@/types/global";
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {

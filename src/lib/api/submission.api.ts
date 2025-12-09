@@ -1,14 +1,12 @@
 import Cookies from "js-cookie";
 
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
-
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
 import { Submission } from "@/server/models/submission";
 import { UploadedFile } from "@/server/models/upload";
+import { ApiResponse, PaginatedResponse } from "@/types";
 
 import { apiGet, apiPost } from "./utils";
-
-import { ApiResponse, PaginatedResponse } from "@/types";
 
 export const submissionCreate = async (req: CreateSubmissionBody): Promise<ApiResponse<Submission> | undefined> => {
   return apiPost({

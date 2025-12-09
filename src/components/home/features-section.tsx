@@ -1,9 +1,8 @@
 import { BarChart, FileText, Mail, Sparkles, TrendingUp } from "lucide-react";
 import React from "react";
 
-import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
-
 import { Badge } from "@/components/ui/badge";
+import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
 
 const features = [
   {

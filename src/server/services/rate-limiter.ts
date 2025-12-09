@@ -1,5 +1,5 @@
-import { redis } from "@/lib/redis";
 import logger from "@/lib/logger";
+import { redis } from "@/lib/redis";
 
 async function safeRedisOperation<T>(operation: () => Promise<T>, fallback: T): Promise<T> {
   try {

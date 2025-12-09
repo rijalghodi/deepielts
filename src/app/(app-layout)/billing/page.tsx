@@ -1,6 +1,5 @@
-import { CurrentSubscription } from "@/components/billing/current-subscription";
-
 import { authGetUser } from "@/app/api/auth/auth-middleware";
+import { CurrentSubscription } from "@/components/billing/current-subscription";
 
 export default async function BillingPage() {
   const user = await authGetUser();

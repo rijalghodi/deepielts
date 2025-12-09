@@ -4,12 +4,11 @@ import { Brain, Crown, FileDown, FileText, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { create } from "zustand";
 
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { usePaddlePrice } from "@/lib/contexts/paddle";
 import { env } from "@/lib/env";
-
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 type State = {
   open: boolean;

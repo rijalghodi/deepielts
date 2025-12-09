@@ -7,17 +7,15 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { submissionCreateStream, submissionGenerateDOCX } from "@/lib/api/submission.api";
-import { saveDocxToCache } from "@/lib/storage/docx-cache";
-import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
-
 import { useAside } from "@/components/ui/aside";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
 import { LoadingBar } from "@/components/ui/loading-bar";
 import { SelectInput } from "@/components/ui/select-input";
-
+import { submissionCreateStream, submissionGenerateDOCX } from "@/lib/api/submission.api";
+import { saveDocxToCache } from "@/lib/storage/docx-cache";
+import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 
@@ -101,6 +99,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
         appendAnalysis(submissionData.feedback);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submissionData]);
 
   // Debounced function to save form data to localStorage

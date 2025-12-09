@@ -2,12 +2,10 @@ import { Query } from "firebase-admin/firestore";
 
 import { HTTP_CODE } from "@/lib/constants";
 import { db } from "@/lib/firebase/firebase-admin";
-
 import { QuestionType } from "@/server/models/submission";
+import { AppError } from "@/types/global";
 
 import { GetPerformanceResult, PerformanceScore } from "../dto/performance.dto";
-
-import { AppError } from "@/types/global";
 
 export async function getPerformance({
   userId,

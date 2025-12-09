@@ -4,7 +4,6 @@ import { NextRequest } from "next/server";
 import { ACCESS_TOKEN_KEY } from "@/lib/constants";
 import { verifyAccessToken } from "@/lib/jwt";
 import logger from "@/lib/logger";
-
 import { AppError } from "@/types";
 
 export async function authGetUser() {

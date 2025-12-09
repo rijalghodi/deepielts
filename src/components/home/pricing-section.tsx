@@ -3,19 +3,18 @@
 import { Percent } from "lucide-react";
 import React from "react";
 
+import { useAuthDialog } from "@/components/auth/auth-dialog";
+import { Badge } from "@/components/ui/badge";
+import { PricingCard } from "@/components/ui/pricing-card";
 import { PRICING_PLANS } from "@/lib/constants/pricing";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { usePaddlePrice } from "@/lib/contexts/paddle";
 import { env } from "@/lib/env";
 
-import { useAuthDialog } from "@/components/auth/auth-dialog";
-import { Badge } from "@/components/ui/badge";
-import { PricingCard } from "@/components/ui/pricing-card";
-
-import { useCheckoutDialog } from "./checkout-dialog";
 // import { usePaymentDialog } from "./payment-dialog";
 // import { ToggleFrequency } from "../checkout/toggle-frequency";
 import { Skeleton } from "../ui/skeleton";
+import { useCheckoutDialog } from "./checkout-dialog";
 
 export function PricingSection() {
   const { user } = useAuth();

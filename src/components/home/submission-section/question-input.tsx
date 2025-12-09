@@ -5,16 +5,14 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
-import TASK_1_GENERAL_QUESTIONS from "@/lib/constants/task-1-general-questions.json";
-import TASK_2_QUESTIONS from "@/lib/constants/task-2-questions.json";
-import { cn } from "@/lib/utils";
-
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { inputVariants } from "@/components/ui/input";
 import { InputImage } from "@/components/ui/input-image";
 import { Textarea } from "@/components/ui/textarea";
-
+import TASK_1_GENERAL_QUESTIONS from "@/lib/constants/task-1-general-questions.json";
+import TASK_2_QUESTIONS from "@/lib/constants/task-2-questions.json";
+import { cn } from "@/lib/utils";
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models/submission";
 

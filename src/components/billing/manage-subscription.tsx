@@ -3,11 +3,10 @@
 import { Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import { type Subscription } from "@/lib/api/billing.api";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { type Subscription } from "@/lib/api/billing.api";
 
 interface Props {
   subscription: Subscription | null;

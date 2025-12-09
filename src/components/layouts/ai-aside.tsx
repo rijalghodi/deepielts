@@ -3,9 +3,8 @@
 import { AlertCircle, Bot, DownloadIcon, FileText, Loader, XIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
-
 import { Aside, AsideContent, AsideFooter, AsideHeader, AsideTrigger } from "@/components/ui/aside";
+import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { useAuthDialog } from "../auth/auth-dialog";
 import { useCheckoutDialog } from "../home/checkout-dialog";

@@ -1,6 +1,5 @@
-import { BILLING_FREQUENCY, BillingFrequency } from "@/lib/constants/pricing";
-
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BILLING_FREQUENCY, BillingFrequency } from "@/lib/constants/pricing";
 
 interface Props {
   setFrequency: (frequency: BillingFrequency) => void;

@@ -4,10 +4,9 @@ import { ArrowLeft } from "lucide-react";
 import React, { useState } from "react";
 import { create } from "zustand";
 
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { APP_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { GoogleButton } from "./google-button";
 import { LoginForm } from "./login-form";

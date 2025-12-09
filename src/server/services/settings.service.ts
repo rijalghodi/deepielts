@@ -1,10 +1,9 @@
 import { Timestamp } from "firebase-admin/firestore";
 
 import { db } from "@/lib/firebase/firebase-admin";
+import { AppError } from "@/types/global";
 
 import { DEFAULT_SETTINGS, User, UserSettings } from "../models";
-
-import { AppError } from "@/types/global";
 
 /**
  * Update specific setting fields

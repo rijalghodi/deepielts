@@ -1,14 +1,12 @@
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
+import { authGetUser } from "@/app/api/auth/auth-middleware";
 import { GUEST_USER_ID } from "@/lib/constants/database";
 import logger from "@/lib/logger";
-
-import { authGetUser } from "@/app/api/auth/auth-middleware";
 import { handleError } from "@/server/services";
 import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
 import { generateFeedbackPDF } from "@/server/services/submission.service";
-
 import { AppError, AppResponse } from "@/types/global";
 
 const MAX_PDF_GENERATION_PER_DAY = 30;

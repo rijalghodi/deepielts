@@ -2,14 +2,12 @@ import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services/interceptor";
 import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
 import { uploadFileToStorage } from "@/server/services/upload.service";
+import { AppError, AppResponse } from "@/types";
 
 import { authGetUser } from "../auth/auth-middleware";
-
-import { AppError, AppResponse } from "@/types";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const MAX_FILE_UPLOAD_PER_DAY = 30;

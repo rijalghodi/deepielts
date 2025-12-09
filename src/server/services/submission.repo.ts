@@ -3,10 +3,8 @@ import { Query, Timestamp } from "firebase-admin/firestore";
 import { HTTP_CODE } from "@/lib/constants";
 import { getSignedImageUrl } from "@/lib/files/assign";
 import { db } from "@/lib/firebase/firebase-admin";
-
 import { CreateSubmissionBody, GetSubmissionResult } from "@/server/dto/submission.dto";
 import { QuestionType, Submission } from "@/server/models/submission";
-
 import { AppError } from "@/types/global";
 
 /**

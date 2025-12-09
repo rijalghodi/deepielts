@@ -4,11 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
 import { getPaddleInstance } from "@/lib/paddle/get-paddle-instance";
-
 import { Transaction } from "@/server/dto/transactions.dto";
 import { getUserById } from "@/server/services";
 import { handleError } from "@/server/services/interceptor";
-
 import { AppError, AppResponse } from "@/types";
 
 export async function GET(request: NextRequest) {

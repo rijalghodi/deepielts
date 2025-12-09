@@ -4,12 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { remark } from "remark";
 import remarkHtml from "remark-html";
 
-import logger from "@/lib/logger";
-
 import { authGetUser } from "@/app/api/auth/auth-middleware";
+import logger from "@/lib/logger";
 import { handleError } from "@/server/services";
 import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
-
 import { AppError } from "@/types/global";
 
 const MAX_DOCX_GENERATION_PER_DAY = 30;

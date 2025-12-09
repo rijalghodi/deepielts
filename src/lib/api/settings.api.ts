@@ -1,8 +1,7 @@
 import { UserSettings } from "@/server/models/user";
+import { ApiResponse } from "@/types/global";
 
 import { apiPut } from "./utils";
-
-import { ApiResponse } from "@/types/global";
 
 export interface UpdateSettingsRequest {
   targetBandScore?: string;

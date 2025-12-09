@@ -1,9 +1,6 @@
 import { Check, ChevronDown, Loader2, Settings, User } from "lucide-react";
 import React, { useState } from "react";
 
-import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 import { SettingAccount } from "./account/setting-account";
 import { SettingPreferences } from "./preferences/setting-preferences";

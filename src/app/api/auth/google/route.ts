@@ -8,9 +8,7 @@ import { env } from "@/lib/env";
 import { auth, db } from "@/lib/firebase";
 import { signAccessToken, signRefreshToken } from "@/lib/jwt";
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services";
-
 import { AppError, AppResponse } from "@/types";
 
 export async function POST(req: NextRequest) {

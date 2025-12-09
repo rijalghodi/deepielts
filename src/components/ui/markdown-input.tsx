@@ -2,11 +2,10 @@ import { MDXEditorMethods } from "@mdxeditor/editor";
 import { cva } from "class-variance-authority";
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
-
 import { Label } from "@/components/ui/label";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 const inputVariants = cva("", {
   variants: {

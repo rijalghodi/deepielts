@@ -1,18 +1,17 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 
-import "./globals.css";
-
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { APP_DESCRIPTION, APP_KEYWORDS, APP_NAME, APP_TAGLINE } from "@/lib/constants/brand";
 import { AuthProvider } from "@/lib/contexts/auth-context";
 import { PaddleProvider } from "@/lib/contexts/paddle";
 import { DialogSystemProvider } from "@/lib/providers/dialog-system";
 import { ReactQueryProvider } from "@/lib/providers/react-query";
 import { cn } from "@/lib/utils";
-
-import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: {

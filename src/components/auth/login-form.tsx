@@ -6,12 +6,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { requestEmailCode } from "@/lib/api/auth.api";
-import { writeCooldown } from "@/hooks/use-resend-cooldown";
-
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { writeCooldown } from "@/hooks/use-resend-cooldown";
+import { requestEmailCode } from "@/lib/api/auth.api";
 
 const schema = z.object({
   email: z.string().email(),

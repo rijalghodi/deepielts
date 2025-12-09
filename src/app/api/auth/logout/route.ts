@@ -4,9 +4,7 @@ import { NextResponse } from "next/server";
 
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services";
-
 import { AppResponse } from "@/types";
 
 export async function POST() {

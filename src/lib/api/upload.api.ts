@@ -3,10 +3,9 @@ import type { AxiosProgressEvent, GenericAbortSignal } from "axios";
 import { toast } from "sonner";
 
 import { apiGet, apiPost } from "@/lib/api";
+import { ApiResponse } from "@/types";
 
 import { compressImage } from "../files/compress-image";
-
-import { ApiResponse } from "@/types";
 
 export type UploadFileRequest = {
   file: File;

@@ -3,13 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { TARGET_BAND_SCORE } from "@/lib/constants/band-scores";
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services/interceptor";
 import { updateUserSettings } from "@/server/services/settings.service";
+import { AppError, AppResponse } from "@/types/global";
 
 import { authGetUser } from "../../auth/auth-middleware";
-
-import { AppError, AppResponse } from "@/types/global";
 
 export const runtime = "nodejs";
 

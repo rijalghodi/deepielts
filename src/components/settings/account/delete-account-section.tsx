@@ -5,13 +5,12 @@ import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { deleteUserAccount } from "@/lib/api/auth.api";
-import { useAuth } from "@/lib/contexts/auth-context";
-
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { deleteUserAccount } from "@/lib/api/auth.api";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 import { SettingItem, SettingItemContent, SettingItemLabel } from "../settings-borad";
 

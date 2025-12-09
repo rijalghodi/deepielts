@@ -2,9 +2,8 @@
 
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 const TabsSide = React.forwardRef<React.ElementRef<typeof Tabs>, React.ComponentPropsWithoutRef<typeof Tabs>>(
   ({ className, ...props }, ref) => (

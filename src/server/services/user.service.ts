@@ -1,11 +1,10 @@
 import { auth, db } from "@/lib/firebase";
 import logger from "@/lib/logger";
+import { StringifyTimestamp } from "@/types";
 
-import { getSubscriptionByUserId } from "./subscription.repo";
 import { Role, User } from "../models";
 import { Subscription } from "../models/subscription";
-
-import { StringifyTimestamp } from "@/types";
+import { getSubscriptionByUserId } from "./subscription.repo";
 
 /**
  * Get a user by email from Firestore. Returns { id, ...data } or null if not found.

@@ -3,11 +3,10 @@
 import { Sparkles } from "lucide-react";
 import React from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { APP_NAME } from "@/lib/constants";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
-
-import { Badge } from "@/components/ui/badge";
 
 export function HeroSection() {
   const { user } = useAuth();

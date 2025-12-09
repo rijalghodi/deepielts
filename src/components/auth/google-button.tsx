@@ -5,13 +5,12 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { Button, ButtonProps } from "@/components/ui/button";
+import { IconGoogle } from "@/components/ui/icon-google";
 import { loginByGoogle } from "@/lib/api/auth.api";
 import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { clientAuth } from "@/lib/firebase/firebase-client";
-
-import { Button, ButtonProps } from "@/components/ui/button";
-import { IconGoogle } from "@/components/ui/icon-google";
 
 type Props = ButtonProps & {
   onSuccess?: () => void;

@@ -1,8 +1,7 @@
 import { db } from "@/lib/firebase/firebase-admin";
+import { AppError } from "@/types/global";
 
 import { Subscription } from "../models/subscription";
-
-import { AppError } from "@/types/global";
 
 export async function upsertSubscription(userId: string, subscription: Subscription): Promise<void> {
   try {

@@ -5,13 +5,12 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { usePaddle } from "@/lib/contexts/paddle";
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-
+import { Button } from "../ui/button";
 import { CheckoutItems } from "./checkout-items";
 import { PriceSection } from "./price-section";
-import { Button } from "../ui/button";
 
 interface Props {
   userEmail?: string;

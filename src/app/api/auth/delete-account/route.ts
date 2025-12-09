@@ -2,13 +2,11 @@ import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services";
 import { deleteUserAccount } from "@/server/services/user.service";
+import { AppError, AppResponse } from "@/types";
 
 import { authGetUser } from "../auth-middleware";
-
-import { AppError, AppResponse } from "@/types";
 
 export async function DELETE(_request: NextRequest) {
   try {

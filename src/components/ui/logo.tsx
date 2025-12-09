@@ -5,7 +5,6 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
-
 import logoDark from "~/logo-dark.png";
 import logoLight from "~/logo-light.png";
 

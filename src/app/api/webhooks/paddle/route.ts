@@ -4,9 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import logger from "@/lib/logger";
 import { getPaddleInstance } from "@/lib/paddle/get-paddle-instance";
 import { processEvent } from "@/lib/paddle/process-webhook";
-
 import { handleError } from "@/server/services/interceptor";
-
 import { AppError, AppResponse } from "@/types";
 
 export async function POST(request: NextRequest) {

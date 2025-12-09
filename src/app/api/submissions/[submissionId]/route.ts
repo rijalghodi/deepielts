@@ -1,12 +1,10 @@
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
-import logger from "@/lib/logger";
-
 import { authMiddleware } from "@/app/api/auth/auth-middleware";
+import logger from "@/lib/logger";
 import { handleError } from "@/server/services";
 import { getSubmission } from "@/server/services/submission.repo";
-
 import { AppError, AppResponse } from "@/types/global";
 
 export async function GET(req: NextRequest, context: { params: Promise<{ submissionId: string }> }) {

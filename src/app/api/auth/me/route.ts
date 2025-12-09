@@ -3,13 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { JwtDecode } from "@/lib/jwt";
 import logger from "@/lib/logger";
-
 import { handleError } from "@/server/services";
 import { getUserById, updateUser } from "@/server/services/user.service";
+import { AppError, AppResponse } from "@/types";
 
 import { authGetUser, authMiddleware } from "../auth-middleware";
-
-import { AppError, AppResponse } from "@/types";
 
 export async function GET(req: NextRequest & { user: JwtDecode }) {
   try {

@@ -5,19 +5,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
 
+import { VerifyCodeEmail } from "@/components/emails/verify-code.email";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { JwtPayload, signAccessToken, signRefreshToken } from "@/lib/jwt";
 import logger from "@/lib/logger";
-
-import { VerifyCodeEmail } from "@/components/emails/verify-code.email";
-
 import { handleError } from "@/server/services";
 import { isCodeValid, removeCode } from "@/server/services";
 import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
 import { createUserWithEmail, getUserByEmail } from "@/server/services/user.service";
 import { generateCode, storeCode } from "@/server/services/verify-code.service";
-
 import { AppError, AppResponse } from "@/types";
 
 const resend = new Resend(env.RESEND_API_KEY);

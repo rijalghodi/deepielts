@@ -1,7 +1,6 @@
+import { authGetUser } from "@/app/api/auth/auth-middleware";
 import { CheckoutContents } from "@/components/checkout/checkout-content";
 import { StatePage } from "@/components/ui/state-page";
-
-import { authGetUser } from "@/app/api/auth/auth-middleware";
 import { getSubscriptionByUserId } from "@/server/services/subscription.repo";
 
 interface CheckoutPageProps {

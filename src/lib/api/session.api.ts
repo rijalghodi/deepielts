@@ -1,8 +1,7 @@
 import { Session } from "@/server/models/session";
+import { ApiResponse } from "@/types/global";
 
 import { apiDelete, apiGet, apiPost } from "./utils";
-
-import { ApiResponse } from "@/types/global";
 
 // Get session
 export const getSession = async () => {

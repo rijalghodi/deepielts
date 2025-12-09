@@ -15,10 +15,9 @@ import { Timestamp } from "firebase-admin/firestore";
 import { Subscription } from "@/server/models/subscription";
 import { upsertCustomerId as insertCustomerId, upsertSubscription } from "@/server/services/subscription.repo";
 import { getUserByCustomerId, getUserByEmail } from "@/server/services/user.service";
+import { AppError } from "@/types";
 
 import logger from "../logger";
-
-import { AppError } from "@/types";
 
 export interface CustomerData {
   userId: string;

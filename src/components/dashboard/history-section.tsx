@@ -4,9 +4,6 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 
-import { submissionList } from "@/lib/api/submission.api";
-import { cn } from "@/lib/utils";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent } from "@/components/ui/dropdown-menu";
@@ -15,7 +12,8 @@ import { Pagination } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { State } from "@/components/ui/states";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-
+import { submissionList } from "@/lib/api/submission.api";
+import { cn } from "@/lib/utils";
 import { GetSubmissionResult } from "@/server/dto/submission.dto";
 import { QuestionType } from "@/server/models";
 
@@ -164,6 +162,7 @@ export default function HistorySection({ className }: Props) {
           <DropdownMenuContent align="start" className="w-56">
             {QUESTION_TYPES.map((type) => (
               <DropdownMenuCheckboxItem
+                key={type.value}
                 className="capitalize"
                 checked={questionTypes.includes(type.value)}
                 onCheckedChange={(value) => {

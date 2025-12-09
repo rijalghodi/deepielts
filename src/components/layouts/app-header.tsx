@@ -4,10 +4,9 @@ import { Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import React, { Suspense, useEffect, useState } from "react";
 
+import { useAuthDialog } from "@/components/auth/auth-dialog";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { cn } from "@/lib/utils";
-
-import { useAuthDialog } from "@/components/auth/auth-dialog";
 
 import { useCheckoutDialog } from "../home/checkout-dialog";
 import { ASIDE_WIDTH, useAside } from "../ui/aside";

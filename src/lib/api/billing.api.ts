@@ -1,8 +1,7 @@
 import { GetTransactionsResult } from "@/server/dto/transactions.dto";
+import { ApiResponse } from "@/types";
 
 import { apiGet, apiPost } from "./utils";
-
-import { ApiResponse } from "@/types";
 
 export interface Subscription {
   id: string;

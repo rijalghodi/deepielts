@@ -2,10 +2,6 @@ import { CreditCard, Edit, LogOut, PieChart, Settings } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { useLogout } from "@/lib/api/auth.api";
-import { useAuth } from "@/lib/contexts/auth-context";
-import { useIsMobile } from "@/hooks";
-
 import { useSettingsDialog } from "@/components/settings/settings-dialog";
 import {
   DropdownMenu,
@@ -26,6 +22,9 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks";
+import { useLogout } from "@/lib/api/auth.api";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 import { Badge } from "../ui/badge";
 

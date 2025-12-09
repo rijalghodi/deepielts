@@ -1,8 +1,7 @@
 import { GetPerformanceQuery, GetPerformanceResult } from "@/server/dto/performance.dto";
+import { ApiResponse } from "@/types";
 
 import { apiGet } from "./utils";
-
-import { ApiResponse } from "@/types";
 
 export const performanceGet = async (
   q?: GetPerformanceQuery,

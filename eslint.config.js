@@ -1,59 +1,74 @@
-import globals from "globals";
 import js from "@eslint/js";
-import ts from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import prettier from "eslint-config-prettier";
-import next from "@next/eslint-plugin-next";
+import eslintConfigPrettier from "eslint-config-prettier";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import unusedImports from "eslint-plugin-unused-imports";
+import tseslint from "typescript-eslint";
 
-/** @type {import("eslint").Linter.FlatConfig[]} */
+/**
+ * A shared ESLint configuration for the repository.
+ *
+ * @type {import("eslint").Linter.Config}
+ * */
 export default [
+  js.configs.recommended,
+  eslintConfigPrettier,
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
-
+    plugins: {
+      react,
+      "react-hooks": reactHooks,
+    },
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: {
-        React: "readonly",
-        JSX: "readonly",
-        ...globals.node,
-        ...globals.browser,
-      },
-      parser: tsParser,
       parserOptions: {
-        project: "./tsconfig.json",
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
     },
-    plugins: {
-      "@typescript-eslint": ts,
-      "simple-import-sort": simpleImportSort,
-      "unused-imports": unusedImports,
-      "@next/next": next,
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...ts.configs.recommended.rules,
-      ...next.configs.recommended.rules,
-      ...prettier.rules,
-
-      // Custom rules
+      ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      "react/react-in-jsx-scope": "off", // Not needed in React 17+
+      "react/prop-types": "off", // Using TypeScript for prop validation
+      "react/no-unescaped-entities": "off", // Allow unescaped entities like quotes
+    },
+  },
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    rules: {
+      ...config.rules,
+      "@typescript-eslint/no-explicit-any": "off", // Override to allow any usage
+    },
+  })),
+  {
+    plugins: {
+      "simple-import-sort": simpleImportSort,
+      "unused-imports": unusedImports,
+    },
+    rules: {
       "no-unused-vars": "off",
       "no-restricted-globals": "off",
       "prefer-destructuring": "off",
       "no-trailing-spaces": "off",
       "no-console": "off",
-      "no-multiple-empty-lines": "off",
-      "import/order": "off",
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-require-imports": "off",
+      "no-multiple-empty-lines": "off",
+      "import/order": "off",
+      //#region  //*=========== Unused Import ===========
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
-          args: "all",
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
+          args: "all", // Required for argsIgnorePattern to work
+          argsIgnorePattern: "^_", // Ignores arguments starting with _
+          varsIgnorePattern: "^_", // Ignores variables starting with _
           caughtErrorsIgnorePattern: "^_",
           destructuredArrayIgnorePattern: "^_",
           ignoreRestSiblings: true,
@@ -61,38 +76,40 @@ export default [
       ],
       "unused-imports/no-unused-imports": "warn",
       "unused-imports/no-unused-vars": "off",
+      //#endregion  //*======== Unused Import ===========
+
+      //#region  //*=========== Import Sort ===========
       "simple-import-sort/exports": "warn",
-      "brackets-eslint.gutterMarks": "off",
+      // "simple-import-sort/imports": "warn",
       "simple-import-sort/imports": [
         "warn",
         {
           groups: [
-            ["^@?\\w", "^\\u0000"],
-            ["^.+\\.s?css$"],
-            ["^@/lib", "^@/hooks"],
-            ["^@/data"],
-            ["^@/components", "^@/container"],
-            ["^@/store"],
-            ["^@/"],
-            [
-              "^\\./?$",
-              "^\\.(?!/?$)",
-              "^\\.\\./?$",
-              "^\\.\\.(?!/?$)",
-              "^\\.\\./\\.\\./?$",
-              "^\\.\\./\\.\\.(?!/?$)",
-              "^\\.\\./\\.\\./\\.\\./?$",
-              "^\\.\\./\\.\\./\\.\\.(?!/?$)",
-            ],
-            ["^@/types"],
+            // Side effect imports.
+            ["^\\u0000"],
+            // Node.js builtins prefixed with `node:`.
+            ["^node:"],
+            // Packages.
+            // Things that start with a letter (or digit or underscore), or `@` followed by a letter.
+            ["^@?\\w"],
+            // Absolute imports and other imports such as Vue-style `@/foo`.
+            // Anything not matched in another group.
             ["^"],
+            // Relative imports.
+            // Anything that starts with a dot.
+            ["^\\."],
           ],
         },
       ],
+    },
+  },
+  {
+    // Final override to ensure any usage is allowed
+    rules: {
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
   {
-    ignores: ["node_modules", "dist", "build", "public", ".next", "eslint.config.js", ".secrets"],
+    ignores: ["dist/**", "node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
 ];

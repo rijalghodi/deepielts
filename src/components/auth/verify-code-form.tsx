@@ -7,14 +7,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { requestEmailCode, verifyEmailCode } from "@/lib/api/auth.api";
-import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
-import { useAuth } from "@/lib/contexts/auth-context";
-import { useResendCooldown } from "@/hooks";
-
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useResendCooldown } from "@/hooks";
+import { requestEmailCode, verifyEmailCode } from "@/lib/api/auth.api";
+import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 const schema = z.object({
   code: z.string().length(6, "Code must be 6 digits"),

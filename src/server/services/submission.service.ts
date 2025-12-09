@@ -10,14 +10,12 @@ import {
   getScoreParsePrompt,
   getScorePrompt,
 } from "@/lib/prompts/utils";
-
 import { QuestionType } from "@/server/models/submission";
+import { AppError } from "@/types/global";
 
+import { UploadedFile } from "../models/upload";
 import { getSubmission } from "./submission.repo";
 import { uploadFileToStorage } from "./upload.service";
-import { UploadedFile } from "../models/upload";
-
-import { AppError } from "@/types/global";
 
 export async function generateChartDataIfNeeded(params: {
   questionType: QuestionType;

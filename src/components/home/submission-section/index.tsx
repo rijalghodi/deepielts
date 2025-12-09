@@ -3,9 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 
-import { submissionGet, submissionGetKey } from "@/lib/api/submission.api";
-
 import { SubmissionForm } from "@/components/home/submission-section/submission-form";
+import { submissionGet, submissionGetKey } from "@/lib/api/submission.api";
 
 export function SubmissionSection() {
   const searchParams = useSearchParams();

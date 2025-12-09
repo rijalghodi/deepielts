@@ -4,7 +4,6 @@ import { createContext, type ReactNode, useCallback, useContext, useEffect, useS
 
 import { getCurrentUser } from "@/lib/api/auth.api";
 import { AUTH_CHANGED_KEY } from "@/lib/constants/brand";
-
 import { UserSettings } from "@/server/models/user";
 
 type User = {

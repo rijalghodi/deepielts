@@ -3,13 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
-import { cn } from "@/lib/utils";
-
 import { Button } from "@/components/ui/button";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { inputVariants } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
+import { cn } from "@/lib/utils";
 import { createSubmissionBodySchema } from "@/server/dto/submission.dto";
 
 export function AnswerInput() {
@@ -20,6 +18,7 @@ export function AnswerInput() {
   useEffect(() => {
     const count = (watch("answer")?.match(/\b\w+\b/g) || []).length;
     setWordCount(count);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watch("answer")]);
 
   return (

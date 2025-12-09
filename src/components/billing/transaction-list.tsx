@@ -3,11 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { billingGetTransactions, billingGetTransactionsKey } from "@/lib/api/billing.api";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { billingGetTransactions, billingGetTransactionsKey } from "@/lib/api/billing.api";
 
 import { Badge } from "../ui/badge";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
