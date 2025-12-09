@@ -14,7 +14,7 @@ export async function aiScore(data: { question: string; answer: string }) {
   });
 
   return await openai.chat.completions.create({
-    model: "gpt-5-mini",
+    model: "gpt-4.1-mini",
     stream: true,
     messages: [{ role: "system", content: prompt }],
   });
