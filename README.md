@@ -55,7 +55,7 @@ Deep IELTS is a free AI-powered IELTS writing checker, trained on over hundreds 
 
 ### Prerequisites
 
-- Node.js 20+ and Yarn
+- Node.js 20+ and pnpm
 - Firebase project with Authentication, Firestore, and Storage enabled
 - Redis instance (local or cloud)
 - OpenAI API key
@@ -75,7 +75,7 @@ Deep IELTS is a free AI-powered IELTS writing checker, trained on over hundreds 
 2. **Install dependencies**
 
    ```bash
-   yarn install
+   pnpm install
    ```
 
 3. **Set up environment variables**
@@ -87,7 +87,6 @@ Deep IELTS is a free AI-powered IELTS writing checker, trained on over hundreds 
    ```
 
    Fill in all required environment variables in `.env.local`:
-
    - **App Configuration**: `NEXT_PUBLIC_BASE_URL`, `NEXT_PUBLIC_API_BASE_URL`
    - **Firebase**: All `NEXT_PUBLIC_FIREBASE_*` and `FIREBASE_ADMIN_*` variables
    - **JWT**: `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`
@@ -100,15 +99,15 @@ Deep IELTS is a free AI-powered IELTS writing checker, trained on over hundreds 
 4. **Run the development server**
 
    ```bash
-   yarn dev
+   pnpm dev
    ```
 
    The app will be available at `http://localhost:3003`
 
 5. **Build for production**
    ```bash
-   yarn build
-   yarn start
+   pnpm build
+   pnpm start
    ```
 
 ### Additional Setup
