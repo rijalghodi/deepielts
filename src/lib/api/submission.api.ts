@@ -94,3 +94,35 @@ export const submissionGeneratePDF = async (submissionId: string): Promise<ApiRe
     pathParams: { submissionId },
   });
 };
+
+/**
+ * Generate DOCX from markdown text
+ */
+export const submissionGenerateDOCX = async (markdown: string): Promise<Blob> => {
+  try {
+    const token = Cookies.get(ACCESS_TOKEN_KEY);
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch("/api/converts/md-docx", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ markdown }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw data;
+    }
+
+    return await response.blob();
+  } catch (error) {
+    console.error("Error generating DOCX:", error);
+    throw error;
+  }
+};

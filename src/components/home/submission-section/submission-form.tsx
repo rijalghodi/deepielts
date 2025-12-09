@@ -7,7 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { submissionCreateStream, submissionGeneratePDF } from "@/lib/api/submission.api";
+import { submissionCreateStream, submissionGenerateDOCX } from "@/lib/api/submission.api";
+import { saveDocxToCache } from "@/lib/storage/docx-cache";
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
 
 import { useAside } from "@/components/ui/aside";
@@ -47,12 +48,12 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
     generating,
     setAbortController,
     stopGeneration,
-    setPdfUrl,
+    setDocxUrl,
   } = useAIAnalysisStore();
   const { setOpen, setOpenMobile } = useAside();
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [generatingPdf, setGeneratingPdf] = useState(false);
+  const [generatingDocx, setGeneratingDocx] = useState(false);
 
   // Get stored form data on first render
   const getStoredFormData = (): z.infer<typeof schema> | null => {
@@ -181,13 +182,30 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
         }
       }
 
-      const { data } = matter(localAnalysis || "");
+      const { data, content } = matter(localAnalysis || "");
       const submissionId = data?.submissionId?.trim() as string;
 
-      setGeneratingPdf(true);
-      const pdf = await submissionGeneratePDF(submissionId);
-      setPdfUrl(pdf?.data?.url || null);
-      setGeneratingPdf(false);
+      // Generate DOCX from markdown
+      setGeneratingDocx(true);
+      try {
+        // Construct markdown with question, answer, and feedback (similar to PDF generation)
+        const docxInput = `## Question\n\n${values.question}\n\n## Your Answer\n\n${values.answer}\n\n## Feedback\n\n${content || localAnalysis}`;
+        const docxBlob = await submissionGenerateDOCX(docxInput);
+
+        // Save to IndexedDB cache
+        if (submissionId) {
+          await saveDocxToCache(submissionId, docxBlob);
+        }
+
+        // Create object URL for download
+        const docxUrl = URL.createObjectURL(docxBlob);
+        setDocxUrl(docxUrl);
+      } catch (error) {
+        console.error("Error generating DOCX:", error);
+        // Don't throw - DOCX generation is optional
+      } finally {
+        setGeneratingDocx(false);
+      }
 
       onSuccess?.({ success: true });
     } catch (error: any) {
@@ -203,7 +221,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
         });
       }
     } finally {
-      setGeneratingPdf(false);
+      setGeneratingDocx(false);
       setGenerating(false);
       setAbortController(null);
 
@@ -272,7 +290,7 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       <LoadingBar
         isVisible={generating}
         onStop={stopGeneration}
-        title={generatingPdf ? "Generating PDF..." : "Generating Analysis..."}
+        title={generatingDocx ? "Generating DOCX..." : "Generating Analysis..."}
       />
     </div>
   );

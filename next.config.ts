@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  serverExternalPackages: ["pino", "pino-pretty", "md-to-pdf"],
+  serverExternalPackages: ["pino", "pino-pretty", "md-to-pdf", "require-in-the-middle"],
   images: {
     remotePatterns: [
       {

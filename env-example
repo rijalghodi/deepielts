@@ -34,12 +34,6 @@ JWT_REFRESH_EXPIRES_IN=60d
 RESEND_API_KEY=
 
 # -----------------------------------------------------------
-# Dify Configuration
-# -----------------------------------------------------------
-DIFY_API_KEY=
-NEXT_PUBLIC_DIFY_WORKFLOW_URL=
-
-# -----------------------------------------------------------
 # Open AI
 # -----------------------------------------------------------
 OPENAI_API_KEY=
@@ -72,4 +66,3 @@ NEXT_PUBLIC_PADDLE_PRO_QUARTER_PRICE_ID=
 NEXT_PUBLIC_PADDLE_ENV=sandbox # or production
 PADDLE_API_KEY= # Developer Tools > Authentication > API keys
 PADDLE_WEBHOOK_SECRET= # Developer Tools > Notifications > create webhook
-/

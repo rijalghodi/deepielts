@@ -121,7 +121,7 @@ function AIOutput() {
 }
 
 export function AIAside() {
-  const { analysis, generating, error, pdfUrl } = useAIAnalysisStore();
+  const { analysis, generating, error, docxUrl } = useAIAnalysisStore();
   const contentRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [autoScroll, setAutoScroll] = useState(true);
@@ -163,11 +163,11 @@ export function AIAside() {
         <AIOutput />
         <div className="flex-none h-12 w-full" ref={messagesEndRef} />
       </AsideContent>
-      {analysis && !generating && !error && pdfUrl && (
+      {analysis && !generating && !error && docxUrl && (
         <AsideFooter className="flex flex-col items-center justify-center gap-2 w-full">
-          <Button variant="outline" size="sm" onClick={() => window.open(pdfUrl, "_blank")}>
+          <Button variant="outline" size="sm" onClick={() => window.open(docxUrl, "_blank")}>
             <DownloadIcon className="w-4 h-4" />
-            Download PDF
+            Download DOCX
           </Button>
         </AsideFooter>
       )}

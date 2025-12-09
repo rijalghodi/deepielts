@@ -9,7 +9,8 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 
-import { submissionGeneratePDF, submissionListKey } from "@/lib/api/submission.api";
+import { submissionGenerateDOCX, submissionGeneratePDF, submissionListKey } from "@/lib/api/submission.api";
+import { getDocxFromCache, saveDocxToCache } from "@/lib/storage/docx-cache";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +36,7 @@ type Props = {
 
 export default function SubmissionView({ isOpen, onClose, question, answer, date, feedback, pdfUrl, id }: Props) {
   const [pdfUrlState, setPdfUrlState] = useState<string | undefined>(undefined);
+  const [docxUrlState, setDocxUrlState] = useState<string | undefined>(undefined);
   const queryClient = useQueryClient();
 
   const { mutateAsync: generatePDF, isPending: isGeneratingPDF } = useMutation({
@@ -54,12 +56,62 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
     },
   });
 
+  const { mutateAsync: generateDOCX, isPending: isGeneratingDOCX } = useMutation({
+    mutationFn: async () => {
+      // First check cache
+      const cachedDocx = await getDocxFromCache(id);
+      if (cachedDocx) {
+        return cachedDocx;
+      }
+
+      // If not cached, generate from markdown
+      const markdown = `## Question\n\n${question}\n\n## Your Answer\n\n${answer}\n\n## Feedback\n\n${feedback}`;
+      const docxBlob = await submissionGenerateDOCX(markdown);
+
+      // Save to cache
+      await saveDocxToCache(id, docxBlob);
+
+      return docxBlob;
+    },
+    onSuccess: (blob) => {
+      const url = URL.createObjectURL(blob);
+      setDocxUrlState(url);
+      toast.success("DOCX generated successfully!");
+      // Auto-download
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `feedback-${id}.docx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    onError: (error) => {
+      toast.error("Failed to generate DOCX.", {
+        description: (error as any).message,
+      });
+    },
+  });
+
   // Check if PDF already exists when component mounts
   React.useEffect(() => {
     if (pdfUrl) {
       setPdfUrlState(pdfUrl);
     }
   }, [pdfUrl]);
+
+  // Check for cached DOCX when component mounts
+  React.useEffect(() => {
+    const checkCachedDocx = async () => {
+      if (feedback && id) {
+        const cachedDocx = await getDocxFromCache(id);
+        if (cachedDocx) {
+          const url = URL.createObjectURL(cachedDocx);
+          setDocxUrlState(url);
+        }
+      }
+    };
+    checkCachedDocx();
+  }, [feedback, id]);
 
   const handleGeneratePDF = async () => {
     await generatePDF(id);
@@ -68,6 +120,21 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
   const handleDownloadPDF = () => {
     if (pdfUrlState) {
       window.open(pdfUrlState, "_blank");
+    }
+  };
+
+  const handleGenerateDOCX = async () => {
+    await generateDOCX();
+  };
+
+  const handleDownloadDOCX = () => {
+    if (docxUrlState) {
+      const link = document.createElement("a");
+      link.href = docxUrlState;
+      link.download = `feedback-${id}.docx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -98,18 +165,33 @@ export default function SubmissionView({ isOpen, onClose, question, answer, date
 
           {/* Feedback */}
           <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <h3 className="text-lg font-semibold">Feedback</h3>
-              {!feedback ? null : pdfUrlState ? (
-                <Button variant="outline" size="sm" onClick={handleDownloadPDF} disabled={isGeneratingPDF}>
-                  <Download className="h-4 w-4" />
-                  Download PDF
-                </Button>
-              ) : (
-                <Button variant="outline" size="sm" onClick={handleGeneratePDF} disabled={isGeneratingPDF}>
-                  <FileText className="h-4 w-4" />
-                  {isGeneratingPDF ? "Generating..." : "Generate PDF"}
-                </Button>
+              {!feedback ? null : (
+                <div className="flex gap-2">
+                  {docxUrlState ? (
+                    <Button variant="outline" size="sm" onClick={handleDownloadDOCX} disabled={isGeneratingDOCX}>
+                      <Download className="h-4 w-4" />
+                      Download DOCX
+                    </Button>
+                  ) : (
+                    <Button variant="outline" size="sm" onClick={handleGenerateDOCX} disabled={isGeneratingDOCX}>
+                      <FileText className="h-4 w-4" />
+                      {isGeneratingDOCX ? "Generating..." : "Generate DOCX"}
+                    </Button>
+                  )}
+                  {pdfUrlState ? (
+                    <Button variant="outline" size="sm" onClick={handleDownloadPDF} disabled={isGeneratingPDF}>
+                      <Download className="h-4 w-4" />
+                      PDF
+                    </Button>
+                  ) : (
+                    <Button variant="outline" size="sm" onClick={handleGeneratePDF} disabled={isGeneratingPDF}>
+                      <FileText className="h-4 w-4" />
+                      {isGeneratingPDF ? "..." : "PDF"}
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
             <div className="ai-output">
