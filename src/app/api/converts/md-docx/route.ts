@@ -1,10 +1,8 @@
 import * as Sentry from "@sentry/nextjs";
-import HTMLtoDOCX from "html-to-docx";
 import { NextRequest, NextResponse } from "next/server";
-import { remark } from "remark";
-import remarkHtml from "remark-html";
 
 import { authGetUser } from "@/app/api/auth/auth-middleware";
+import { convertMdToDocx } from "@/lib/files/md-to-docx";
 import logger from "@/lib/logger";
 import { handleError } from "@/server/services";
 import { incrementUsage, isBelowLimit } from "@/server/services/rate-limiter";
@@ -44,62 +42,18 @@ export async function POST(req: NextRequest) {
       throw new AppError({ message: "Markdown text is required", code: 400 });
     }
 
-    // Convert markdown to HTML
-    const processed = await remark().use(remarkHtml).process(markdown);
-    const html = String(processed);
-
-    // Wrap HTML with styling
-    const styledHtml = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="UTF-8">
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              font-size: 11pt;
-              line-height: 1.6;
-              margin: 1in;
-            }
-            p {
-              margin-bottom: 12pt;
-            }
-            h1, h2, h3, h4, h5, h6 {
-              font-family: Arial, sans-serif;
-              margin-top: 12pt;
-              margin-bottom: 6pt;
-            }
-            h1 { font-size: 18pt; }
-            h2 { font-size: 16pt; }
-            h3 { font-size: 14pt; }
-            h4 { font-size: 12pt; }
-            ul, ol {
-              margin-bottom: 12pt;
-            }
-            li {
-              margin-bottom: 6pt;
-            }
-          </style>
-        </head>
-        <body>
-          ${html}
-        </body>
-      </html>
-    `;
-
-    // Convert HTML to DOCX
-    const docxBuffer = await HTMLtoDOCX(styledHtml, null, {
-      table: { row: { cantSplit: true } },
-      footer: true,
-      pageNumber: true,
+    // Convert markdown to DOCX using the library function
+    const docxBuffer = await convertMdToDocx(markdown, {
       font: "Arial",
       fontSize: 11,
+      pageNumber: true,
+      footer: true,
     });
 
     await incrementUsage(dailyAttemptId);
 
-    // Return DOCX file (Buffer can be passed directly to NextResponse)
-    return new NextResponse(docxBuffer, {
+    // Return DOCX file - convert Buffer to Uint8Array for NextResponse
+    return new NextResponse(new Uint8Array(docxBuffer), {
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "Content-Disposition": "attachment; filename=file.docx",
