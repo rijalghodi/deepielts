@@ -7,18 +7,20 @@ import { handleError } from "@/server/services";
 import { getUserById, updateUser } from "@/server/services/user.service";
 import { AppError, AppResponse } from "@/types";
 
-import { authGetUser, authMiddleware } from "../auth-middleware";
+import { authGetUser } from "../auth-middleware";
 
-export async function GET(req: NextRequest & { user: JwtDecode }) {
+export async function GET(req: NextRequest ) {
   try {
-    await authMiddleware(req);
+   const user = await authGetUser();
 
-    const user = await getUserById(req.user.uid);
     if (!user) throw new AppError({ message: "User not found", code: 404 });
+
+    const userDb = await getUserById(user.uid);
+    if (!userDb) throw new AppError({ message: "User not found", code: 404 });
 
     return NextResponse.json(
       new AppResponse({
-        data: user,
+        data: userDb,
       }),
     );
   } catch (error: any) {

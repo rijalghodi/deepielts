@@ -155,6 +155,9 @@ importers:
       motion:
         specifier: ^12.23.7
         version: 12.23.25(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      ms:
+        specifier: ^2.1.3
+        version: 2.1.3
       mustache:
         specifier: ^4.2.0
         version: 4.2.0
