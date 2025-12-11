@@ -115,3 +115,9 @@ Deep IELTS is a free AI-powered IELTS writing checker, trained on over hundreds 
 - **Firebase**: Configure Firebase Authentication (Email/Password or Google), set up Firestore security rules, and configure Cloud Storage buckets.
 - **Redis**: Ensure Redis is running and accessible at the `REDIS_URL` you configured.
 - **Paddle**: Set up products and pricing in your Paddle dashboard and configure webhooks.
+
+## TODO:
+
+- [] Fix export to docx
+- [] Improve payment, make it robust
+- [] Improve Sidebar UI

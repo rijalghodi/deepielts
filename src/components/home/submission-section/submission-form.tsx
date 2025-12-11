@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { DoodleArrow } from "@/components/ui/icons/doodle-arrow";
 import { LoadingBar } from "@/components/ui/loading-bar";
 import { SelectInput } from "@/components/ui/select-input";
+import { APP_NAME } from "@/lib/constants/brand";
 import { submissionCreateStream, submissionGenerateDOCX } from "@/lib/api/submission.api";
 import { saveDocxToCache } from "@/lib/storage/docx-cache";
 import { useAIAnalysisStore } from "@/lib/zustand/ai-analysis-store";
@@ -21,6 +22,8 @@ import { QuestionType } from "@/server/models/submission";
 
 import { AnswerInput } from "./answer-input";
 import { QuestionInput } from "./question-input";
+import { convertMarkdownToDocx } from "@mohtasham/md-to-docx";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 const schema = createSubmissionBodySchema;
 
@@ -38,6 +41,8 @@ type Props = {
 const FORM_STORAGE_KEY = "ielts_submission_form_data";
 
 export function SubmissionForm({ onSuccess, submissionData }: Props) {
+  const { user } = useAuth();
+
   const {
     appendAnalysis,
     clearAnalysis,
@@ -188,8 +193,39 @@ export function SubmissionForm({ onSuccess, submissionData }: Props) {
       setGeneratingDocx(true);
       try {
         // Construct markdown with question, answer, and feedback (similar to PDF generation)
-        const docxInput = `## Question\n\n${values.question}\n\n## Your Answer\n\n${values.answer}\n\n## Feedback\n\n${content || localAnalysis}`;
-        const docxBlob = await submissionGenerateDOCX(docxInput);
+
+        // Create opening text with brand name, student name, and date
+        const currentDate = new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        const opening = `# ${APP_NAME}\n\n**Student Name:** _${user?.name || "[Your Name]"}_\n\n**Date:** ${currentDate}\n\n---\n\n\n\n`;
+        const docxInput = `${opening}\n\n## Question\n\n${values.question}\n\n## Your Answer\n\n${values.answer}\n\n## Feedback\n\n${content || localAnalysis}`;
+
+        // Convert HTML tags to markdown equivalents
+        const cleanDocxInput = docxInput
+          .replace(/<strong[^>]*>(.*?)<\/strong>/gs, "**$1**")
+          .replace(/<b[^>]*>(.*?)<\/b>/gs, "**$1**")
+          .replace(/<em[^>]*>(.*?)<\/em>/gs, "_$1_")
+          .replace(/<i[^>]*>(.*?)<\/i>/gs, "_$1_")
+          .replace(/<u[^>]*>(.*?)<\/u>/gs, "_$1_")
+          .replace(/<code[^>]*>(.*?)<\/code>/gs, "`$1`")
+          .replace(/<pre[^>]*>(.*?)<\/pre>/gs, "```\n$1\n```")
+          .replace(/<br\s*\/?>/g, "\n")
+          .replace(/<p[^>]*>(.*?)<\/p>/gs, "$1\n\n")
+          .replace(/<h1[^>]*>(.*?)<\/h1>/gs, "# $1\n")
+          .replace(/<h2[^>]*>(.*?)<\/h2>/gs, "## $1\n")
+          .replace(/<h3[^>]*>(.*?)<\/h3>/gs, "### $1\n")
+          .replace(/<h4[^>]*>(.*?)<\/h4>/gs, "#### $1\n")
+          .replace(/<ul[^>]*>(.*?)<\/ul>/gs, "$1")
+          .replace(/<ol[^>]*>(.*?)<\/ol>/gs, "$1")
+          .replace(/<li[^>]*>(.*?)<\/li>/gs, "- $1\n")
+          .replace(/<[^>]+>/g, ""); // Remove any remaining HTML tags
+
+        const docxBlob = await convertMarkdownToDocx(cleanDocxInput, {
+          documentType: "document",
+        });
 
         // Save to IndexedDB cache
         if (submissionId) {

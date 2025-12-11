@@ -43,12 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Convert markdown to DOCX using the library function
-    const docxBuffer = await convertMdToDocx(markdown, {
-      font: "Arial",
-      fontSize: 11,
-      pageNumber: true,
-      footer: true,
-    });
+    const docxBuffer = await convertMdToDocx(markdown);
 
     await incrementUsage(dailyAttemptId);
 
